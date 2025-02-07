@@ -8,20 +8,22 @@ import SideBar from "./sideBar";
 import Navbar from "./navbar";
 import Toolbar from "./toolbar";
 import Footer from "./footer";
-import { ActiveTools } from "../types";
+import { ActiveTool } from "../types";
 import ShapeSidebar from "./shape-sidebar";
+import FillColorSidebar from "./fill-color-sidebar";
 
 
 export const Editor = () => {
-  const [activeTools, setActiveTools] = useState<ActiveTools>("select")
+  const [activeTool, setActiveTool] = useState<ActiveTool>("select")
 
-  const onChangeActiveTools = useCallback((tool: ActiveTools)=>{
-    if(tool === activeTools){
-      return setActiveTools("select")
+  const onChangeActiveTool = useCallback((tool: ActiveTool)=>{
+    if(tool === activeTool){
+      return setActiveTool("select")
     }
-    setActiveTools(tool)
-  },[activeTools])
-  const { init,editor  } = useEditor();
+    setActiveTool(tool)
+  },[activeTool])
+
+  const { init, editor } = useEditor();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
 
@@ -42,12 +44,13 @@ export const Editor = () => {
 
   return (
     <div className="flex   flex-col w-full h-full">
-      <Navbar activeTools={activeTools} onChangeActiveTools={onChangeActiveTools} />
+      <Navbar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
-        <SideBar activeTools={activeTools} onChangeActiveTools={onChangeActiveTools} />
-        <ShapeSidebar editor={editor} activeTools={activeTools} onChangeActiveTools={onChangeActiveTools} />
+        <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <FillColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <main className="flex-1  flex flex-col relative bg-muted overflow-x-auto">
-          <Toolbar />
+          <Toolbar editor={editor} activeTool={activeTool} onChanveActiveTool={onChangeActiveTool} />
           <div className="flex-1 overflow-y-hidden h-full bg-muted" ref={containerRef}>
             <canvas ref={canvasRef}/>
           </div> 

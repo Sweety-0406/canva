@@ -2,9 +2,20 @@ import { useCallback, useMemo, useState } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResizer } from "./useAutoResizer"
 import { buildEditorProps, Editor } from "../types"
+import { useCanvasEvents } from "./useCanvasEvents"
+import { isTextType } from "../utils"
 
 
-const buildEditor =({canvas}:buildEditorProps):Editor=>{
+const buildEditor =({
+    canvas,
+    fillColor,
+    setFillColor,
+    strokeColor,
+    setStrokeColor,
+    strokeWidth,
+    setStrokeWidth,
+    selectedObjects
+}:buildEditorProps):Editor=>{
     const getWorkspace = ()=>{
         return canvas.getObjects().find((obj)=>obj.name === 'clip')
     }
@@ -16,14 +27,77 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
         canvas._centerObject(object, center)
     }
     return{
+        changeFillColor:(value:string)=>{
+            setFillColor(value)
+            canvas.getActiveObjects().forEach(element => {
+                element.set({fill: value})
+            });
+            canvas.renderAll()
+        },
+        changeStrokeColor:(value:string)=>{
+            setStrokeColor(value)
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    element.set({fill: value})
+                }else{
+                    element.set({stroke: value})
+                }
+            });
+            canvas.renderAll()
+        },
+        changeStrokeWidth:(value:number)=>{
+            setStrokeWidth(value)
+            canvas.getActiveObjects().forEach(element => {
+                element.set({strokeWidth: value})
+            });
+            canvas.renderAll()
+        },
         addCircle:()=>{
             const object=new fabric.Circle({
                 height:100,
                 width:100,
-                fill:"#00000",
-                stroke:"#00000",
+                fill: fillColor,
+                stroke:strokeColor,
                 radius:60
             })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addHorizontalEllipse:()=>{
+            const object=new fabric.Ellipse({
+                height:100,
+                width:100,
+                fill: fillColor,
+                stroke:strokeColor,
+                rx: 50,
+                ry: 70
+            })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addVerticalEllipse:()=>{
+            const object=new fabric.Ellipse({
+                height:100,
+                width:100,
+                fill: fillColor,
+                stroke:strokeColor,
+                rx: 70,
+                ry: 50
+            })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addLine:()=>{
+            const object=new fabric.Line(
+                [50, 100, 200, 200],
+                {
+                    fill: fillColor,
+                    stroke:strokeColor,
+                }
+            )
             center(object)
             canvas.add(object)
             canvas.setActiveObject(object)
@@ -32,8 +106,8 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
             const object=new fabric.Rect({
                 height:100,
                 width:100,
-                fill:"#00000",
-                stroke:"#00000",
+                fill: fillColor,
+                stroke:strokeColor,
                 rx: 10,
                 ry: 10
             })
@@ -45,8 +119,8 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
             const object=new fabric.Rect({
                 height:100,
                 width:100,
-                fill:"#00000",
-                stroke:"#00000",
+                fill: fillColor,
+                stroke:strokeColor,
             })
             center(object)
             canvas.add(object)
@@ -64,9 +138,9 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
                 ],
                 {
                     height:100,
-                    width:100,
-                    fill:"#00000",
-                    stroke:"#00000",
+                    width:100, 
+                    fill: fillColor,
+                    stroke:strokeColor,
                 }
             )
             center(object)
@@ -77,8 +151,8 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
             const object=new fabric.Triangle({
                 height:100,
                 width:100,
-                fill:"#00000",
-                stroke:"#00000",
+                fill: fillColor,
+                stroke:strokeColor,
                 // rx:10,
                 // ry:10,
             })
@@ -98,8 +172,8 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
                 {
                     height:100,
                     width:100,
-                    fill:"#00000",
-                    stroke:"#00000",
+                    fill: fillColor,
+                    stroke:strokeColor,
                     
                 }
             )
@@ -107,6 +181,11 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
             canvas.add(object)
             canvas.setActiveObject(object)
         },
+        canvas,
+        fillColor,
+        strokeColor,
+        strokeWidth,
+        selectedObjects
          
     }
 }
@@ -114,15 +193,36 @@ const buildEditor =({canvas}:buildEditorProps):Editor=>{
 export const useEditor=()=>{
     const[canvas, setCanvas] = useState<fabric.Canvas | null>(null)
     const [container, setContainer] = useState<HTMLDivElement | null>(null)
+    const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
+    const [fillColor, setFillColor] = useState("#000000")
+    const [strokeColor, setStrokeColor] = useState("#000000")
+    const [strokeWidth, setStrokeWidth] = useState(5)
  
     useAutoResizer({canvas,container})
 
+    useCanvasEvents({canvas, setSelectedObjects})
+
     const editor=useMemo(()=>{
         if(canvas){
-            return buildEditor({canvas})
+            return buildEditor({
+                canvas,
+                fillColor,
+                setFillColor,
+                strokeColor,
+                setStrokeColor,
+                strokeWidth,
+                setStrokeWidth,
+                selectedObjects
+            })
         }
         return undefined
-    },[canvas])
+    },[
+        canvas,
+        fillColor,
+        strokeColor,
+        strokeWidth,
+        selectedObjects
+    ])
 
     const init = useCallback(({
         initialCanvas,
@@ -165,4 +265,4 @@ export const useEditor=()=>{
 
     },[])
     return{init, editor}
-}
+}   

@@ -19,17 +19,17 @@ import { Separator } from "@/components/ui/separator";
 import { Redo } from 'lucide-react';
 import { Undo } from 'lucide-react';
 import { MdOutlineCloudDone } from "react-icons/md";
-import { ActiveTools } from "../types";
+import { ActiveTool } from "../types";
 import { cn } from "@/lib/utils";
   
 interface NavbarProps{
-    activeTools: ActiveTools,
-    onChangeActiveTools:(tool:ActiveTools)=>void
+    activeTool: ActiveTool,
+    onChangeActiveTool:(tool:ActiveTool)=>void
 }  
 
 const Navbar = ({
-    activeTools,
-    onChangeActiveTools
+    activeTool,
+    onChangeActiveTool
 }:NavbarProps)=>{
     return(
         <div className="bg-white flex items-center gap-3 h-12 border-b p-2 ">
@@ -59,9 +59,9 @@ const Navbar = ({
                 <Button  
                     variant="ghost" 
                     size={"sm"}
-                    onClick={()=>onChangeActiveTools("select")}
+                    onClick={()=>onChangeActiveTool("select")}
                     className={cn(
-                        activeTools==='select' && "bg-gray-100"
+                        activeTool==='select' && "bg-gray-100"
                     )}
                 >
                     <MousePointerClick />

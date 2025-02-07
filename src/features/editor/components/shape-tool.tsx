@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 
 interface ShapeToolProps{
     onClick:()=>void,
-    icon:IconType,
+    icon:IconType | LucideIcon,
     iconClassName?:string
 }
 

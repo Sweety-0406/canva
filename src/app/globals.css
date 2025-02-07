@@ -66,6 +66,17 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  .circle-picker{
+    width: auto !important;
+  }
+ 
+  .chrome-picker{
+    width: auto !important;
+    box-shadow: none !important;
+    border-radius: 0.5rem;
+    overflow: hidden
+  }
 }
 
 @layer base {

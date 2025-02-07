@@ -7,16 +7,16 @@ import { Type } from 'lucide-react';
 import { Settings } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
 import { Shapes } from 'lucide-react';
-import { ActiveTools } from "../types";
+import { ActiveTool} from "../types";
 
 interface SideBarProps{
-    activeTools: ActiveTools,
-    onChangeActiveTools: (tool:ActiveTools)=>void
+    activeTool: ActiveTool,
+    onChangeActiveTool: (tool:ActiveTool)=>void
 }
 
 const SideBar = ({
-    activeTools,
-    onChangeActiveTools
+    activeTool,
+    onChangeActiveTool
 }:SideBarProps)=>{
     return(
         <aside className=" h-full border-r  bg-white ">
@@ -24,38 +24,38 @@ const SideBar = ({
                 <SideBarItems
                     label="Design"
                     icon={LayoutTemplate}
-                    onClick={()=>onChangeActiveTools("templates")}
-                    isActive={activeTools==="templates"}
+                    onClick={()=>onChangeActiveTool("templates")}
+                    isActive={activeTool==="templates"}
                 />
                 <SideBarItems
                     label="Image"
                     icon={ImagePlus}
-                    onClick={()=>onChangeActiveTools("images")}
-                    isActive={activeTools==="images"}
+                    onClick={()=>onChangeActiveTool("images")}
+                    isActive={activeTool==="images"}
                 />
                 <SideBarItems
                     label="Text"
                     icon={RemoveFormatting}
-                    onClick={()=>onChangeActiveTools("text")}
-                    isActive={activeTools==="text"}
+                    onClick={()=>onChangeActiveTool("text")}
+                    isActive={activeTool==="text"}
                 />
                 <SideBarItems
                     label="Shape"
                     icon={Shapes}
-                    onClick={()=>onChangeActiveTools("shapes")}
-                    isActive={activeTools==="shapes"}
+                    onClick={()=>onChangeActiveTool("shapes")}
+                    isActive={activeTool==="shapes"}
                 />
                 <SideBarItems
                     label="AI"
                     icon={WandSparkles}
-                    onClick={()=>onChangeActiveTools("ai")}
-                    isActive={activeTools==="ai"}
+                    onClick={()=>onChangeActiveTool("ai")}
+                    isActive={activeTool==="ai"}
                 />
                 <SideBarItems
                     label="Setting"
                     icon={Settings}
-                    onClick={()=>onChangeActiveTools("settings")}
-                    isActive={activeTools==="settings"}
+                    onClick={()=>onChangeActiveTool("settings")}
+                    isActive={activeTool==="settings"}
                 />
             </ul>
         </aside>
