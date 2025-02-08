@@ -11,7 +11,8 @@ import Footer from "./footer";
 import { ActiveTool } from "../types";
 import ShapeSidebar from "./shape-sidebar";
 import FillColorSidebar from "./fill-color-sidebar";
-
+import StrokeColorSidebar from "./stroke-color-sidebar";
+import StrokeWidthSidebar from "./stroke-width-sidebar";
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select")
@@ -23,9 +24,16 @@ export const Editor = () => {
     setActiveTool(tool)
   },[activeTool])
 
+
   const { init, editor } = useEditor();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
+
+  useEffect(()=>{
+    if(editor?.selectedObjects.length == 0){
+      return setActiveTool("select")
+    }
+  },[editor?.selectedObjects])
 
   useEffect(() => {
       const canvas = new fabric.Canvas(canvasRef.current, {
@@ -49,6 +57,8 @@ export const Editor = () => {
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FillColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <StrokeColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <StrokeWidthSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <main className="flex-1  flex flex-col relative bg-muted overflow-x-auto">
           <Toolbar editor={editor} activeTool={activeTool} onChanveActiveTool={onChangeActiveTool} />
           <div className="flex-1 overflow-y-hidden h-full bg-muted" ref={containerRef}>

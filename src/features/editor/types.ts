@@ -49,13 +49,18 @@ export type buildEditorProps = {
     setStrokeColor: (value: string)=>void
     strokeWidth:number,
     setStrokeWidth: (value: number)=>void,
+    strokeType: number[],
+    setStrokeType:(value: number[])=>void
     selectedObjects: fabric.Object[]
 }  
 
 export interface Editor{
+    bringForward:()=>void,
+    sendBackward:()=>void,
     changeFillColor:(value:string)=>void,
     changeStrokeColor:(value:string)=>void,
     changeStrokeWidth:(value:number)=>void,
+    changeStrokeType:(value: number[])=>void,
     addCircle:()=>void,
     addLine:()=>void,
     addHorizontalEllipse:()=>void,
@@ -69,6 +74,7 @@ export interface Editor{
     fillColor:string,
     strokeColor:string,
     strokeWidth:number,
+    strokeType: number[],
     selectedObjects: fabric.Object[]
     
 }

@@ -14,6 +14,8 @@ const buildEditor =({
     setStrokeColor,
     strokeWidth,
     setStrokeWidth,
+    strokeType,
+    setStrokeType,
     selectedObjects
 }:buildEditorProps):Editor=>{
     const getWorkspace = ()=>{
@@ -27,6 +29,22 @@ const buildEditor =({
         canvas._centerObject(object, center)
     }
     return{
+        bringForward:()=>{
+            canvas.getActiveObjects().forEach(element=>{
+                canvas.bringForward(element)
+            })
+            canvas.renderAll()
+            const workspace = getWorkspace()
+            workspace?.sendToBack()
+        },
+        sendBackward:()=>{
+            canvas.getActiveObjects().forEach(element=>{
+                canvas.sendBackwards(element)
+            })
+            canvas.renderAll()
+            const workspace = getWorkspace()
+            workspace?.sendToBack()
+        },
         changeFillColor:(value:string)=>{
             setFillColor(value)
             canvas.getActiveObjects().forEach(element => {
@@ -52,13 +70,22 @@ const buildEditor =({
             });
             canvas.renderAll()
         },
+        changeStrokeType:(value:number[])=>{
+            setStrokeType(value)
+            canvas.getActiveObjects().forEach(element=>{
+                element.set({strokeDashArray: value})
+            })
+            canvas.renderAll()
+        },
         addCircle:()=>{
             const object=new fabric.Circle({
-                height:100,
-                width:100,
+                height: 100,
+                width: 100,
+                radius: 60,
                 fill: fillColor,
-                stroke:strokeColor,
-                radius:60
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -66,12 +93,14 @@ const buildEditor =({
         },
         addHorizontalEllipse:()=>{
             const object=new fabric.Ellipse({
-                height:100,
+                height: 100,
                 width:100,
-                fill: fillColor,
-                stroke:strokeColor,
                 rx: 50,
-                ry: 70
+                ry: 70,
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -79,12 +108,14 @@ const buildEditor =({
         },
         addVerticalEllipse:()=>{
             const object=new fabric.Ellipse({
-                height:100,
-                width:100,
-                fill: fillColor,
-                stroke:strokeColor,
+                height: 100,
+                width: 100,
                 rx: 70,
-                ry: 50
+                ry: 50,
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -96,6 +127,8 @@ const buildEditor =({
                 {
                     fill: fillColor,
                     stroke:strokeColor,
+                    strokeWidth: strokeWidth,
+                    strokeDashArray: strokeType,
                 }
             )
             center(object)
@@ -104,12 +137,14 @@ const buildEditor =({
         },
         addRoundedRectangle:()=>{
             const object=new fabric.Rect({
-                height:100,
-                width:100,
-                fill: fillColor,
-                stroke:strokeColor,
+                height: 100,
+                width: 100,
                 rx: 10,
-                ry: 10
+                ry: 10,
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -117,10 +152,12 @@ const buildEditor =({
         },
         addRectangle:()=>{
             const object=new fabric.Rect({
-                height:100,
-                width:100,
+                height: 100,
+                width: 100,
                 fill: fillColor,
-                stroke:strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -137,10 +174,12 @@ const buildEditor =({
                     {x:0, y:HEIGHT/2},
                 ],
                 {
-                    height:100,
-                    width:100, 
+                    height: 100,
+                    width: 100, 
                     fill: fillColor,
-                    stroke:strokeColor,
+                    stroke: strokeColor,
+                    strokeWidth: strokeWidth,
+                    strokeDashArray: strokeType,
                 }
             )
             center(object)
@@ -149,12 +188,12 @@ const buildEditor =({
         },
         addTriangle:()=>{
             const object=new fabric.Triangle({
-                height:100,
-                width:100,
+                height: 100,
+                width: 100,
                 fill: fillColor,
-                stroke:strokeColor,
-                // rx:10,
-                // ry:10,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
             })
             center(object)
             canvas.add(object)
@@ -173,8 +212,9 @@ const buildEditor =({
                     height:100,
                     width:100,
                     fill: fillColor,
-                    stroke:strokeColor,
-                    
+                    stroke: strokeColor,
+                    strokeWidth: strokeWidth,
+                    strokeDashArray: strokeType,
                 }
             )
             center(object)
@@ -185,6 +225,7 @@ const buildEditor =({
         fillColor,
         strokeColor,
         strokeWidth,
+        strokeType,
         selectedObjects
          
     }
@@ -197,6 +238,7 @@ export const useEditor=()=>{
     const [fillColor, setFillColor] = useState("#000000")
     const [strokeColor, setStrokeColor] = useState("#000000")
     const [strokeWidth, setStrokeWidth] = useState(5)
+    const [strokeType, setStrokeType] = useState<number[]>([])
  
     useAutoResizer({canvas,container})
 
@@ -212,6 +254,8 @@ export const useEditor=()=>{
                 setStrokeColor,
                 strokeWidth,
                 setStrokeWidth,
+                strokeType,
+                setStrokeType,
                 selectedObjects
             })
         }
@@ -221,6 +265,7 @@ export const useEditor=()=>{
         fillColor,
         strokeColor,
         strokeWidth,
+        strokeType,
         selectedObjects
     ])
 
