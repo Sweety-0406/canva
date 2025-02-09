@@ -6,9 +6,13 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ShapeTool from "./shape-tool"
 import { FaCircle, FaSquare, FaSquareFull  } from "react-icons/fa";
-import { IoTriangle, IoEllipse } from "react-icons/io5";
+import { IoTriangle } from "react-icons/io5";
 import { FaDiamond } from "react-icons/fa6";
 import { TfiLayoutLineSolid } from "react-icons/tfi";
+import { IoStar } from "react-icons/io5";
+import { PiPentagonFill } from "react-icons/pi";
+import { BsHexagonFill } from "react-icons/bs";
+import { VscHeartFilled } from "react-icons/vsc";
  
 
 interface ShapeSidebarProps{
@@ -44,6 +48,9 @@ const ShapeSidebar = ({
                     <ShapeTool icon={FaDiamond} onClick={()=>editor?.addDiamond()} />
                     <ShapeTool icon={IoTriangle} onClick={()=>editor?.addTriangle()} />
                     <ShapeTool icon={IoTriangle} onClick={()=>editor?.addReverseTriangle()} iconClassName="rotate-180" />
+                    <ShapeTool icon={IoStar} onClick={()=>editor?.addStar()}  />
+                    <ShapeTool icon={PiPentagonFill} onClick={()=>editor?.addPentagon()}  />
+                    <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}  />
                 </div>
             </ScrollArea>
         </aside>

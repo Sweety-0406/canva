@@ -7,6 +7,9 @@ import { Paintbrush } from 'lucide-react';
 import { AiOutlineAlibaba } from "react-icons/ai";
 import { BsBorderWidth } from "react-icons/bs";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown  } from "react-icons/io";
+import { RxTransparencyGrid } from "react-icons/rx";
+import { RiBrushAiFill } from "react-icons/ri";
+
 
 
 interface  ToolBarProps{
@@ -47,7 +50,7 @@ const Toolbar=({
                         `}
                           
                     >
-                        <Paintbrush 
+                        <RiBrushAiFill 
                             className="size-4 rounded-sm"
                             style={{
                                 color: typeof fillColor === "string" ? fillColor : "black"
@@ -102,7 +105,7 @@ const Toolbar=({
             </div>
             <div className="flex items-center  h-full my-auto">
                 <Hint 
-                    label="Stroke Width"
+                    label="Send Forward"
                     side="bottom"
                     >
                     <Button 
@@ -122,7 +125,7 @@ const Toolbar=({
             </div>
             <div className="flex items-center  h-full my-auto">
                 <Hint 
-                    label="Stroke Width"
+                    label="Send Backward"
                     side="bottom"
                     >
                     <Button 
@@ -136,6 +139,26 @@ const Toolbar=({
                     >
                         <IoIosArrowRoundDown  
                             className="size-4 rounded-sm "
+                        />    
+                    </Button>
+                </Hint>
+            </div>
+            <div className="flex items-center  h-full my-auto">
+                <Hint 
+                    label="Opacity"
+                    side="bottom"
+                    >
+                    <Button 
+                        onClick={()=>onChanveActiveTool("opacity")}
+                        size="sm" 
+                        variant="ghost"
+                        className={`
+                            items-center h-full rounded-sm  flex justify-center p-1 px-2
+                            ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
+                        `}
+                    >
+                        <RxTransparencyGrid  
+                            className="size-4 rounded-sm"
                         />    
                     </Button>
                 </Hint>

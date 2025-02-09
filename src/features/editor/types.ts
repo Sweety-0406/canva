@@ -50,11 +50,14 @@ export type buildEditorProps = {
     strokeWidth:number,
     setStrokeWidth: (value: number)=>void,
     strokeType: number[],
-    setStrokeType:(value: number[])=>void
+    setStrokeType:(value: number[])=>void,
+    opacity: number,
+    setOpacity: (value: number)=>void,
     selectedObjects: fabric.Object[]
 }  
 
 export interface Editor{
+    changeOpacity:(value:number)=>void
     bringForward:()=>void,
     sendBackward:()=>void,
     changeFillColor:(value:string)=>void,
@@ -70,11 +73,16 @@ export interface Editor{
     addDiamond:()=>void,
     addTriangle:()=>void,
     addReverseTriangle:()=>void,
+    addStar:()=>void,
+    addPentagon:()=>void,
+    addHexagon:()=>void,
+    addHeart:()=>void,
     canvas:fabric.Canvas,
     fillColor:string,
     strokeColor:string,
     strokeWidth:number,
     strokeType: number[],
+    opacity: number,
     selectedObjects: fabric.Object[]
     
 }

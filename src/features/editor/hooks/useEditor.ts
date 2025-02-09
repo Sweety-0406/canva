@@ -16,6 +16,8 @@ const buildEditor =({
     setStrokeWidth,
     strokeType,
     setStrokeType,
+    opacity,
+    setOpacity,
     selectedObjects
 }:buildEditorProps):Editor=>{
     const getWorkspace = ()=>{
@@ -29,6 +31,13 @@ const buildEditor =({
         canvas._centerObject(object, center)
     }
     return{
+        changeOpacity:(value:number)=>{
+            setOpacity(value)
+            canvas.getActiveObjects().forEach(element => {
+                element.set({opacity: value})
+            });
+            canvas.renderAll()
+        },
         bringForward:()=>{
             canvas.getActiveObjects().forEach(element=>{
                 canvas.bringForward(element)
@@ -86,6 +95,7 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
             center(object)
             canvas.add(object)
@@ -101,6 +111,7 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
             center(object)
             canvas.add(object)
@@ -116,6 +127,7 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
             center(object)
             canvas.add(object)
@@ -129,6 +141,7 @@ const buildEditor =({
                     stroke:strokeColor,
                     strokeWidth: strokeWidth,
                     strokeDashArray: strokeType,
+                    opacity:1,
                 }
             )
             center(object)
@@ -145,6 +158,7 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
             center(object)
             canvas.add(object)
@@ -158,7 +172,26 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
+            // const object = new fabric.Polygon([
+            //     { x: 150, y: 50 },  // Top point
+            //     { x: 170, y: 150 }, // Bottom right
+            //     { x: 250, y: 150 }, // Top right
+            //     { x: 190, y: 190 }, // Inner bottom right
+            //     { x: 210, y: 290 }, // Bottom center
+            //     { x: 150, y: 220 }, // Inner bottom left
+            //     { x: 90, y: 290 },  // Bottom left
+            //     { x: 110, y: 190 }, // Inner top left
+            //     { x: 50, y: 150 },  // Top left
+            //     { x: 130, y: 150 } 
+            //  ], {
+            //     fill: fillColor,
+            //     stroke: strokeColor,
+            //     strokeWidth: strokeWidth,
+            //     strokeDashArray: strokeType,
+            //     opacity:1,
+            //  })
             center(object)
             canvas.add(object)
             canvas.setActiveObject(object)
@@ -180,6 +213,7 @@ const buildEditor =({
                     stroke: strokeColor,
                     strokeWidth: strokeWidth,
                     strokeDashArray: strokeType,
+                    opacity:1,
                 }
             )
             center(object)
@@ -194,6 +228,7 @@ const buildEditor =({
                 stroke: strokeColor,
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
+                opacity:1,
             })
             center(object)
             canvas.add(object)
@@ -215,8 +250,91 @@ const buildEditor =({
                     stroke: strokeColor,
                     strokeWidth: strokeWidth,
                     strokeDashArray: strokeType,
+                    opacity:1,
                 }
             )
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addStar:()=>{
+            const createStarPoints=(centerX:number, centerY:number, outerRadius:number, innerRadius:number)=> {
+                const points = [];
+                const totalPoints = 5;
+                const step = Math.PI / totalPoints;
+                
+                for (let i = 0; i < 2 * totalPoints; i++) {
+                    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                    const x = centerX + radius * Math.cos(i * step - Math.PI / 2);
+                    const y = centerY + radius * Math.sin(i * step - Math.PI / 2);
+                    points.push({ x, y });
+                }
+                
+                return points;
+            }
+            
+            const starPoints = createStarPoints(150, 150, 50, 20);
+            const object = new fabric.Polygon(starPoints, {
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
+                opacity:1,
+            })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addPentagon:()=>{
+            const object = new fabric.Polygon([
+                { x: 150, y: 100 }, 
+                { x: 185, y: 130 }, 
+                { x: 170, y: 170 }, 
+                { x: 130, y: 170 }, 
+                { x: 115, y: 130 } 
+             ], {
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
+                opacity:1,
+             })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addHexagon:()=>{
+            const object = new fabric.Polygon([
+                { x: 150, y: 100 },
+                { x: 185, y: 125 },  
+                { x: 185, y: 165 },  
+                { x: 150, y: 190 },
+                { x: 115, y: 165 },  
+                { x: 115, y: 125 }  
+             ], {
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
+                opacity:1,
+             })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
+        },
+        addHeart:()=>{
+            const object = new fabric.Path( `
+                    M 150 200
+                    C 50 100, 50 20, 150 80
+                    C 250 20, 250 100, 150 200
+                    Z
+                `, {
+                fill: fillColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                strokeDashArray: strokeType,
+                opacity:1,
+             })
             center(object)
             canvas.add(object)
             canvas.setActiveObject(object)
@@ -226,7 +344,8 @@ const buildEditor =({
         strokeColor,
         strokeWidth,
         strokeType,
-        selectedObjects
+        selectedObjects,
+        opacity
          
     }
 }
@@ -239,6 +358,7 @@ export const useEditor=()=>{
     const [strokeColor, setStrokeColor] = useState("#000000")
     const [strokeWidth, setStrokeWidth] = useState(5)
     const [strokeType, setStrokeType] = useState<number[]>([])
+    const [opacity, setOpacity] = useState<number>(1)
  
     useAutoResizer({canvas,container})
 
@@ -256,6 +376,8 @@ export const useEditor=()=>{
                 setStrokeWidth,
                 strokeType,
                 setStrokeType,
+                opacity,
+                setOpacity,
                 selectedObjects
             })
         }
@@ -266,7 +388,8 @@ export const useEditor=()=>{
         strokeColor,
         strokeWidth,
         strokeType,
-        selectedObjects
+        selectedObjects,
+        opacity
     ])
 
     const init = useCallback(({
