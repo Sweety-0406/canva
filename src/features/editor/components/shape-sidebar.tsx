@@ -13,6 +13,8 @@ import { IoStar } from "react-icons/io5";
 import { PiPentagonFill } from "react-icons/pi";
 import { BsHexagonFill } from "react-icons/bs";
 import { VscHeartFilled } from "react-icons/vsc";
+import { FaArrowRight, FaArrowsUpDown  } from "react-icons/fa6";
+import { TbOvalFilled, TbOvalVerticalFilled, TbArrowNarrowRightDashed, TbArrowDownCircleFilled, TbArrowDownSquareFilled   } from "react-icons/tb";
  
 
 interface ShapeSidebarProps{
@@ -37,20 +39,40 @@ const ShapeSidebar = ({
             `}
         >
             <ToolSidebarHeader onClose={onClose} title="Shapes" description="Add shapes to your canvas" />
-            <ScrollArea className="p-1">
-                <div className="grid grid-cols-3 gap-2">
-                    <ShapeTool icon={FaCircle} onClick={()=>editor?.addCircle()} />
-                    <ShapeTool icon={FaCircle} onClick={()=>editor?.addHorizontalEllipse()} iconClassName=" "/>
-                    <ShapeTool icon={FaCircle} onClick={()=>editor?.addVerticalEllipse()} iconClassName=" "/>
-                    <ShapeTool icon={TfiLayoutLineSolid} onClick={()=>editor?.addLine()} iconClassName="rotate-45" />
-                    <ShapeTool icon={FaSquare} onClick={()=>editor?.addRoundedRectangle()} />
-                    <ShapeTool icon={FaSquareFull} onClick={()=>editor?.addRectangle()} />
-                    <ShapeTool icon={FaDiamond} onClick={()=>editor?.addDiamond()} />
-                    <ShapeTool icon={IoTriangle} onClick={()=>editor?.addTriangle()} />
-                    <ShapeTool icon={IoTriangle} onClick={()=>editor?.addReverseTriangle()} iconClassName="rotate-180" />
-                    <ShapeTool icon={IoStar} onClick={()=>editor?.addStar()}  />
-                    <ShapeTool icon={PiPentagonFill} onClick={()=>editor?.addPentagon()}  />
-                    <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}  />
+            <ScrollArea className="p-1 h-[85vh]">
+                <div>
+                    <div className="text-sm p1-2">
+                        Shapes
+                    </div>
+                    <div className="grid border-t pt-2 grid-cols-3 gap-2">
+                        <ShapeTool icon={FaCircle} onClick={()=>editor?.addCircle()} />
+                        <ShapeTool icon={TbOvalFilled} onClick={()=>editor?.addHorizontalEllipse()} iconClassName="size-16 "/>
+                        <ShapeTool icon={TbOvalVerticalFilled} onClick={()=>editor?.addVerticalEllipse()} iconClassName="size-16 "/>
+                        <ShapeTool icon={FaSquare} onClick={()=>editor?.addRoundedRectangle()} />
+                        <ShapeTool icon={FaSquareFull} onClick={()=>editor?.addRectangle()} />
+                        <ShapeTool icon={FaDiamond} onClick={()=>editor?.addDiamond()} />
+                        <ShapeTool icon={IoTriangle} onClick={()=>editor?.addTriangle()} />
+                        <ShapeTool icon={IoTriangle} onClick={()=>editor?.addReverseTriangle()} iconClassName="rotate-180" />
+                        <ShapeTool icon={IoStar} onClick={()=>editor?.addStar()}  />
+                        <ShapeTool icon={PiPentagonFill} onClick={()=>editor?.addPentagon()}  />
+                        <ShapeTool icon={BsHexagonFill} onClick={()=>editor?.addHexagon()}  />
+                        <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}  />
+                    </div>
+                </div>
+                <div className="mt-6">
+                    <div className="text-sm pb-1">
+                        Lines
+                    </div>
+                    <div className="grid border-t pt-2 grid-cols-3 gap-2">
+                        <ShapeTool icon={TfiLayoutLineSolid} onClick={()=>editor?.addLine()} iconClassName="rotate-45 size-16"  />
+                        <ShapeTool icon={FaArrowRight} onClick={()=>editor?.addSingleHeadArrow()} iconClassName="size-16 " />
+                        <ShapeTool icon={TbArrowNarrowRightDashed} onClick={()=>editor?.addDashedSingleHeadArrow()} iconClassName="size-16 " />
+                        <ShapeTool icon={FaArrowsUpDown } onClick={()=>editor?.addDoubleHeadArrow()} iconClassName="rotate-90" />
+                        <ShapeTool icon={FaArrowsUpDown } onClick={()=>editor?.addDashedDoubleHeadArrow()} iconClassName="rotate-90" />
+                        <ShapeTool icon={TbArrowDownCircleFilled } onClick={()=>editor?.addArrowWithCircle()} iconClassName="-rotate-90" />
+                        <ShapeTool icon={TbArrowDownSquareFilled  } onClick={()=>editor?.addArrowWithRectangle()} iconClassName="-rotate-90" />
+                        
+                    </div>
                 </div>
             </ScrollArea>
         </aside>

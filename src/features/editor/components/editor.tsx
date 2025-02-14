@@ -14,6 +14,8 @@ import FillColorSidebar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
 import OpacitySidebar from "./opacity-sidebar";
+import TextSidebar from "./text-sidebar";
+import FontSidebar from "./font-sidebar";
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select")
@@ -61,6 +63,8 @@ export const Editor = () => {
         <StrokeColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <StrokeWidthSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <TextSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <main className="flex-1  flex flex-col relative bg-muted overflow-x-auto">
           <Toolbar editor={editor} activeTool={activeTool} onChanveActiveTool={onChangeActiveTool} />
           <div className="flex-1 overflow-y-hidden h-full bg-muted" ref={containerRef}>

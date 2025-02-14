@@ -9,6 +9,8 @@ import { BsBorderWidth } from "react-icons/bs";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown  } from "react-icons/io";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { RiBrushAiFill } from "react-icons/ri";
+import { isTextType } from "../utils";
+import { FaBold } from "react-icons/fa";
 
 
 
@@ -31,90 +33,150 @@ const Toolbar=({
     }
     const strokeColor = editor?.selectedObjects[0].stroke
     const fillColor = editor?.selectedObjects[0].fill
-    const strokeWidth = editor?.selectedObjects[0].strokeWidth
-     
+    const font = editor?.font
+    const fontWeight = editor?.fontWeight || 500
+    const obj = editor?.selectedObjects[0]
+    
+    const selectedObjectType = editor?.selectedObjects[0].type;
+    const isTextTypeObject = isTextType(selectedObjectType) 
+    // console.log(fontWeight) 
     return( 
         <div className="bg-white flex gap-2 border-b p-1 h-10">
-            <div className="flex items-center  h-full my-auto">
-                <Hint 
-                    label="Fill Color"
-                    side="bottom"
-                    >
-                    <Button 
-                        onClick={()=>onChanveActiveTool("fill")}
-                        size="sm" 
-                        variant="ghost"
-                        className={`
-                            items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="fill"? "bg-gray-100":"bg-none"}
-                        `}
-                          
-                    >
-                        <RiBrushAiFill 
-                            className="size-4 rounded-sm"
+            {!(selectedObjectType==="line" || selectedObjectType==="group") && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Fill Color"
+                        side="bottom"
+                        >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("fill")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="fill"? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <RiBrushAiFill 
+                                className="size-4 rounded-sm"
+                                style={{
+                                    color: typeof fillColor === "string" ? fillColor : "black"
+                                }}
+                            />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Font"
+                        side="bottom"
+                        >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("font")}
+                            size="sm" 
+                            variant="ghost"
                             style={{
-                                color: typeof fillColor === "string" ? fillColor : "black"
+                                fontFamily: font
                             }}
-                        />
-                    </Button>
-                </Hint>
-            </div>
-            <div className="flex items-center  h-full my-auto">
-                <Hint 
-                    label="Stroke color"
-                    side="bottom"
+                            className={`
+                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="font"? "bg-gray-100":"bg-none"}
+                            `}
+                            
+                        >
+                            {font}
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Bold"
+                        side="bottom"
                     >
-                    <Button 
-                        onClick={()=>onChanveActiveTool("stroke-color")}
-                        size="sm" 
-                        variant="ghost"
-                        className={`
-                            items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="stroke-color"? "bg-gray-100":"bg-none"}
-                        `}
-                          
-                    >
-                        <AiOutlineAlibaba 
-                            className="size-4 rounded-sm "
+                        <Button 
+                            onClick = {()=>{
+                                editor?.changeFontWeight(fontWeight)
+                            }}
+                            size="sm" 
+                            variant="ghost"
                             style={{
-                                color: typeof strokeColor === "string" ? strokeColor : "black"
+                                fontFamily: font
                             }}
-                        />
-                    </Button>
-                </Hint>
-            </div>
-            <div className="flex items-center  h-full my-auto">
-                <Hint 
-                    label="Stroke Width"
-                    side="bottom"
+                            className={`
+                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="font"? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <FaBold />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {!isTextTypeObject && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Stroke color"
+                        side="bottom"
+                        >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("stroke-color")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="stroke-color"? "bg-gray-100":"bg-none"}
+                            `}
+                            
+                        >
+                            <AiOutlineAlibaba 
+                                className="size-4 rounded-sm "
+                                style={{
+                                    color: typeof strokeColor === "string" ? strokeColor : "black"
+                                }}
+                            />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {!(selectedObjectType==="textbox" || selectedObjectType==="line" || selectedObjectType==="group")  && (
+                <div className={`
+                    flex items-center  h-full my-auto
+                `}>
+                    <Hint 
+                        label="Stroke Width"
+                        side="bottom"
                     >
-                    <Button 
-                        onClick={()=>onChanveActiveTool("stroke-width")}
-                        size="sm" 
-                        variant="ghost"
-                        className={`
-                            items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
-                        `}
-                    >
-                        <BsBorderWidth 
-                            className="size-4 rounded-sm "
-                        />    
-                    </Button>
-                </Hint>
-            </div>
+                        <Button 
+                            onClick={()=>onChanveActiveTool("stroke-width")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <BsBorderWidth 
+                                className="size-4 rounded-sm "
+                            />    
+                        </Button>
+                    </Hint>
+                </div>
+            )}
             <div className="flex items-center  h-full my-auto">
                 <Hint 
                     label="Send Forward"
                     side="bottom"
-                    >
+                >
                     <Button 
                         onClick={()=>editor?.bringForward()}
                         size="sm" 
                         variant="ghost"
                         className={`
                             items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
                         `}
                     >
                         <IoIosArrowRoundUp 
@@ -134,7 +196,6 @@ const Toolbar=({
                         variant="ghost"
                         className={`
                             items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
                         `}
                     >
                         <IoIosArrowRoundDown  
@@ -154,7 +215,6 @@ const Toolbar=({
                         variant="ghost"
                         className={`
                             items-center h-full rounded-sm  flex justify-center p-1 px-2
-                            ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
                         `}
                     >
                         <RxTransparencyGrid  

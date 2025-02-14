@@ -68,11 +68,11 @@ const StrokeWidthSidebar = ({
                         <div className="border-2 rounded-full border-black w-full " />
                     </Button>
                     <Button 
-                        onClick={()=>onChangeStrokeType([3,3])}
+                        onClick={()=>onChangeStrokeType([5,5])}
                         variant="secondary"
                         className={`
                             w-full
-                            ${JSON.stringify(strokeTypeValue) === '[3,3]' ? "border border-blue-300": "border-none"}
+                            ${JSON.stringify(strokeTypeValue) === '[5,5]' ? "border border-blue-300": "border-none"}
                         `}
                     >
                         <div className="border-2 border-dashed rounded-full border-black w-full " />

@@ -18,7 +18,11 @@ const buildEditor =({
     setStrokeType,
     opacity,
     setOpacity,
-    selectedObjects
+    selectedObjects,
+    font,
+    setFont,
+    fontWeight,
+    setFontWeight
 }:buildEditorProps):Editor=>{
     const getWorkspace = ()=>{
         return canvas.getObjects().find((obj)=>obj.name === 'clip')
@@ -64,7 +68,17 @@ const buildEditor =({
         changeStrokeColor:(value:string)=>{
             setStrokeColor(value)
             canvas.getActiveObjects().forEach(element => {
-                if(isTextType(element.type)){
+                if (element instanceof fabric.Group) {
+                    // Iterate over objects in the group
+                    element.getObjects().forEach(obj => {
+                        if (isTextType(obj.type)) {
+                            obj.set({ fill: value });
+                        } else {
+                            obj.set({ stroke: value, fill:value });
+                        }
+                    });
+                }
+                else if(isTextType(element.type)){
                     element.set({fill: value})
                 }else{
                     element.set({stroke: value})
@@ -85,6 +99,52 @@ const buildEditor =({
                 element.set({strokeDashArray: value})
             })
             canvas.renderAll()
+        },
+        changeFont:(value:string)=>{
+            setFont(value)
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    //@ts-ignore
+                    element.set({fontFamily: value})
+                    // element._set("fontFamily", value)
+                }
+            });
+            canvas.renderAll()
+        },
+        changeFontWeight:(value:number)=>{
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    if(value==700){
+                        //@ts-ignore
+                        element.set({fontWeight: 300})
+                        setFontWeight(300)
+                    }else{
+                        //@ts-ignore
+                        element.set({fontWeight: 700})
+                        setFontWeight(700)
+                    }
+                }
+            });
+            canvas.renderAll()
+        },
+        addText:(value, option)=>{
+            var shadow = new fabric.Shadow({
+                // color: fillColor,
+                blur: 20,
+            });
+            const object = new fabric.Textbox(value,{
+                fill: fillColor,
+                fontFamily:font,
+                fontSize: 32,
+                height: 100,
+                fontWeight:fontWeight,
+                width: 260,
+                // shadow: shadow,
+                ...option
+            })
+            center(object)
+            canvas.add(object)
+            canvas.setActiveObject(object)
         },
         addCircle:()=>{
             const object=new fabric.Circle({
@@ -144,10 +204,281 @@ const buildEditor =({
                     opacity:1,
                 }
             )
+            
             center(object)
             canvas.add(object)
             canvas.setActiveObject(object)
+            
         },
+        addSingleHeadArrow:()=>{
+            var triangle = new fabric.Triangle({
+                width: 10, 
+                height: 15, 
+                fill: strokeColor, 
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 235, 
+                top: 65,
+                angle: 90
+            });
+            
+            var line = new fabric.Line([50, 100, 200, 100], {
+                left: 75,
+                top: 70,
+                stroke: strokeColor,  
+                strokeDashArray: [5,5],
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+            
+            triangle.set({
+                fill: strokeColor,
+                stroke: strokeColor
+            });
+            
+            line.set({
+                stroke: strokeColor,
+            });
+            
+            var objs = [line, triangle];
+            
+            var alltogetherObj = new fabric.Group(objs);
+            
+            alltogetherObj.forEachObject(obj => {
+                obj.set({
+                    fill: strokeColor,
+                    stroke: strokeColor,
+                });
+            });
+            alltogetherObj.setCoords();
+            
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+            
+        },
+        addDashedSingleHeadArrow:()=>{
+            var triangle = new fabric.Triangle({
+                width: 10, 
+                height: 15, 
+                fill: strokeColor, 
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 235, 
+                top: 65,
+                angle: 90
+            });
+            
+            var line = new fabric.Line([50, 100, 200, 100], {
+                left: 75,
+                top: 70,
+                stroke: strokeColor,  
+                strokeDashArray: [5,5],
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+            
+            triangle.set({
+                fill: strokeColor,
+                stroke: strokeColor
+            });
+            
+            line.set({
+                stroke: strokeColor,
+            });
+            
+            var objs = [line, triangle];
+            
+            var alltogetherObj = new fabric.Group(objs);
+            
+            alltogetherObj.forEachObject(obj => {
+                obj.set({
+                    fill: strokeColor,
+                    stroke: strokeColor,
+                });
+            });
+            alltogetherObj.setCoords();
+            
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+            
+        },
+        addDoubleHeadArrow: () => {
+            var line = new fabric.Line([50, 100, 200, 100], {
+                stroke: strokeColor,  
+                strokeDashArray: strokeType , 
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+        
+            var leftTriangle = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 50, 
+                top: 110,
+                angle: -90 
+            });
+        
+            var rightTriangle = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 200, 
+                top: 95,
+                angle: 90 
+            });
+        
+            var objs = [line, leftTriangle, rightTriangle];
+        
+            
+            var alltogetherObj = new fabric.Group(objs);
+        
+            // Ensure bounding box and positioning is correct
+            alltogetherObj.setCoords();
+        
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+        },        
+        addDashedDoubleHeadArrow: () => {
+            var line = new fabric.Line([50, 100, 200, 100], {
+                stroke: strokeColor,  
+                strokeDashArray: [5,5] , 
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+        
+            var leftTriangle = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 48, 
+                top: 110,
+                angle: -90 
+            });
+        
+            var rightTriangle = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 200, 
+                top: 95,
+                angle: 90 
+            });
+        
+            var objs = [line, leftTriangle, rightTriangle];
+        
+            
+            var alltogetherObj = new fabric.Group(objs);
+        
+            // Ensure bounding box and positioning is correct
+            alltogetherObj.setCoords();
+        
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+        }, 
+        addArrowWithCircle: () => {
+            var line = new fabric.Line([50, 100, 200, 100], {
+                stroke: strokeColor,  
+                strokeDashArray: strokeType || [],
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+        
+            var arrowhead = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 200, 
+                top: 95,
+                angle: 90 
+            });
+        
+            var LeftCircle = new fabric.Circle({
+                radius: 5,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 50, 
+                top: 102,
+                originX: "center",
+                originY: "center"
+            });
+        
+            var objs = [line, LeftCircle, arrowhead];
+        
+            var alltogetherObj = new fabric.Group(objs);
+        
+            alltogetherObj.setCoords();
+        
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+        },
+        addArrowWithRectangle: () => {
+            var line = new fabric.Line([50, 100, 200, 100], {
+                stroke: strokeColor,  
+                strokeDashArray: strokeType || [],
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+        
+            var arrowhead = new fabric.Triangle({
+                width: 10,
+                height: 15,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 200, 
+                top: 95,
+                angle: 90 
+            });
+        
+            var LeftRectangle = new fabric.Rect({
+                width: 10,
+                height: 10,
+                fill: strokeColor,
+                stroke: strokeColor,
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 50, 
+                top: 102, 
+                originX: "center",
+                originY: "center"
+            });
+        
+            var objs = [line, LeftRectangle, arrowhead];
+        
+            var alltogetherObj = new fabric.Group(objs);
+        
+            alltogetherObj.setCoords();
+        
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
+        },              
         addRoundedRectangle:()=>{
             const object=new fabric.Rect({
                 height: 100,
@@ -174,24 +505,6 @@ const buildEditor =({
                 strokeDashArray: strokeType,
                 opacity:1,
             })
-            // const object = new fabric.Polygon([
-            //     { x: 150, y: 50 },  // Top point
-            //     { x: 170, y: 150 }, // Bottom right
-            //     { x: 250, y: 150 }, // Top right
-            //     { x: 190, y: 190 }, // Inner bottom right
-            //     { x: 210, y: 290 }, // Bottom center
-            //     { x: 150, y: 220 }, // Inner bottom left
-            //     { x: 90, y: 290 },  // Bottom left
-            //     { x: 110, y: 190 }, // Inner top left
-            //     { x: 50, y: 150 },  // Top left
-            //     { x: 130, y: 150 } 
-            //  ], {
-            //     fill: fillColor,
-            //     stroke: strokeColor,
-            //     strokeWidth: strokeWidth,
-            //     strokeDashArray: strokeType,
-            //     opacity:1,
-            //  })
             center(object)
             canvas.add(object)
             canvas.setActiveObject(object)
@@ -345,13 +658,15 @@ const buildEditor =({
         strokeWidth,
         strokeType,
         selectedObjects,
-        opacity
-         
+        opacity,
+        font,
+        fontWeight,
+        setFontWeight         
     }
 }
 
 export const useEditor=()=>{
-    const[canvas, setCanvas] = useState<fabric.Canvas | null>(null)
+    const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
     const [container, setContainer] = useState<HTMLDivElement | null>(null)
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
     const [fillColor, setFillColor] = useState("#000000")
@@ -359,6 +674,8 @@ export const useEditor=()=>{
     const [strokeWidth, setStrokeWidth] = useState(5)
     const [strokeType, setStrokeType] = useState<number[]>([])
     const [opacity, setOpacity] = useState<number>(1)
+    const [font, setFont] = useState("Arial")
+    const [fontWeight, setFontWeight] = useState(700)
  
     useAutoResizer({canvas,container})
 
@@ -378,7 +695,11 @@ export const useEditor=()=>{
                 setStrokeType,
                 opacity,
                 setOpacity,
-                selectedObjects
+                selectedObjects,
+                font,
+                setFont,
+                fontWeight,
+                setFontWeight
             })
         }
         return undefined
@@ -389,7 +710,10 @@ export const useEditor=()=>{
         strokeWidth,
         strokeType,
         selectedObjects,
-        opacity
+        opacity,
+        font, 
+        // setFont,
+        fontWeight
     ])
 
     const init = useCallback(({

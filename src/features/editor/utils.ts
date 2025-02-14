@@ -1,7 +1,7 @@
 import { RGBColor } from "react-color"
 
 export const isTextType=(type: string | undefined)=>{
-    return type ==="text" || type==="i-text" || type==="textBox"
+    return type ==="text" || type==="i-text" || type==="textbox"
 }
 
 export const ColorObjectToString = (rgba: RGBColor | "transparent")=>{

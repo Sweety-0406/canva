@@ -17,7 +17,7 @@ const ShapeTool=({
 }:ShapeToolProps)=>{
     return(
         <div className="border p-2 hover:cursor-pointer" onClick={onClick}>
-            <Icon className={cn("h-full w-full", iconClassName)} />
+            <Icon className={cn("h-full w-full flex justify-center", iconClassName)} />
         </div>
     )
 }

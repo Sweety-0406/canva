@@ -1,5 +1,6 @@
 import { fabric } from "fabric"
 import * as material from "material-colors"
+import { ITextOptions } from "fabric/fabric-impl"
 
 export const colors=[
     material.red["500"],
@@ -21,6 +22,28 @@ export const colors=[
     material.indigo["500"],
     material.deepPurple["500"],
     "transparent"
+]
+
+export const fonts = [
+    "Arial",
+    "Arial Black",
+    "Verdana",
+    "Helvetica",
+    "Tahoma",
+    "Trebuchet MS",
+    "Time New Roman",
+    "Georgia",
+    "Garamond",
+    "Courier New",
+    "Brush Script MT",
+    "Palatino",
+    "Bookman",
+    "Comic Sans MS",
+    "Impact ",
+    "Lucid Sans Unicode",
+    "Geneva",
+    "Lucida Console",
+    "OpenType"
 ]
 
 export type ActiveTool = 
@@ -53,19 +76,32 @@ export type buildEditorProps = {
     setStrokeType:(value: number[])=>void,
     opacity: number,
     setOpacity: (value: number)=>void,
-    selectedObjects: fabric.Object[]
+    selectedObjects: fabric.Object[],
+    font: string,
+    setFont:(value: string)=>void,
+    fontWeight: number,
+    setFontWeight:(value: number)=>void
 }  
 
 export interface Editor{
     changeOpacity:(value:number)=>void
     bringForward:()=>void,
     sendBackward:()=>void,
-    changeFillColor:(value:string)=>void,
-    changeStrokeColor:(value:string)=>void,
-    changeStrokeWidth:(value:number)=>void,
+    addText:(value: string, option?: ITextOptions)=>void,
+    changeFillColor:(value: string)=>void,
+    changeStrokeColor:(value: string)=>void,
+    changeStrokeWidth:(value: number)=>void,
     changeStrokeType:(value: number[])=>void,
+    changeFont:(value: string)=>void,
+    changeFontWeight:(value: number)=>void,
     addCircle:()=>void,
     addLine:()=>void,
+    addSingleHeadArrow:()=>void,
+    addDashedSingleHeadArrow:()=>void,
+    addDoubleHeadArrow:()=>void,
+    addDashedDoubleHeadArrow:()=>void,
+    addArrowWithCircle:()=>void,
+    addArrowWithRectangle:()=>void,
     addHorizontalEllipse:()=>void,
     addVerticalEllipse:()=>void,
     addRectangle:()=>void,
@@ -83,6 +119,9 @@ export interface Editor{
     strokeWidth:number,
     strokeType: number[],
     opacity: number,
-    selectedObjects: fabric.Object[]
+    selectedObjects: fabric.Object[],
+    font: string,
+    fontWeight: number,
+    setFontWeight:(value:number)=>void
     
 }
