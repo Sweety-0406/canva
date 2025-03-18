@@ -7,16 +7,24 @@ import { cn } from "@/lib/utils"
 interface ShapeToolProps{
     onClick:()=>void,
     icon:IconType | LucideIcon,
-    iconClassName?:string
+    iconClassName?:string,
+    isActive?: boolean
 }
 
 const ShapeTool=({
     onClick,
     icon:Icon,
-    iconClassName
+    iconClassName,
+    isActive
 }:ShapeToolProps)=>{
     return(
-        <div className="border p-2 hover:cursor-pointer" onClick={onClick}>
+        <div 
+            className={`
+                ${isActive && "border-2 border-[#8B3DFF]"}
+                border p-2 hover:cursor-pointer
+            `}
+            onClick={onClick}
+        >
             <Icon className={cn("h-full w-full flex justify-center", iconClassName)} />
         </div>
     )

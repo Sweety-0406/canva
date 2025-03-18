@@ -5,42 +5,44 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ColorPicker from "./color-picker" 
 
-interface StrokeColorSidebarProps{
+interface ShadowColorSidebarProps{
     editor: Editor | undefined,
     activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
-const StrokeColorSidebar = ({
+const ShadowColorSidebar = ({
     editor,
     activeTool,
     onChangeActiveTool
-}:StrokeColorSidebarProps)=>{
-    const value = editor?.strokeColor || "#00000"
+}:ShadowColorSidebarProps)=>{
+    const textShadow = editor?.selectedObjects[0]?.get("shadow")    
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
 
     const onChange=(value:string)=>{
-        editor?.changeStrokeColor(value)
+        console.log(typeof value)
+        editor?.changeTextShadow( value)
     }
-
+    const value = typeof textShadow ==="object"? textShadow?.color:"black" 
+    console.log(textShadow)
     return(
         <aside 
             className={`
-                ${activeTool==="stroke-color" ? "visible":"hidden"}
+                ${activeTool==="shadow" ? "visible":"hidden"}
                 w-64 bg-white border-r
             `}
         >
-            <ToolSidebarHeader onClose={onClose} title="Stroke color" description="Add stroke color to your element" />
+            <ToolSidebarHeader onClose={onClose} title="Shadow color" description="Add shadow color to your element" />
             <ScrollArea className="p-1">
                 <div className="m-1">
-                    <ColorPicker value={value} onChange={onChange} />
+                    <ColorPicker  value={value} onChange={onChange} />
                 </div>
             </ScrollArea>
         </aside>
     )
 }
 
-export default StrokeColorSidebar
+export default ShadowColorSidebar
 

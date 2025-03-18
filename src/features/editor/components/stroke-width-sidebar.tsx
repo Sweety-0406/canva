@@ -42,7 +42,7 @@ const StrokeWidthSidebar = ({
             `}
         >
             <ToolSidebarHeader onClose={onClose} title="Stroke Options" description="Modify the stroke of your element" />
-            <ScrollArea className=" ">
+            <ScrollArea >
                 <div className="border-b mb-2 p-1">
                     <div className="m-1 pb-2">
                         <Label>
@@ -62,17 +62,17 @@ const StrokeWidthSidebar = ({
                         variant="secondary"
                         className={`
                             w-full
-                            ${JSON.stringify(strokeTypeValue) === '[]'? "border border-blue-300": "border-none"}
+                            ${JSON.stringify(strokeTypeValue) === '[]'? "border-2 border-[#8B3DFF]": "border-none"}
                         `}
                         >
                         <div className="border-2 rounded-full border-black w-full " />
                     </Button>
                     <Button 
-                        onClick={()=>onChangeStrokeType([5,5])}
+                        onClick={()=>onChangeStrokeType([10,10])}
                         variant="secondary"
                         className={`
                             w-full
-                            ${JSON.stringify(strokeTypeValue) === '[5,5]' ? "border border-blue-300": "border-none"}
+                            ${JSON.stringify(strokeTypeValue) === '[10,10]' ? "border-2 border-[#8B3DFF]": "border-none"}
                         `}
                     >
                         <div className="border-2 border-dashed rounded-full border-black w-full " />

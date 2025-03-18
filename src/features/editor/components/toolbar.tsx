@@ -3,15 +3,18 @@
 import { ActiveTool, Editor } from "../types";
 import { Button } from "@/components/ui/button";
 import Hint from "./hint";
-import { Paintbrush } from 'lucide-react';
 import { AiOutlineAlibaba } from "react-icons/ai";
 import { BsBorderWidth } from "react-icons/bs";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown  } from "react-icons/io";
-import { RxTransparencyGrid } from "react-icons/rx";
 import { RiBrushAiFill } from "react-icons/ri";
 import { isTextType } from "../utils";
-import { FaBold } from "react-icons/fa";
-
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa6";
+import { CiTextAlignCenter, CiTextAlignJustify, CiTextAlignLeft, CiTextAlignRight  } from "react-icons/ci";
+import OpacitySidebar from "./opacity-sidebar";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiColorFilterAiLine } from "react-icons/ri";
+import { RxShadowOuter } from "react-icons/rx";
+import { IoCopyOutline } from "react-icons/io5";
 
 
 interface  ToolBarProps{
@@ -34,15 +37,30 @@ const Toolbar=({
     const strokeColor = editor?.selectedObjects[0].stroke
     const fillColor = editor?.selectedObjects[0].fill
     const font = editor?.font
-    const fontWeight = editor?.fontWeight || 500
-    const obj = editor?.selectedObjects[0]
+    const shadowColor = typeof fillColor === "string" ? fillColor : "black"
+   
+
+
+    //@ts-ignore
+    const fontWeight = editor?.selectedObjects[0].get("fontWeight")
+    //@ts-ignore
+    const fontStyle = editor?.selectedObjects[0].get("fontStyle")
+    //@ts-ignore
+    const underline = editor?.selectedObjects[0].get("underline")
+    //@ts-ignore
+    const lineThrough = editor?.selectedObjects[0].get("linethrough")
+    //@ts-ignore
+    const textAlign = editor?.selectedObjects[0].get("textAlign")
+    //@ts-ignore
+    const fontSize = editor?.selectedObjects[0].get("fontSize")
+    const textShadow = editor?.selectedObjects[0].get("shadow")
+
     
     const selectedObjectType = editor?.selectedObjects[0].type;
     const isTextTypeObject = isTextType(selectedObjectType) 
-    // console.log(fontWeight) 
     return( 
         <div className="bg-white flex gap-2 border-b p-1 h-10">
-            {!(selectedObjectType==="line" || selectedObjectType==="group") && (
+            {!(selectedObjectType==="line" || selectedObjectType==="image" || selectedObjectType==="group") && (
                 <div className="flex items-center  h-full my-auto">
                     <Hint 
                         label="Fill Color"
@@ -67,8 +85,32 @@ const Toolbar=({
                     </Hint>
                 </div>
             )}
-            {selectedObjectType === "textbox" && (
+            {selectedObjectType === "textbox"  && (
                 <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Shadow color"
+                        side="bottom"
+                        >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("shadow")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="shadow"? "bg-gray-100":"bg-none"}
+                            `}
+                            
+                        >
+                            <RxShadowOuter 
+                                className="size-4  rounded-full shadow-2xl"
+                                style={{ boxShadow: "4px 4px 4px gray" }}
+                            />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center   h-full my-auto">
                     <Hint 
                         label="Font"
                         side="bottom"
@@ -81,13 +123,33 @@ const Toolbar=({
                                 fontFamily: font
                             }}
                             className={`
-                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                items-center border h-full rounded-sm  flex justify-center p-1 px-2
                                 ${activeTool==="font"? "bg-gray-100":"bg-none"}
                             `}
                             
                         >
                             {font}
                         </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex border items-center hover:bg-muted rounded-md px-2  h-full my-auto">
+                    <Hint 
+                        label="Font Size"
+                        side="bottom"
+                        customClassName="mt-1"
+                    >
+                        <input 
+                            type="number"
+                            min={10}
+                            max={100} 
+                            value={fontSize} 
+                            onChange={(e)=>{
+                                editor?.changeFontSize(parseInt(e.target.value))
+                            }}
+                            className=" text-center"
+                        />
                     </Hint>
                 </div>
             )}
@@ -103,15 +165,110 @@ const Toolbar=({
                             }}
                             size="sm" 
                             variant="ghost"
-                            style={{
-                                fontFamily: font
-                            }}
                             className={`
                                 items-center  h-full rounded-sm  flex justify-center p-1 px-2
-                                ${activeTool==="font"? "bg-gray-100":"bg-none"}
+                                ${fontWeight===700 ? "bg-gray-100":"bg-none"}
                             `}
                         >
                             <FaBold />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Italic"
+                        side="bottom"
+                    >
+                        <Button 
+                            onClick = {()=>{
+                                editor?.changeFontStyle(fontStyle)
+                            }}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                ${fontStyle==="italic" ? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <FaItalic />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Underline"
+                        side="bottom"
+                    >
+                        <Button 
+                            onClick = {()=>{
+                                editor?.changeUnderline(underline)
+                            }}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                ${underline===true ? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <FaUnderline />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center  h-full my-auto">
+                    <Hint 
+                        label="Line Through"
+                        side="bottom"
+                    >
+                        <Button 
+                            onClick = {()=>{
+                                editor?.changeLineThrough(lineThrough)
+                            }}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center  h-full rounded-sm  flex justify-center p-1 px-2
+                                ${lineThrough===true ? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <FaStrikethrough />
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType === "textbox" && (
+                <div className="flex items-center   h-full my-auto">
+                    <Hint 
+                        label="Align"
+                        side="bottom"
+                        >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("textAlign")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="textAlign"? "bg-gray-100":"bg-none"}
+                            `}
+                            
+                        >
+                            {textAlign=="center" && (
+                                <CiTextAlignCenter />
+                            )}
+                            {textAlign=="justify" && (
+                                <CiTextAlignJustify />
+                            )}
+                            {textAlign=="left" && (
+                                <CiTextAlignLeft />
+                            )}
+                            {textAlign=="right" && (
+                                <CiTextAlignRight/>
+                            )}
                         </Button>
                     </Hint>
                 </div>
@@ -166,6 +323,30 @@ const Toolbar=({
                     </Hint>
                 </div>
             )}
+            {selectedObjectType==="image"  && (
+                <div className={`
+                    flex items-center  h-full my-auto
+                `}>
+                    <Hint 
+                        label="Filters"
+                        side="bottom"
+                    >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("filter")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="filter"? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <RiColorFilterAiLine 
+                                className="size-4 rounded-sm "
+                            />    
+                        </Button>
+                    </Hint>
+                </div>
+            )}
             <div className="flex items-center  h-full my-auto">
                 <Hint 
                     label="Send Forward"
@@ -204,22 +385,39 @@ const Toolbar=({
                     </Button>
                 </Hint>
             </div>
+            <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="opacity"?"bg-muted":"bg-transparent"}`}>
+                <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChanveActiveTool}/>
+            </div>
             <div className="flex items-center  h-full my-auto">
                 <Hint 
-                    label="Opacity"
+                    label="copy style"
                     side="bottom"
-                    >
+                >
                     <Button 
-                        onClick={()=>onChanveActiveTool("opacity")}
+                        onClick = {()=>{
+                            editor?.onCopy()
+                            editor?.onPaste()
+                        }}
                         size="sm" 
                         variant="ghost"
-                        className={`
-                            items-center h-full rounded-sm  flex justify-center p-1 px-2
-                        `}
                     >
-                        <RxTransparencyGrid  
-                            className="size-4 rounded-sm"
-                        />    
+                        <IoCopyOutline  />
+                    </Button>
+                </Hint>
+            </div>
+            <div className="flex items-center  h-full my-auto">
+                <Hint 
+                    label="Delete"
+                    side="bottom"
+                >
+                    <Button 
+                        onClick = {()=>{
+                            editor?.deleteObject()
+                        }}
+                        size="sm" 
+                        variant="ghost"
+                    >
+                        <RiDeleteBin6Line  />
                     </Button>
                 </Hint>
             </div>

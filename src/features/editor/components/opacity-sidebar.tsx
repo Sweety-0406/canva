@@ -1,9 +1,10 @@
 "use client"
 
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@radix-ui/react-dropdown-menu"
 import { ActiveTool, Editor } from "../types"
-import ToolSidebarHeader from "./tool-sidebar-header"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Slider } from "@/components/ui/slider"
+import { RxTransparencyGrid } from "react-icons/rx"
+import Hint from "./hint"
 
 interface OpacitySidebarProps{
     editor: Editor | undefined,
@@ -17,9 +18,7 @@ const OpacitySidebar = ({
     onChangeActiveTool
 }:OpacitySidebarProps)=>{
     const value = editor?.selectedObjects[0]?.opacity || 1
-    const onClose = ()=>{
-        onChangeActiveTool("select")
-    }
+
 
     const onChangeOpacity=(value:number)=>{
         editor?.changeOpacity(value)
@@ -27,27 +26,34 @@ const OpacitySidebar = ({
 
 
     return(
-        <aside 
-            className={`
-                ${activeTool==="opacity" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
-        >
-            <ToolSidebarHeader onClose={onClose} title="Opacity" description="Modify the opacity of your element" />
-            <ScrollArea>
-                <div className="border-b mb-2 p-1">
-                    <div className="m-1 mt-6 pb-2  ">
-                        <Slider 
-                            onValueChange={(values)=>onChangeOpacity(values[0])}
-                            value={[value]}
-                            max={1}
-                            min={0}
-                            step={0.01}
-                        />
+        <div>
+            <DropdownMenu >
+                <DropdownMenuTrigger >
+                    <div className={`mt-2 ${activeTool==="opacity"?"bg-muted":"bg-transparent"}`}>
+                        <Hint 
+                            label="Transparency"
+                            side="bottom"
+                            customClassName="mt-[6px]"
+                            >
+                            <RxTransparencyGrid  
+                                className="size-4 -mt- rounded-sm"
+                            /> 
+                            {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChanveActiveTool}/> */}
+                        </Hint>
                     </div>
-                </div>
-            </ScrollArea>
-        </aside>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className={`w-44 rounded-md bg-white p-4 mt-4 `}>
+                    <Slider 
+                        onValueChange={(values)=>onChangeOpacity(values[0])}
+                        value={[value]}
+                        max={1}
+                        min={0}
+                        step={0.01}
+                        className="cursor-pointer"
+                    />
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     )
 }
 

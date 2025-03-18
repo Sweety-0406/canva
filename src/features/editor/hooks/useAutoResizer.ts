@@ -75,4 +75,6 @@ export const useAutoResizer=({
             debouncedAutoZoom.cancel();
         }
     },[canvas, container, autoZoom])
+
+    return {autoZoom}
 }

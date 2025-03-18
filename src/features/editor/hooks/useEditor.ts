@@ -1,13 +1,17 @@
 import { useCallback, useMemo, useState } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResizer } from "./useAutoResizer"
-import { buildEditorProps, Editor } from "../types"
+import { buildEditorProps, Editor, fonts, fontStyleType } from "../types"
 import { useCanvasEvents } from "./useCanvasEvents"
-import { isTextType } from "../utils"
+import { isTextType, createFilter } from "../utils"
+import { useClipboard } from "./useClipboard"
 
 
 const buildEditor =({
     canvas,
+    autoZoom,
+    copy,
+    paste,
     fillColor,
     setFillColor,
     strokeColor,
@@ -22,7 +26,20 @@ const buildEditor =({
     font,
     setFont,
     fontWeight,
-    setFontWeight
+    setFontWeight,
+    fontStyle,
+    setFontStyle,
+    lineThrough,
+    setLineThrough,
+    underline,
+    setUnderline,
+    textAlign,
+    setTextAlign,
+    fontSize,
+    setFontSize,
+    textShadow,
+    setTextShadow
+
 }:buildEditorProps):Editor=>{
     const getWorkspace = ()=>{
         return canvas.getObjects().find((obj)=>obj.name === 'clip')
@@ -35,6 +52,87 @@ const buildEditor =({
         canvas._centerObject(object, center)
     }
     return{
+        getWorkspace,
+        autoZoom:()=>autoZoom(),
+        zoomIn:()=>{
+            let zoomRatio = canvas.getZoom();
+            zoomRatio += 0.05
+            const center = canvas.getCenter()
+            canvas.zoomToPoint(
+                new fabric.Point(center.left, center.top),
+                zoomRatio
+            )
+        },
+        zoomOut:()=>{
+            let zoomRatio = canvas.getZoom();
+            zoomRatio -= 0.05
+            const center = canvas.getCenter()
+            canvas.zoomToPoint(
+                new fabric.Point(center.left, center.top),
+                zoomRatio < 0.2 ?  0.2 : zoomRatio
+            )
+        },
+        changeSize:(value:{width:number, height: number})=>{
+            const workspace = getWorkspace();
+            workspace?.set(value)
+            autoZoom()
+        },
+        changeBackground:(value:string)=>{
+            const workspace = getWorkspace()
+            workspace?.set({fill: value})
+            canvas.renderAll()
+        },
+        enableDrawing:()=>{
+            canvas.discardActiveObject()
+            canvas.renderAll()
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.width = strokeWidth
+            canvas.freeDrawingBrush.color = strokeColor
+            canvas.freeDrawingBrush.strokeDashArray = strokeType
+            
+        },
+        disableDrawing:()=>{
+            canvas.isDrawingMode = false;
+        },
+        onCopy:()=>copy(),
+        onPaste:()=>paste(),
+        addImage : (value:string)=>{
+            fabric.Image.fromURL(
+                value,
+                (image)=>{
+                    const workspace = getWorkspace();
+                    image.scaleToWidth(workspace?.width || 0)
+                    image.scaleToHeight(workspace?.height || 0)
+
+                    center(image)
+                    canvas.add(image)
+                    canvas.setActiveObject(image)
+                },
+                {
+                    crossOrigin: "anonymous"
+                }
+            )
+        },
+        changeImageFilter: (value: string)=>{
+            const objects = canvas.getActiveObjects()
+            objects.forEach((object)=>{
+                if(object.type==="image"){
+                    const imageObject = object as fabric.Image;
+                    const effect = createFilter(value);
+
+                    imageObject.filters = effect? [effect]:[]
+                    imageObject.applyFilters();
+                    canvas.renderAll()
+                }
+            })
+        },
+        deleteObject:()=>{
+            canvas.getActiveObjects().forEach(element => {
+                canvas.remove(element)
+            });
+            canvas.discardActiveObject()
+            canvas.renderAll()
+        },
         changeOpacity:(value:number)=>{
             setOpacity(value)
             canvas.getActiveObjects().forEach(element => {
@@ -84,6 +182,7 @@ const buildEditor =({
                     element.set({stroke: value})
                 }
             });
+            canvas.freeDrawingBrush.color = value
             canvas.renderAll()
         },
         changeStrokeWidth:(value:number)=>{
@@ -91,6 +190,7 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element => {
                 element.set({strokeWidth: value})
             });
+            canvas.freeDrawingBrush.width = value
             canvas.renderAll()
         },
         changeStrokeType:(value:number[])=>{
@@ -98,6 +198,7 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element=>{
                 element.set({strokeDashArray: value})
             })
+            canvas.freeDrawingBrush.strokeDashArray = value
             canvas.renderAll()
         },
         changeFont:(value:string)=>{
@@ -115,31 +216,113 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
                     if(value==700){
+                        setFontWeight(300)
                         //@ts-ignore
                         element.set({fontWeight: 300})
-                        setFontWeight(300)
                     }else{
+                        setFontWeight(700)
                         //@ts-ignore
                         element.set({fontWeight: 700})
-                        setFontWeight(700)
                     }
+                }
+            });
+            canvas.renderAll()
+        },
+        changeFontStyle:(value:string)=>{
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    if(value=="normal"){
+                        setFontStyle("italic")
+                        //@ts-ignore
+                        element.set({fontStyle: "italic"})
+                    }else{
+                        setFontStyle("normal")
+                        //@ts-ignore
+                        element.set({fontStyle: "normal"})
+                    }
+                }
+            });
+            canvas.renderAll()
+        },
+        changeFontSize:(value:number)=>{
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    if(value>100){
+                        value=100;
+                    }else if(value<10){
+                        value=10
+                    }
+                    setFontSize(value)
+                    //@ts-ignore
+                    element.set({fontSize: value})
+                }
+            });
+            canvas.renderAll()
+        },
+        changeUnderline:(value:boolean)=>{
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    setUnderline(!value)
+                    //@ts-ignore
+                    element.set({underline: !value})
+                }
+            });
+            canvas.renderAll()
+        },
+        changeLineThrough:(value:boolean)=>{
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    setLineThrough(!value)
+                    //@ts-ignore
+                    element.set({linethrough: !value})
+                }
+            });
+            canvas.renderAll()
+        },
+        changeTextAlign:(value:string)=>{
+            console.log(value)
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    setTextAlign(value)
+                    //@ts-ignore
+                    element.set({textAlign: value})
+                }
+            });
+            canvas.renderAll()
+        },
+        changeTextShadow:(color: string)=>{
+            const shadow = new fabric.Shadow({
+                color: color, 
+                blur: 30, 
+                offsetX: 0,
+                offsetY: 0
+            })
+            canvas.getActiveObjects().forEach(element => {
+                if(isTextType(element.type)){
+                    setTextShadow((color))
+                    element.set({shadow: shadow})
+
                 }
             });
             canvas.renderAll()
         },
         addText:(value, option)=>{
             var shadow = new fabric.Shadow({
-                // color: fillColor,
+                color: fillColor,
                 blur: 20,
             });
             const object = new fabric.Textbox(value,{
                 fill: fillColor,
                 fontFamily:font,
-                fontSize: 32,
+                fontStyle: "normal",
+                textAlign:"left",
+                fontSize: fontSize,
                 height: 100,
-                fontWeight:fontWeight,
+                fontWeight: fontWeight,
+                linethrough: false,
+                underline: false,
                 width: 260,
-                // shadow: shadow,
+                shadow: textShadow,
                 ...option
             })
             center(object)
@@ -660,8 +843,13 @@ const buildEditor =({
         selectedObjects,
         opacity,
         font,
-        fontWeight,
-        setFontWeight         
+        fontWeight,   
+        fontStyle,
+        lineThrough,
+        underline,
+        textAlign,
+        fontSize,
+        textShadow 
     }
 }
 
@@ -676,8 +864,15 @@ export const useEditor=()=>{
     const [opacity, setOpacity] = useState<number>(1)
     const [font, setFont] = useState("Arial")
     const [fontWeight, setFontWeight] = useState(700)
+    const [fontStyle, setFontStyle] = useState("normal")
+    const [underline, setUnderline] = useState(false)
+    const [lineThrough, setLineThrough] = useState(false)
+    const [textAlign, setTextAlign] = useState("left")
+    const [fontSize, setFontSize] = useState(32)
+    const [textShadow, setTextShadow] = useState("white")
  
-    useAutoResizer({canvas,container})
+    const {copy, paste} = useClipboard({canvas})
+    const {autoZoom} = useAutoResizer({canvas,container})
 
     useCanvasEvents({canvas, setSelectedObjects})
 
@@ -685,6 +880,9 @@ export const useEditor=()=>{
         if(canvas){
             return buildEditor({
                 canvas,
+                autoZoom,
+                copy,
+                paste,
                 fillColor,
                 setFillColor,
                 strokeColor,
@@ -699,12 +897,27 @@ export const useEditor=()=>{
                 font,
                 setFont,
                 fontWeight,
-                setFontWeight
+                setFontWeight,
+                fontStyle,
+                setFontStyle,
+                underline,
+                setUnderline,
+                lineThrough,
+                setLineThrough,
+                textAlign,
+                setTextAlign,
+                fontSize,
+                setFontSize,
+                textShadow,
+                setTextShadow
             })
         }
         return undefined
     },[
         canvas,
+        autoZoom,
+        copy,
+        paste,
         fillColor,
         strokeColor,
         strokeWidth,
@@ -712,8 +925,12 @@ export const useEditor=()=>{
         selectedObjects,
         opacity,
         font, 
-        // setFont,
-        fontWeight
+        fontWeight,
+        fontStyle,
+        underline,
+        lineThrough,
+        textAlign,
+        textShadow
     ])
 
     const init = useCallback(({

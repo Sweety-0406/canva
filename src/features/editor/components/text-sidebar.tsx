@@ -40,11 +40,9 @@ const TextSidebar = ({
                     </div>
                     <Button variant="secondary" className="w-full bg-white border rounded-xl text-black " onClick={()=>{
                         if(editor){
-                            editor.setFontWeight(700) 
                             editor?.addText("Adding a heading",{
                                 fontFamily:value,
                                 fontSize: 65,
-                                fontWeight:700
                             })
                         }
                     }}>
@@ -54,12 +52,9 @@ const TextSidebar = ({
                     </Button>
                     <Button variant="secondary" className="w-full bg-white border rounded-xl text-black " onClick={()=>{
                         if(editor){
-                            editor.setFontWeight(700) 
                             editor.addText("Adding a subheading",{
                                 fontFamily:value,
                                 fontSize: 40,
-                                fontWeight:700,
-                                selectable:true
                             })
                         }
                     }}>
@@ -69,11 +64,9 @@ const TextSidebar = ({
                     </Button>
                     <Button variant="secondary" className="w-full bg-white border rounded-xl text-black " onClick={()=>{
                         if (editor){
-                            editor.setFontWeight(700) 
                             editor.addText("Add a body text", {
                               fontFamily: value,
                               fontSize: 25,
-                              fontWeight: 700,
                             });
                       
                         }

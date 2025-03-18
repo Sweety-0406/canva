@@ -5,18 +5,18 @@ import { colors } from "../types"
 import { ColorObjectToString } from "../utils"
 
 interface ColorPickerProps{
-    value: string,
-    onChange: (value: string)=>void
+    value: string | undefined ,
+    onChange: (value: string)=>void,
 }
 
 const ColorPicker = ({
     value,
-    onChange
+    onChange,
 }:ColorPickerProps)=>{
+    const clr = typeof value === "undefined" ? "transparent" : value;
     return(
         <div className="w-full space-y-4  ">
             <ChromePicker 
-                
                 color={value}
                 onChange={(color)=>{
                     const stringColor = ColorObjectToString(color.rgb)

@@ -6,13 +6,15 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 
 interface HintProps{
     label: string,
     children: React.ReactNode,
     side?:"top"|"bottom"|"left"|"right"
     align?:"start"|'end'|"center",
-    sideOffset?:number
+    sideOffset?:number,
+    customClassName?: string
 }
 
 const Hint = ({
@@ -20,7 +22,8 @@ const Hint = ({
     children,
     side,
     align,
-    sideOffset
+    sideOffset,
+    customClassName
  }:HintProps)=>{
     return(
         <TooltipProvider >
@@ -28,8 +31,8 @@ const Hint = ({
             <TooltipTrigger asChild>
                 {children}
             </TooltipTrigger>
-            <TooltipContent className="bg-slate-800" align={align} side={side} sideOffset={sideOffset}>
-                <p className="text-white capitalize">{label}</p>
+            <TooltipContent className={cn("bg-slate-800", customClassName )} align={align} side={side} sideOffset={sideOffset}>
+                <p className="text-white text-xs capitalize">{label}</p>
             </TooltipContent>
             </Tooltip>
         </TooltipProvider>    )

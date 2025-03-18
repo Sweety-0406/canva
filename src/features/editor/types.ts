@@ -1,8 +1,11 @@
 import { fabric } from "fabric"
 import * as material from "material-colors"
-import { ITextOptions } from "fabric/fabric-impl"
+import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
+
+export type fontStyleType="normal" | "italic" 
 export const colors=[
+    "#FFFFFF",
     material.red["500"],
     material.pink["500"],
     material.purple["500"],
@@ -15,41 +18,58 @@ export const colors=[
     material.lime["500"],
     material.lightGreen["500"],
     material.green["500"],
+    "#933BFF",
+    "#22E12F",
+    "#000000",
     material.teal["500"],
     material.cyan["500"],
     material.lightBlue["500"],
     material.blue["500"],
     material.indigo["500"],
     material.deepPurple["500"],
-    "transparent"
 ]
 
 export const fonts = [
     "Arial",
     "Arial Black",
-    "Verdana",
-    "Helvetica",
     "Tahoma",
     "Trebuchet MS",
-    "Time New Roman",
+    "Verdana",
+    "Segoe UI",
+    "Lucida Sans Unicode",
+    "Times New Roman",
     "Georgia",
-    "Garamond",
+    "Bookman Old Style",
     "Courier New",
-    "Brush Script MT",
-    "Palatino",
-    "Bookman",
-    "Comic Sans MS",
-    "Impact ",
-    "Lucid Sans Unicode",
-    "Geneva",
     "Lucida Console",
-    "OpenType"
+    "Impact",
+    "Brush Script MT",
 ]
+//     "Arial",
+//     "Arial Black",
+//     "Verdana",
+//     "Helvetica",
+//     "Tahoma",
+//     "Trebuchet MS",
+//     "Times New Roman",
+//     "Georgia",
+//     "Garamond",
+//     "Courier New",
+//     "Brush Script MT",
+//     "Palatino",
+//     "Bookman",
+//     "Comic Sans MS",
+//     "Impact ",
+//     "Lucid Sans Unicode",
+//     "Geneva",
+//     "Lucida Console",
+//     "OpenType"
 
 export type ActiveTool = 
     "select"
     |"shapes"
     |"text"
+    |"textAlign"
     |"images"
     |"settings"
     |"ai"
@@ -58,14 +78,45 @@ export type ActiveTool =
     |"stroke-color"
     |"stroke-width"
     |"font"
+    |"font-size"
     |"opacity"
     |"filter"
     |"remove-bg"
     |"templates"
+    |"shadow"
+
+
+export const filters = [
+    "none",
+    "polaroid",
+    "sepia",
+    "kodachrome",
+    "contrast",
+    "brightness",
+    "grayscale",
+    "brownie",
+    "vintage",
+    "technicolor",
+    "pixelate",
+    "invert",
+    "blur",
+    "sharpen",
+    "emboss",
+    "removecolor",
+    "blacknwhite",
+    "vibrance",
+    "blendcolor",
+    "huerotate",
+    "saturation",
+    "gamma"
+]
 
 
 export type buildEditorProps = {
     canvas:  fabric.Canvas,
+    autoZoom:()=>void,
+    copy:()=>void,
+    paste:()=>void,
     fillColor:string,
     setFillColor: (value: string)=>void
     strokeColor:string,
@@ -80,10 +131,35 @@ export type buildEditorProps = {
     font: string,
     setFont:(value: string)=>void,
     fontWeight: number,
-    setFontWeight:(value: number)=>void
+    setFontWeight:(value: number)=>void,
+    fontStyle: string,
+    setFontStyle:(value: string)=>void,
+    lineThrough: boolean,
+    setLineThrough:(value: boolean)=>void,
+    underline: boolean,
+    setUnderline:(value: boolean)=>void,
+    textAlign: string,
+    setTextAlign: (value:string) => void
+    textShadow: string,
+    setTextShadow: (value:string) => void
+    fontSize: number,
+    setFontSize: (value:number) => void
 }  
 
 export interface Editor{
+    getWorkspace: ()=>fabric.Object | undefined,
+    autoZoom:()=>void,
+    zoomIn:()=>void,
+    zoomOut:()=>void,
+    changeSize:(value:{width:number, height: number})=>void,
+    changeBackground:(value: string)=>void,
+    enableDrawing:()=>void,
+    disableDrawing:()=>void,
+    onCopy:()=>void,
+    onPaste:()=>void,
+    addImage:(value: string)=>void,
+    changeImageFilter:(value:string)=>void,
+    deleteObject:()=>void,
     changeOpacity:(value:number)=>void
     bringForward:()=>void,
     sendBackward:()=>void,
@@ -94,6 +170,12 @@ export interface Editor{
     changeStrokeType:(value: number[])=>void,
     changeFont:(value: string)=>void,
     changeFontWeight:(value: number)=>void,
+    changeFontStyle:(value: string)=>void,
+    changeLineThrough:(value: boolean)=>void,
+    changeUnderline:(value: boolean)=>void,
+    changeTextAlign:(value: string)=>void,
+    changeFontSize:(value: number)=>void,
+    changeTextShadow:( color: string)=>void,
     addCircle:()=>void,
     addLine:()=>void,
     addSingleHeadArrow:()=>void,
@@ -122,6 +204,11 @@ export interface Editor{
     selectedObjects: fabric.Object[],
     font: string,
     fontWeight: number,
-    setFontWeight:(value:number)=>void
+    fontStyle: string,
+    underline: boolean,
+    lineThrough: boolean,
+    textAlign: string,
+    fontSize: number,
+    textShadow: string
     
 }

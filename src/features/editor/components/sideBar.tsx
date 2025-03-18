@@ -1,12 +1,13 @@
 "use client"
 import SideBarItems from "./sideBar-items"
-import { LayoutTemplate } from "lucide-react";
+import { LayoutTemplate, PencilLine } from "lucide-react";
 import { ImagePlus } from 'lucide-react';
 import { RemoveFormatting } from 'lucide-react';
 import { Type } from 'lucide-react';
 import { Settings } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
 import { Shapes } from 'lucide-react';
+import { RiPencilLine } from "react-icons/ri";
 import { ActiveTool} from "../types";
 
 interface SideBarProps{
@@ -20,7 +21,7 @@ const SideBar = ({
 }:SideBarProps)=>{
     return(
         <aside className=" h-full border-r  bg-white ">
-            <ul className="flex flex-col">
+            <ul className="flex flex-col"> 
                 <SideBarItems
                     label="Design"
                     icon={LayoutTemplate}
@@ -44,6 +45,12 @@ const SideBar = ({
                     icon={Shapes}
                     onClick={()=>onChangeActiveTool("shapes")}
                     isActive={activeTool==="shapes"}
+                />
+                <SideBarItems
+                    label="Draw"
+                    icon={PencilLine }
+                    onClick={()=>onChangeActiveTool("draw")}
+                    isActive={activeTool==="draw"}
                 />
                 <SideBarItems
                     label="AI"

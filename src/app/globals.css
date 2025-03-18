@@ -77,7 +77,16 @@ body {
     border-radius: 0.5rem;
     overflow: hidden
   }
+  .upload-button {
+    background-color: #8B3DFF!important; 
+    
+  }
+  .upload-button:hover {
+    background-color: #7731d8!important; 
+    
+  }
 }
+
 
 @layer base {
   * {
