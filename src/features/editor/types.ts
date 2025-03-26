@@ -4,6 +4,18 @@ import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
 
 export type fontStyleType="normal" | "italic" 
+
+export const KEYS = [
+    "name",
+    "gradientAngle",
+    "selectable",
+    "hasControl",
+    "linkData",
+    "editable",
+    "extensionType",
+    "extension"
+]
+
 export const colors=[
     "#FFFFFF",
     material.red["500"],
@@ -112,8 +124,26 @@ export const filters = [
 ]
 
 
+export interface EditorHookProps{
+    clearSelectionCallback?: ()=> void
+}
+export const selectionDependentTools = [
+    "fill",
+    "font",
+    "filter",
+    "opacity",
+    "remove-bg",
+    "stroke-color",
+    "stroke-width",
+  ];
+
 export type buildEditorProps = {
     canvas:  fabric.Canvas,
+    save:(skip?:boolean)=>void,
+    undo:()=>void,
+    redo:()=>void,
+    canUndo:()=>boolean,
+    canRedo:()=>boolean,
     autoZoom:()=>void,
     copy:()=>void,
     paste:()=>void,
@@ -147,7 +177,16 @@ export type buildEditorProps = {
 }  
 
 export interface Editor{
+    saveJson:()=>void,
+    savePng:()=>void,
+    saveJpg:()=>void,
+    saveSvg:()=>void,
+    loadFromJSON:(json: string)=>void,
     getWorkspace: ()=>fabric.Object | undefined,
+    onUndo:()=>void,
+    onRedo:()=>void,
+    canUndo:()=>boolean,
+    canRedo:()=>boolean,
     autoZoom:()=>void,
     zoomIn:()=>void,
     zoomOut:()=>void,

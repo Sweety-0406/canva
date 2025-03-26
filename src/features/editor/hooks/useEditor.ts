@@ -1,14 +1,22 @@
 import { useCallback, useMemo, useState } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResizer } from "./useAutoResizer"
-import { buildEditorProps, Editor, fonts, fontStyleType } from "../types"
+import { buildEditorProps, Editor, EditorHookProps, fonts, fontStyleType, KEYS } from "../types"
 import { useCanvasEvents } from "./useCanvasEvents"
-import { isTextType, createFilter } from "../utils"
+import { isTextType, createFilter, downloadCanvasImage, transformText } from "../utils"
 import { useClipboard } from "./useClipboard"
+import { useHistory } from "./useHistory"
+import { useShortcutKeys } from "./useShortcutKeys"
+import { useWindowEvents } from "./useWindowEvents"
 
 
 const buildEditor =({
     canvas,
+    save,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     autoZoom,
     copy,
     paste,
@@ -41,6 +49,55 @@ const buildEditor =({
     setTextShadow
 
 }:buildEditorProps):Editor=>{
+    const generateSaveOptions = ()=>{
+        const{width, height, left, top} = getWorkspace() as fabric.Rect;
+        return{
+            name:"Image",
+            format:"png",
+            quality: 1,
+            width,
+            height,
+            left,
+            top
+        }
+    }
+
+    const savePng = ()=>{
+        const options = generateSaveOptions()
+        canvas.setViewportTransform([1,0,0,1,0,0])
+        const dataUrl = canvas.toDataURL(options)
+        downloadCanvasImage(dataUrl,"png")
+        autoZoom()
+    }
+    const saveSvg = ()=>{
+        const options = generateSaveOptions()
+        canvas.setViewportTransform([1,0,0,1,0,0])
+        const dataUrl = canvas.toDataURL(options)
+        downloadCanvasImage(dataUrl,"svg")
+        autoZoom()
+    }
+    const saveJpg = ()=>{
+        const options = generateSaveOptions()
+        canvas.setViewportTransform([1,0,0,1,0,0])
+        const dataUrl = canvas.toDataURL(options)
+        downloadCanvasImage(dataUrl,"jpg")
+        autoZoom()
+    }
+    const saveJson = async()=>{
+        const dataUrl = canvas.toJSON(KEYS)
+        await transformText(dataUrl.objects)
+        const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+            JSON.stringify(dataUrl, null, "\t")
+        )}`
+        downloadCanvasImage(fileString,"json")
+    }
+    const loadFromJSON = (json: string)=>{
+        const data = JSON.parse(json);
+        canvas.loadFromJSON(data, ()=>{
+            autoZoom()
+        })
+    }
+
     const getWorkspace = ()=>{
         return canvas.getObjects().find((obj)=>obj.name === 'clip')
     }
@@ -52,7 +109,14 @@ const buildEditor =({
         canvas._centerObject(object, center)
     }
     return{
+        saveJpg,
+        savePng,
+        saveJson,
+        saveSvg,
+        loadFromJSON,
         getWorkspace,
+        canUndo,
+        canRedo, 
         autoZoom:()=>autoZoom(),
         zoomIn:()=>{
             let zoomRatio = canvas.getZoom();
@@ -76,11 +140,13 @@ const buildEditor =({
             const workspace = getWorkspace();
             workspace?.set(value)
             autoZoom()
+            save()
         },
         changeBackground:(value:string)=>{
             const workspace = getWorkspace()
             workspace?.set({fill: value})
             canvas.renderAll()
+            save()
         },
         enableDrawing:()=>{
             canvas.discardActiveObject()
@@ -94,6 +160,8 @@ const buildEditor =({
         disableDrawing:()=>{
             canvas.isDrawingMode = false;
         },
+        onUndo:()=>undo(),
+        onRedo:()=>redo(),
         onCopy:()=>copy(),
         onPaste:()=>paste(),
         addImage : (value:string)=>{
@@ -853,7 +921,7 @@ const buildEditor =({
     }
 }
 
-export const useEditor=()=>{
+export const useEditor=({clearSelectionCallback}: EditorHookProps)=>{
     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
     const [container, setContainer] = useState<HTMLDivElement | null>(null)
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
@@ -871,15 +939,23 @@ export const useEditor=()=>{
     const [fontSize, setFontSize] = useState(32)
     const [textShadow, setTextShadow] = useState("white")
  
+
+    const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas})
     const {copy, paste} = useClipboard({canvas})
     const {autoZoom} = useAutoResizer({canvas,container})
 
-    useCanvasEvents({canvas, setSelectedObjects})
-
+    useWindowEvents()
+    useCanvasEvents({canvas, setSelectedObjects, save, clearSelectionCallback})
+    useShortcutKeys({canvas, undo, redo, save, copy, paste})
     const editor=useMemo(()=>{
         if(canvas){
             return buildEditor({
                 canvas,
+                save,
+                undo,
+                redo,
+                canRedo,
+                canUndo,
                 autoZoom,
                 copy,
                 paste,
@@ -915,6 +991,11 @@ export const useEditor=()=>{
         return undefined
     },[
         canvas,
+        save,
+        undo,
+        redo,
+        canUndo,
+        canRedo,
         autoZoom,
         copy,
         paste,
@@ -940,7 +1021,6 @@ export const useEditor=()=>{
         initialCanvas:fabric.Canvas,
         initialContainer:HTMLDivElement
     })=>{
-        console.log("hello")
         fabric.Object.prototype.set({
             cornerColor: "#FFF",
             cornerStyle:"circle",
@@ -958,6 +1038,7 @@ export const useEditor=()=>{
             name: "clip",
             fill: "white",
             selectable: false,
+            hasControls: false,
             shadow: new fabric.Shadow({
                 color: "rgba(0,0,0,0.8)",
                 blur: 5,
@@ -972,6 +1053,13 @@ export const useEditor=()=>{
         setCanvas(initialCanvas)
         setContainer(initialContainer)
 
-    },[])
+        const currentState = JSON.stringify(initialCanvas.toJSON(KEYS))
+        canvasHistory.current = [currentState]
+        setHistoryIndex(0)
+
+    },[
+        setHistoryIndex,
+        canvasHistory
+    ])
     return{init, editor}
 }   

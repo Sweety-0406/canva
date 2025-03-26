@@ -1,5 +1,28 @@
 import { fabric } from "fabric"
 import { RGBColor } from "react-color"
+// import {uuid as UUID} from "uuidv4"
+
+export const transformText = (objects:any)=>{
+    if(!objects){
+        return;
+    }
+    objects.forEach((item: any)=>{
+        if(item.objects){
+            transformText(item.objects)
+        }else{
+            item.type === "text" && (item.type === "textbox")
+        }
+    })
+}
+
+export const downloadCanvasImage = (dataUrl:string, type:string)=>{
+    const anchorElement = document.createElement("a")
+    anchorElement.href=dataUrl,
+    anchorElement.download = `${uuid()}.${type}`
+    document.body.appendChild(anchorElement)
+    anchorElement.click()
+    anchorElement.remove()
+}
 
 export const isTextType=(type: string | undefined)=>{
     return type ==="text" || type==="i-text" || type==="textbox"
@@ -117,5 +140,10 @@ export const createFilter = (value: string)=>{
             return;
     }
     return effect
+}
+
+
+function uuid() {
+    throw new Error("Function not implemented.")
 }
 

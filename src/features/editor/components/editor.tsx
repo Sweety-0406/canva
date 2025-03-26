@@ -8,7 +8,7 @@ import SideBar from "./sideBar";
 import Navbar from "./navbar";
 import Toolbar from "./toolbar";
 import Footer from "./footer";
-import { ActiveTool } from "../types";
+import { ActiveTool, selectionDependentTools } from "../types";
 import ShapeSidebar from "./shape-sidebar";
 import FillColorSidebar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
@@ -25,7 +25,12 @@ import SettingSidebar from "./setting-sidebar";
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select")
-  const { init, editor } = useEditor();
+  const onClearSelection = useCallback(() => {
+    if (selectionDependentTools.includes(activeTool)) {
+      setActiveTool("select");
+    }
+  }, [activeTool]);
+  const { init, editor } = useEditor({clearSelectionCallback: onClearSelection});
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
 
@@ -67,7 +72,7 @@ export const Editor = () => {
 
   return (
     <div className="flex   flex-col w-full h-full">
-      <Navbar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+      <Navbar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
