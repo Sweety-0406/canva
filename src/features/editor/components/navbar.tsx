@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { FaRegFileAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Download, File } from "lucide-react";
+import { ChevronDown, Download, File, Loader } from "lucide-react";
 import { MousePointerClick } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Redo } from 'lucide-react';
@@ -22,18 +22,32 @@ import { MdOutlineCloudDone } from "react-icons/md";
 import { ActiveTool, Editor } from "../types";
 import { cn } from "@/lib/utils";
 import UserButton from "./user-button";
+import { useMutation, useMutationState } from "@tanstack/react-query";
+import { BsCloudSlash } from "react-icons/bs";
   
 interface NavbarProps{
-    editor: Editor | undefined
+    editor: Editor | undefined,
+    id: string,
     activeTool: ActiveTool,
     onChangeActiveTool:(tool:ActiveTool)=>void
 }  
 
 const Navbar = ({
     editor,
+    id,
     activeTool,
     onChangeActiveTool
 }:NavbarProps)=>{ 
+    const data = useMutationState({
+        filters:{
+            mutationKey: ["project", { projectId:id }],
+            exact: true
+        },
+        select: (mutation)=> mutation.state.status
+    })
+    const currentState = data[data.length - 1]
+    const isError = currentState === "error"
+    const isPending = currentState === "pending"
     const {openFilePicker} = useFilePicker({
         accept: ".json",
         onFilesSuccessfullySelected:({plainFiles}: any)=>{
@@ -104,12 +118,30 @@ const Navbar = ({
                 </Button>
             </Hint>
             <Separator orientation="vertical" />
-            <div className="flex gap-2 text-gray-500 ">
-                <MdOutlineCloudDone size={20} />
-                <div className="text-sm capitalize">
-                    saved
+            {isPending && (
+                <div className="flex gap-2 text-gray-500 ">
+                    <Loader className="animate-spin" size={20} />
+                    <div className="text-sm capitalize">
+                        saving...
+                    </div>
                 </div>
-            </div>
+            )}
+            {!isPending && isError && (
+                <div className="flex gap-2 text-gray-500 ">
+                    <BsCloudSlash size={20} />
+                    <div className="text-sm capitalize">
+                        Failed to save
+                    </div>
+                </div>
+            )}
+            {!isPending && !isError && (
+                <div className="flex gap-2 text-gray-500 ">
+                    <MdOutlineCloudDone size={20} />
+                    <div className="text-sm capitalize">
+                        saved
+                    </div>
+                </div>
+            )}
             <div className="ml-auto flex items-center">
                 <DropdownMenu modal={false} >
                     <DropdownMenuTrigger asChild className="flex  ">

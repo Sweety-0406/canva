@@ -2,6 +2,28 @@ import { fabric } from "fabric"
 import * as material from "material-colors"
 import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
+export type projectType={
+    json: string,
+    name: string,
+    id: string,
+    userId: string,
+    height: number,
+    width: number,
+    thumbnailUrl :string | null,
+    isTemplate: boolean | null,
+    isPro: boolean | null,
+    createdAt: string,
+    updatedAt: string
+
+}
+export type templateType = {
+    data: projectType[]
+}
+
+export type projectsType = {
+    data: projectType[],
+    nextPage: number | null
+}
 
 export type fontStyleType="normal" | "italic" 
 
@@ -125,7 +147,15 @@ export const filters = [
 
 
 export interface EditorHookProps{
-    clearSelectionCallback?: ()=> void
+    defaultState?: string,
+    defaultHeight?: number,
+    defaultWidth?: number,
+    clearSelectionCallback?: ()=>void,
+    saveCallback?: (values:{
+        json: string,
+        height: number,
+        width: number
+    })=>void
 }
 export const selectionDependentTools = [
     "fill",

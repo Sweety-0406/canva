@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResizer } from "./useAutoResizer"
 import { buildEditorProps, Editor, EditorHookProps, fonts, fontStyleType, KEYS } from "../types"
@@ -8,6 +8,7 @@ import { useClipboard } from "./useClipboard"
 import { useHistory } from "./useHistory"
 import { useShortcutKeys } from "./useShortcutKeys"
 import { useWindowEvents } from "./useWindowEvents"
+import useLoadState from "./useLoadState"
 
 
 const buildEditor =({
@@ -921,7 +922,16 @@ const buildEditor =({
     }
 }
 
-export const useEditor=({clearSelectionCallback}: EditorHookProps)=>{
+export const useEditor=({
+    defaultState,
+    defaultHeight,
+    defaultWidth,
+    clearSelectionCallback, 
+    saveCallback
+}: EditorHookProps)=>{
+    const initialState = useRef(defaultState)
+    const initialHeight = useRef(defaultHeight)
+    const initialWidth = useRef(defaultWidth)
     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
     const [container, setContainer] = useState<HTMLDivElement | null>(null)
     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
@@ -940,13 +950,14 @@ export const useEditor=({clearSelectionCallback}: EditorHookProps)=>{
     const [textShadow, setTextShadow] = useState("white")
  
 
-    const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas})
+    const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas, saveCallback})
     const {copy, paste} = useClipboard({canvas})
     const {autoZoom} = useAutoResizer({canvas,container})
 
     useWindowEvents()
     useCanvasEvents({canvas, setSelectedObjects, save, clearSelectionCallback})
     useShortcutKeys({canvas, undo, redo, save, copy, paste})
+    useLoadState({canvas, autoZoom, initialState, canvasHistory, setHistoryIndex})
     const editor=useMemo(()=>{
         if(canvas){
             return buildEditor({
@@ -1033,8 +1044,8 @@ export const useEditor=({clearSelectionCallback}: EditorHookProps)=>{
         })
 
         const initialWorkspace = new fabric.Rect({
-            width: 500,
-            height: 700,
+            width: initialWidth.current,
+            height: initialHeight.current,
             name: "clip",
             fill: "white",
             selectable: false,

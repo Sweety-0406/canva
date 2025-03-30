@@ -3,12 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor } from "../hooks/useEditor";
 import  {fabric}  from "fabric";
+import { debounce } from "lodash";
 
 import SideBar from "./sideBar"; 
 import Navbar from "./navbar";
 import Toolbar from "./toolbar";
 import Footer from "./footer";
-import { ActiveTool, selectionDependentTools } from "../types";
+import { ActiveTool, projectType, selectionDependentTools } from "../types";
 import ShapeSidebar from "./shape-sidebar";
 import FillColorSidebar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
@@ -16,26 +17,51 @@ import StrokeWidthSidebar from "./stroke-width-sidebar";
 import TextSidebar from "./text-sidebar";
 import FontSidebar from "./font-sidebar";
 import ImageSidebar from "./image-sidebar";
+import TemplateSidebar from "./template-sidebar";
 import TextAlignSidebar from "./text-align-sidebar";
 import ShadowColorSidebar from "./shadow-color-sidebar";
 import FilterSidebar from "./filter-sidebar";
 import DrawSidebar from "./draw-sidebar";
 import SettingSidebar from "./setting-sidebar";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useUpdateProject } from "../hooks/useUpdateProject";
 
+interface EditorProps{
+  initialData: projectType
+}
 
-export const Editor = () => {
+export const Editor = ({initialData}: EditorProps) => {
+  const projectId = initialData.id
+  const {mutate} = useUpdateProject(projectId)
+  const debouncedSave = useCallback(debounce((values: {
+    json: string,
+    height: number,
+    width: number
+  })=>{
+    console.log("save")
+    mutate(values)
+  }, 500),[mutate])
+
   const [activeTool, setActiveTool] = useState<ActiveTool>("select")
   const onClearSelection = useCallback(() => {
     if (selectionDependentTools.includes(activeTool)) {
       setActiveTool("select");
     }
   }, [activeTool]);
-  const { init, editor } = useEditor({clearSelectionCallback: onClearSelection});
+  const { init, editor } = useEditor({
+    defaultState: initialData.json,
+    defaultWidth: initialData.width,
+    defaultHeight: initialData.height,
+    clearSelectionCallback: onClearSelection,
+    saveCallback: debouncedSave
+  });
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
 
   const onChangeActiveTool = useCallback((tool: ActiveTool)=>{
     if(tool==="draw"){
+      console.log("draw")
       editor?.enableDrawing()
     }
     if(activeTool==="draw"){
@@ -72,7 +98,7 @@ export const Editor = () => {
 
   return (
     <div className="flex   flex-col w-full h-full">
-      <Navbar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+      <Navbar editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
@@ -84,6 +110,7 @@ export const Editor = () => {
         <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ImageSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <TemplateSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <SettingSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />

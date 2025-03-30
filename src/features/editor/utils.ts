@@ -18,7 +18,7 @@ export const transformText = (objects:any)=>{
 export const downloadCanvasImage = (dataUrl:string, type:string)=>{
     const anchorElement = document.createElement("a")
     anchorElement.href=dataUrl,
-    anchorElement.download = `${uuid()}.${type}`
+    anchorElement.download = `${uuid}.${type}`
     document.body.appendChild(anchorElement)
     anchorElement.click()
     anchorElement.remove()

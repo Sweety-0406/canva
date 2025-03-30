@@ -8,7 +8,7 @@ const DEFAULT_COLLECTION_ID = ["317099"]
 export async function GET(request: Request, response: Response){
     const session = await auth()
     if(!session?.user) {
-        return NextResponse.json({error:"Anathorized"},{status: 401})
+        return NextResponse.json({error:"Unathorized"},{status: 401})
     }
     const images = await unsplash.photos.getRandom({
         collectionIds: DEFAULT_COLLECTION_ID,

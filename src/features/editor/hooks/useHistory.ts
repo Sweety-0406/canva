@@ -3,10 +3,15 @@ import { KEYS } from "../types"
 import {fabric} from "fabric"
 
 interface useHistoryprops{
-    canvas: fabric.Canvas | null
+    canvas: fabric.Canvas | null,
+    saveCallback?: (values:{
+        json: string,
+        height: number,
+        width: number
+    })=>void
 }
 
-export const useHistory=({canvas}:useHistoryprops)=>{
+export const useHistory=({canvas, saveCallback}:useHistoryprops)=>{
     const [historyIndex, setHistoryIndex] = useState(0)
     const canvasHistory = useRef<string []>([])
     const skipSave = useRef(false)
@@ -29,7 +34,13 @@ export const useHistory=({canvas}:useHistoryprops)=>{
         if(!skip && !skipSave.current){
             canvasHistory.current.push(jsonCurrentObjects)
             setHistoryIndex(canvasHistory.current.length - 1)
-        }
+        }  
+        
+        const workspace = canvas.getObjects().find((obj)=>obj.name === "clip")
+        const height = workspace?.height || 0
+        const width  = workspace?.width || 0
+
+        saveCallback?.({json:jsonCurrentObjects, height, width})
 
     },[canvas])
 
