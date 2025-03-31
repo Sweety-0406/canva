@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 import TemplateCard from "./templateCard";
 import { projectType, templateType } from "@/features/editor/types";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
+import usePaywall from "@/features/editor/hooks/usePaywall";
 
 const TemplateSection = ()=>{
     const router = useRouter();
     const mutation = useCreateProject();
+    const paywall = usePaywall()
   
     const { 
       data, 
@@ -18,7 +20,11 @@ const TemplateSection = ()=>{
     } = useGetTemplates("1","4");
   
     const onClick = (template: templateType["data"][0]) => {
-  
+      console.log(paywall.shouldBlock)
+      if(template.isPro && paywall.shouldBlock){
+        paywall.triggerPaywall()
+        return;
+      }
       mutation.mutate(
         {
           name: `${template.name} project`,

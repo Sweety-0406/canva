@@ -5,6 +5,8 @@ import Provider from "@/features/editor/providers/provider";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import Modal from "@/features/editor/components/modal";
+import SubscriptionAlert from "@/features/editor/components/subscriptionAlert";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +35,10 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Toaster />
           <Provider>
+            <Toaster />
+            <Modal />
+            <SubscriptionAlert />
             {children}
           </Provider>
         </body>

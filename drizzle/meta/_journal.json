@@ -29,6 +29,13 @@
       "when": 1743097163526,
       "tag": "0003_legal_hammerhead",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1743342208185,
+      "tag": "0004_dear_big_bertha",
+      "breakpoints": true
     }
   ]
 }

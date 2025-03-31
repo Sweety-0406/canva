@@ -19,7 +19,6 @@ export const useGetTemplates = (page:string,limit: string ) => {
       if (response.status !== 200) {
         throw new Error("Failed to fetch templates.");
       }
-      console.log(response.data.data)
       return response.data.data; 
     },
   });

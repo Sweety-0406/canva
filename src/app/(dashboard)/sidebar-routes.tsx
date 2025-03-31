@@ -6,24 +6,45 @@ import { Crown, Home, MessageCircleQuestion } from "lucide-react"
 import SidebarItem from "./sidebar-item"
 import { usePathname } from "next/navigation"
 import { FaRegCreditCard } from "react-icons/fa";
+import { useCheckout } from "@/features/editor/hooks/useCheckout"
+import { useBilling } from "@/features/editor/hooks/useBilling"
+import usePaywall from "@/features/editor/hooks/usePaywall"
 
 const SidebarRoutes = ()=>{
     const pathname = usePathname()
+    const mutation = useCheckout()
+    const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
+    const billingMutation = useBilling();
+
+    const onClick = () => {
+        if (shouldBlock) {
+        triggerPaywall();
+        return;
+        }
+
+        billingMutation.mutate();
+    };
+
     return(
         <div>
-            <div className="px-2">
-                <Button
-                    onClick={()=>{}}
-                    className="flex w-full rounded-lg hover:bg-white hover:opacity-75 transition"
-                    variant="outline"
-                >
-                    <Crown size={10} className="fill-yellow-500 text-yellow-500" />
-                    <div>Upgrade to Canva Pro</div>
-                </Button>
-            </div>
-            <div className="py-3">
-                <Separator />
-            </div>
+            {shouldBlock && !isLoading && (
+                <>
+                    <div className="px-2">
+                        <Button
+                            onClick={()=>mutation.mutate()}
+                            className="flex w-full rounded-lg hover:bg-white hover:opacity-75 transition"
+                            variant="outline"
+                            disabled={mutation.isPending}
+                        >
+                            <Crown size={10} className="fill-yellow-500 text-yellow-500" />
+                            <div>Upgrade to Canva Pro</div>
+                        </Button>
+                    </div>
+                    <div className="py-3">
+                        <Separator />
+                    </div>
+                </>
+            )}
             <ul className="flex flex-col gap-y-1 px-2">
                 <SidebarItem
                     href="/"
@@ -40,7 +61,7 @@ const SidebarRoutes = ()=>{
                     href={pathname}
                     icon={FaRegCreditCard}
                     label="Billing"
-                    onClick={()=>{}}
+                    onClick={onClick}
                 />
                 <SidebarItem
                     href="mailto:kiyaranandi02@gmail.com"

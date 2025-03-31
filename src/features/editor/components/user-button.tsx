@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import {Crown, Loader } from "lucide-react";
+import { FaCrown } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { FaRegCreditCard } from "react-icons/fa";
 import { 
@@ -16,22 +17,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
-// import { useBilling } from "@/features/subscriptions/api/use-billing";
+import usePaywall from "../hooks/usePaywall";
+import { useBilling } from "../hooks/useBilling";
 
 const UserButton = () => {
-//   const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
-//   const mutation = useBilling();
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
+  const mutation = useBilling();
   const session = useSession();
 
-//   const onClick = () => {
-//     if (shouldBlock) {
-//       triggerPaywall();
-//       return;
-//     }
+  const onClick = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
 
-//     mutation.mutate();
-//   };
+    mutation.mutate();
+  };
 
   if (session.status === "loading") {
     return <Loader className="size-4 animate-spin text-muted-foreground" />
@@ -47,14 +48,14 @@ const UserButton = () => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="outline-none relative">
-        {/* {!shouldBlock && !isLoading && (
+        {!shouldBlock && !isLoading && (
           <div className="absolute -top-1 -left-1 z-10 flex items-center justify-center">
-            <div className="rounded-full bg-white flex items-center justify-center p-1 drop-shadow-sm">
-              <Crown className="size-3 text-yellow-500 fill-yellow-500" />
+            <div className="rounded-full bg-white flex p-1 items-center justify-center p- drop-shadow-2xl">
+              <FaCrown className="size-4  text-yellow-500 fill-yellow-500" />
             </div>
           </div>
-        )} */}
-        <Avatar className="size-8 hover:opcaity-75 transition">
+        )}
+        <Avatar className="size-10 hover:opcaity-75 transition">
           <AvatarImage alt={name} src={imageUrl || ""} />
           <AvatarFallback className="bg-[#aa53f2] font-medium text-white flex items-center justify-center">
             {name.charAt(0).toUpperCase()}
@@ -63,8 +64,8 @@ const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuItem
-          disabled={false}
-          onClick={()=>{}}
+          disabled={mutation.isPending}
+          onClick={onClick}
           className="h-10"
         >
           <FaRegCreditCard className="size-4 mr-2" />

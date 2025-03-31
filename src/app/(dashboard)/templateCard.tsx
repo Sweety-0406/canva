@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image";
 import { Crown } from "lucide-react";
 import { HiDotsHorizontal } from "react-icons/hi";
@@ -36,9 +38,9 @@ const TemplateCard = ({
   isPro
 }: TemplateCardProps) => {
   return (
-    <button
+    <div
       onClick={onClick}
-      disabled={disabled}
+      // disabled={disabled}
       className={cn(
         "space-y-2 group text-left transition flex flex-col",
         disabled ? "cursor-not-allowed opacity-75" : "cursor-pointer"
@@ -59,21 +61,21 @@ const TemplateCard = ({
           </div>
         )}
         <div className="opacity-0 group-hover:opacity-100 transition absolute  inset-0  rounded-xl backdrop-filter ">
-            <div className="absolute right-4 top-2">
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="left-12 bg-black/50 hover:bg-black/60 text-white p-2 px-3 rounded-sm">
-                        <HiDotsHorizontal />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>{title}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <HiOutlinePencilSquare className="size-10" />
-                            Customize this template
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
+          <div className="absolute right-4 top-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="left-12 bg-black/50 hover:bg-black/60 text-white p-2 px-3 rounded-sm">
+                <HiDotsHorizontal />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>{title}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <HiOutlinePencilSquare className="size-10" />
+                  Customize this template
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <div className="space-y-1">
@@ -84,7 +86,7 @@ const TemplateCard = ({
           {description}
         </p>
       </div>
-    </button>
+    </div>
   )
 }
 

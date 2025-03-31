@@ -12,6 +12,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { UploadButton } from "@/lib/uploadthing";
 import { useGetTemplates } from "../hooks/useGetTemplates";
+import usePaywall from "../hooks/usePaywall";
+import { Crown } from "lucide-react";
 
 
 interface TemplateSidebarProps{
@@ -26,11 +28,15 @@ const TemplateSidebar = ({
     onChangeActiveTool
 }:TemplateSidebarProps)=>{
     const {data, isLoading, isError} = useGetTemplates("1","20")
-    // console.log(data)
+    const paywall = usePaywall()
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
     const onClick = (template: projectType)=>{
+        if(template.isPro && paywall.shouldBlock){
+            paywall.triggerPaywall()
+            return;
+        }
         editor?.loadFromJSON(template.json)
     }
     return(
@@ -69,6 +75,11 @@ const TemplateSidebar = ({
                                     alt={template.name || "template"}
                                     className="object-cover"
                                 />
+                                {template.isPro && (
+                                    <div className="absolute bottom-2 right-2 size-5 flex items-center justify-center bg-black/50 rounded-full -z[10]">
+                                        <Crown className="size-3 fill-yellow-500 text-yellow-500" />
+                                    </div>
+                                )}
                                 <div className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-xs truncate text-white  p-1 bg-black/50 text-left">
                                     {template.name}
                                 </div>
