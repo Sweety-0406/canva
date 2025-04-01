@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Crown } from "lucide-react";
+import { FaCrown } from "react-icons/fa";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 
@@ -57,7 +58,7 @@ const TemplateCard = ({
         />
         {isPro && (
           <div className="absolute bottom-2 right-2 h-10 w-10 flex items-center justify-center bg-black/50 rounded-full -z[10]">
-            <Crown className="size-5 fill-yellow-500 text-yellow-500" />
+            <FaCrown className="size-5 fill-yellow-500 text-yellow-500" />
           </div>
         )}
         <div className="opacity-0 group-hover:opacity-100 transition absolute  inset-0  rounded-xl backdrop-filter ">

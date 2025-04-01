@@ -17,6 +17,7 @@ import StrokeWidthSidebar from "./stroke-width-sidebar";
 import TextSidebar from "./text-sidebar";
 import FontSidebar from "./font-sidebar";
 import ImageSidebar from "./image-sidebar";
+import RemoveBgSidebar from "./remove-bg-sidebar";
 import TemplateSidebar from "./template-sidebar";
 import TextAlignSidebar from "./text-align-sidebar";
 import ShadowColorSidebar from "./shadow-color-sidebar";
@@ -91,9 +92,9 @@ export const Editor = ({initialData}: EditorProps) => {
         initialCanvas: canvas,
         initialContainer: containerRef.current!,
       });
-      // return()=>{
-      //   canvas.dispose()
-      // }
+      return()=>{
+        canvas.dispose()
+      }
   }, [init]); 
 
   return (
@@ -110,6 +111,7 @@ export const Editor = ({initialData}: EditorProps) => {
         <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ImageSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <RemoveBgSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <TemplateSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />

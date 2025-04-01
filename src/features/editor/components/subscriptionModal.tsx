@@ -52,6 +52,12 @@ export const SubscriptionModal = () => {
               Unlimited templates
             </p>
           </li>
+          <li className="flex items-center">
+            <CheckCircle2 className="size-5 mr-2 fill-[#8B3DFF] text-white" />
+            <p className="text-sm text-muted-foreground">
+              Background remover
+            </p>
+          </li>
         </ul>
         <DialogFooter className="pt-2 mt-4 gap-y-2">
           <Button

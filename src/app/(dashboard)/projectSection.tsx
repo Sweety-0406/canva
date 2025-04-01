@@ -101,7 +101,7 @@ const ProjectSection = ()=>{
                         onClick={()=> router.push(`/editor/${project.id}`)}
                         className="font-medium flex items-center gap-x-2 cursor-pointer"
                       >
-                        <FileIcon classNamesize-6/>
+                        <FileIcon className = "size-6"/>
                         {project.name}
                       </TableCell>
                       <TableCell

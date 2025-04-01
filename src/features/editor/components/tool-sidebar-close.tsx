@@ -5,11 +5,11 @@ import { PanelLeftClose } from 'lucide-react';
 import { PanelBottomClose  } from 'lucide-react';
 
 
-interface ToolSidebarClosePrps{
+interface ToolSidebarCloseProps{
     onClose:()=>void
 }
 
-const ToolSidebarClose=({onClose}:ToolSidebarClosePrps)=>{
+const ToolSidebarClose=({onClose}:ToolSidebarCloseProps)=>{
     return(
         <button className='relative' onClick={onClose}>
             <PanelBottomClose className='size-5 mt-1 text-gray-600'/>

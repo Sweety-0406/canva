@@ -138,7 +138,7 @@ export const SignInCard = () => {
                     </div>
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                Not a member yet? <Link href="/sign-up"><span className="text-sky-700 hover:underline">Sign up</span></Link>
+                Not a member yet? <Link href="/sign-up"><span className="text-[#8B3DFF]  font-semibold hover:underline">Sign up</span></Link>
                 </p>
            </CardContent>
         </Card>
@@ -233,7 +233,7 @@ export const SignInCard = () => {
                     </div>
                 </Button>
                 <p className="text-xs text-muted-foreground">
-                Not a member yet? <Link href="/sign-up"><span className="text-sky-700 hover:underline">Sign up</span></Link>
+                Not a member yet? <Link href="/sign-up"><span className="text-[#8B3DFF]  font-semibold hover:underline">Sign up</span></Link>
                 </p>
             </CardContent>
             </Card>

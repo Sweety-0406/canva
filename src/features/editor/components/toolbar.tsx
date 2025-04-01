@@ -15,6 +15,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { RiColorFilterAiLine } from "react-icons/ri";
 import { RxShadowOuter } from "react-icons/rx";
 import { IoCopyOutline } from "react-icons/io5";
+import { PiSelectionBackgroundDuotone } from "react-icons/pi";
+
 
 
 interface  ToolBarProps{
@@ -317,6 +319,30 @@ const Toolbar=({
                             `}
                         >
                             <BsBorderWidth 
+                                className="size-4 rounded-sm "
+                            />    
+                        </Button>
+                    </Hint>
+                </div>
+            )}
+            {selectedObjectType==="image"  && (
+                <div className={`
+                    flex items-center  h-full my-auto
+                `}>
+                    <Hint 
+                        label="Background remover"
+                        side="bottom"
+                    >
+                        <Button 
+                            onClick={()=>onChanveActiveTool("remove-bg")}
+                            size="sm" 
+                            variant="ghost"
+                            className={`
+                                items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                ${activeTool==="remove-bg"? "bg-gray-100":"bg-none"}
+                            `}
+                        >
+                            <PiSelectionBackgroundDuotone 
                                 className="size-4 rounded-sm "
                             />    
                         </Button>

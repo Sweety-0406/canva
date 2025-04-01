@@ -11,6 +11,12 @@ import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
 import Link from "next/link";
 import { UploadButton } from "@/lib/uploadthing";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { CiSearch } from "react-icons/ci";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 
 interface ImageSidebarProps{
@@ -24,7 +30,11 @@ const ImageSidebar = ({
     activeTool,
     onChangeActiveTool
 }:ImageSidebarProps)=>{
+    const [searchKey, setSearchKey] = useState("")
     const {data, isLoading, isError} = getImages()
+    const [searchData, setSearchData] = useState<any[]>([])
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     // console.log(data)
     const onClose = ()=>{
         onChangeActiveTool("select")
@@ -32,6 +42,42 @@ const ImageSidebar = ({
     const addImageHandler = (value: string)=>{
         editor?.addImage(value)
     }
+
+    const fetchImages = async (search:string, pageNum = 1) => {
+        try {
+            const response = await axios.post("/api/images", { search, page: pageNum, per_page: 24 });
+            console.log(response.data.data.results);
+    
+            if (pageNum === 1) {
+                setSearchData(response.data.data.results); // Replace data for new search
+            } else {
+                setSearchData((prev) => [...prev, ...response.data.data.results]); // Append new results
+            }
+    
+            setTotalPages(response.data.data.total_pages);
+            setPage(pageNum);
+        } catch (error) {
+            console.error("Error fetching images:", error);
+            
+        }
+    };
+    
+    const onClick = () => {
+        if(searchKey.length===0){
+            console.log("empty")
+            toast.error("Please write something")
+            setSearchData([])
+            return
+        }
+        setPage(1); 
+        fetchImages(searchKey, 1);
+    };
+    
+    const loadMore = () => {
+        if (page < totalPages) {
+            fetchImages(searchKey, page + 1);
+        }
+    };
     return(
         <aside 
             className={`
@@ -42,24 +88,34 @@ const ImageSidebar = ({
             <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your canva" />
             <ScrollArea className="p-1 h-[85vh]">
                 <div>
-                <UploadButton 
-                    className=""
-                    appearance={{
-                        button: "w-full upload-button mb-2 text-sm font-medium bg-purple-400",
-                        allowedContent: "hidden"
-                    }}
-                    content={{
-                        button: "Upload Image"
-                    }}
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
-                    editor?.addImage(res[0].ufsUrl)
-                    }}
-                    onUploadError={(error: Error) => {
-                    // Do something with the error.
-                    alert(`ERROR! ${error.message}`);
-                    }}
-                />
+                    <UploadButton 
+                        className=""
+                        appearance={{
+                            button: "w-full upload-button mb-2 text-sm font-medium bg-purple-400",
+                            allowedContent: "hidden"
+                        }}
+                        content={{
+                            button: "Upload Image"
+                        }}
+                        endpoint="imageUploader"
+                        onClientUploadComplete={(res) => {
+                        editor?.addImage(res[0].ufsUrl)
+                        }}
+                        onUploadError={(error: Error) => {
+                        toast.error(` ${error.message}`);
+                        }}
+                    />
+                    <div className="flex gap-2 mb-2">
+                        <Input 
+                            className="ml-[2px]" 
+                            required
+                            placeholder="Search your images" 
+                            onChange={(e)=>setSearchKey(e.target.value)}
+                        />
+                        <Button variant="purple" onClick={onClick} className=" px-2 rounded-md">
+                            <CiSearch className="size-5 font-bold text-white"/>
+                        </Button>
+                    </div>
                 </div>
                 {isLoading && (
                     <div className="flex flex-1 h-[70vh] justify-center  items-center">
@@ -71,33 +127,75 @@ const ImageSidebar = ({
                         </div>
                     </div>
                 )}
-                <div className="grid grid-cols-2 gap-1">
-                    {data && data.map((image: any)=>{
-                        return(
-                            
-                            <button
-                                key={image.id}
-                                onClick={()=>addImageHandler(image.urls.regular)}
-                                className="relative w-full aspect-video group hover:opacity-75  transition bg-muted rounded-lg overflow-hidden border"
-                            >
+                {searchData.length==0? (
+                    <div className="grid grid-cols-2 gap-1">
+                        {data && data.map((image: any)=>{
+                            return(
                                 
-                                <Image
-                                    fill
-                                    src={image.urls.small}
-                                    alt={image.alt_description || "image"}
-                                    className="object-cover"
-                                />
-                                <Link
-                                    target="_blank"
-                                    href={image.links.html}
-                                    className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-xs truncate text-white hover:underline p-1 bg-black/50 text-left"
+                                <button
+                                    key={image.id}
+                                    onClick={()=>addImageHandler(image.urls.regular)}
+                                    className="relative w-full aspect-video group hover:opacity-75  transition bg-muted rounded-lg overflow-hidden border"
                                 >
-                                    {image.user.name}
-                                </Link>
-                            </button>
-                        )
-                    })}
-                </div>
+                                    
+                                    <Image
+                                        fill
+                                        src={image.urls.small}
+                                        alt={image.alt_description || "image"}
+                                        className="object-cover"
+                                    />
+                                    <Link
+                                        target="_blank"
+                                        href={image.links.html}
+                                        className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-xs truncate text-white hover:underline p-1 bg-black/50 text-left"
+                                    >
+                                        {image.user.name}
+                                    </Link>
+                                </button>
+                            )
+                        })}
+                    </div>
+                ):(
+                    <div >
+                        <div className="grid grid-cols-2 gap-1">
+                            {searchData && searchData.map((image: any)=>{
+                                return(
+                                    <button 
+                                        key={image.id}
+                                        onClick={()=>addImageHandler(image.urls.regular)}
+                                        className="relative w-full aspect-video group hover:opacity-75  transition bg-muted rounded-lg overflow-hidden border"
+                                    >
+                                        
+                                        <Image
+                                            fill
+                                            src={image.urls.small}
+                                            alt={image.alt_description || "image"}
+                                            className="object-cover"
+                                        />
+                                        <Link
+                                            target="_blank"
+                                            href={image.links.html}
+                                            className="opacity-0 group-hover:opacity-100 absolute left-0 bottom-0 w-full text-xs truncate text-white hover:underline p-1 bg-black/50 text-left"
+                                        >
+                                            {image.user.name}
+                                        </Link>
+                                    </button>
+                                )
+                            })}
+                        </div>
+                        {searchData.length > 0 && (
+                            <Button
+                                onClick={loadMore}
+                                variant="purple"
+                                disabled={page >= totalPages}
+                                className="mt-4  px-4 py-2 rounded-md w-full"
+                            >
+                                {page < totalPages ? "Load More" : "No More Results"}
+                            </Button>
+                        )}
+                    </div>
+
+                )}
                 {isError && (
                     <div className="flex flex-col flex-1 h-[70vh] justify-center  items-center">
                         <LuTriangleAlert className="opacity-60 "

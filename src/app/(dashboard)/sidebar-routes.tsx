@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Crown, Home, MessageCircleQuestion } from "lucide-react"
+import { FaCrown } from "react-icons/fa";
 import SidebarItem from "./sidebar-item"
 import { usePathname } from "next/navigation"
 import { FaRegCreditCard } from "react-icons/fa";
@@ -36,7 +37,7 @@ const SidebarRoutes = ()=>{
                             variant="outline"
                             disabled={mutation.isPending}
                         >
-                            <Crown size={10} className="fill-yellow-500 text-yellow-500" />
+                            <FaCrown size={10} className="fill-yellow-500 text-yellow-500" />
                             <div>Upgrade to Canva Pro</div>
                         </Button>
                     </div>
