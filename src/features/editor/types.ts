@@ -12,6 +12,7 @@ export type projectType={
     thumbnailUrl :string | null,
     isTemplate: boolean | null,
     isPro: boolean | null,
+    isPrivate: boolean ;
     createdAt: string,
     updatedAt: string
 
@@ -67,41 +68,23 @@ export const colors=[
     material.deepPurple["500"],
 ]
 
-export const fonts = [
-    "Arial",
-    "Arial Black",
-    "Tahoma",
-    "Trebuchet MS",
-    "Verdana",
-    "Segoe UI",
-    "Lucida Sans Unicode",
-    "Times New Roman",
-    "Georgia",
-    "Bookman Old Style",
-    "Courier New",
-    "Lucida Console",
-    "Impact",
-    "Brush Script MT",
-]
+// export const fonts = [
 //     "Arial",
 //     "Arial Black",
-//     "Verdana",
-//     "Helvetica",
 //     "Tahoma",
 //     "Trebuchet MS",
+//     "Verdana",
+//     "Segoe UI",
+//     "Lucida Sans Unicode",
 //     "Times New Roman",
 //     "Georgia",
-//     "Garamond",
+//     "Bookman Old Style",
 //     "Courier New",
-//     "Brush Script MT",
-//     "Palatino",
-//     "Bookman",
-//     "Comic Sans MS",
-//     "Impact ",
-//     "Lucid Sans Unicode",
-//     "Geneva",
 //     "Lucida Console",
-//     "OpenType"
+//     "Impact",
+//     "Brush Script MT",
+// ]
+
 
 export type ActiveTool = 
     "select"
@@ -173,6 +156,7 @@ export const selectionDependentTools = [
 
 export type buildEditorProps = {
     canvas:  fabric.Canvas,
+    loadFont:(fontFamily: string)=>void,
     save:(skip?:boolean)=>void,
     undo:()=>void,
     redo:()=>void,
@@ -250,13 +234,13 @@ export interface Editor{
     changeFontSize:(value: number)=>void,
     changeTextShadow:( color: string)=>void,
     addCircle:()=>void,
-    addLine:()=>void,
-    addSingleHeadArrow:()=>void,
-    addDashedSingleHeadArrow:()=>void,
-    addDoubleHeadArrow:()=>void,
-    addDashedDoubleHeadArrow:()=>void,
-    addArrowWithCircle:()=>void,
-    addArrowWithRectangle:()=>void,
+    addLine:(strokeWidth: number)=>void,
+    addSingleHeadArrow:(strokeWidth: number)=>void,
+    addDashedSingleHeadArrow:(strokeWidth: number)=>void,
+    addDoubleHeadArrow:(strokeWidth: number)=>void,
+    addDashedDoubleHeadArrow:(strokeWidth: number)=>void,
+    addArrowWithCircle:(strokeWidth: number)=>void,
+    addArrowWithRectangle:(strokeWidth: number)=>void,
     addHorizontalEllipse:()=>void,
     addVerticalEllipse:()=>void,
     addRectangle:()=>void,
@@ -267,8 +251,43 @@ export interface Editor{
     addStar:()=>void,
     addPentagon:()=>void,
     addHexagon:()=>void,
+    addOctagon:()=>void,
+    add6PointerStar:()=>void,
+    add4PointerStar:()=>void,
+    add8PointerStar:()=>void,
+    addStarBrust1:()=>void,
+    addStarBrust2:()=>void,
+    addStarBrust3:()=>void,
+    addStarBrust4:()=>void,
+    addRightArrow:()=>void,
+    addLeftArrow:()=>void,
+    addUpArrow:()=>void,
+    addDownArrow:()=>void,
+    addArrowHorizontal:()=>void,
+    addArrowBlock:()=>void,
+    addArrowBlock2Right:()=>void,
+    addArrowBlockConcave:()=>void,
+    addArrowBlockConvex:()=>void,
+    addWhiteOblongShape:()=>void,
+    addSquareSpeechBubble:()=>void,
+    addOvalSpeechBubble:()=>void,
+    addPlusShape:()=>void,
+    addCloudShape:()=>void,
+    addBanner2:()=>void,
+    addBanner3:()=>void,
+    addBanner4:()=>void,
+    addBanner5:()=>void,
+    addBanner6:()=>void,
+    addParallelogramRight:()=>void,
+    addParallelogramLeft:()=>void,
+    addTrapezoidUp:()=>void,
+    addTrapezoidDown:()=>void,
+    addArchDown:()=>void,
+    addArchUp:()=>void,
     addHeart:()=>void,
+    addSVG:(url: string, fillColor: string, strokeColor: string, strokeWidth: number)=>void,
     canvas:fabric.Canvas,
+    loadFont:(fontFamily: string)=>void,
     fillColor:string,
     strokeColor:string,
     strokeWidth:number,
@@ -285,3 +304,6 @@ export interface Editor{
     textShadow: string
     
 }
+
+
+

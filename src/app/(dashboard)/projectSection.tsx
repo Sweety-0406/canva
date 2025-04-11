@@ -17,13 +17,18 @@ import { useDuplicateProject } from "@/features/editor/hooks/useDuplicateProject
 import { useDeleteProject } from "@/features/editor/hooks/useDeleteProject"
 import useDeleteModal from "@/features/editor/hooks/useDeleteModal"
 import DeleteModal from "./deleteModal"
-
+import useVerifyPrivateModal from "@/features/editor/hooks/useVerifyPrivateModal"
+import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
+import { RiInboxArchiveLine } from "react-icons/ri";
+import axios from "axios"
+import toast from "react-hot-toast"
 
 const ProjectSection = ()=>{
     const router = useRouter()
     const duplicateMutation = useDuplicateProject()
     const deleteMutation = useDeleteProject()
     const deleteModal = useDeleteModal()
+    const verifyPrivateModal = useVerifyPrivateModal()
 
 
     const onCopy = (projectId:string)=>{
@@ -32,6 +37,24 @@ const ProjectSection = ()=>{
 
     const onDelete = (projectId: string)=>{
       deleteMutation.mutate({projectId})
+    }
+
+    const onClick = (isPrivate: boolean, projectId: string)=>{
+      if(isPrivate){
+        verifyPrivateModal.onOpen(projectId)
+      }else{
+        router.push(`/editor/${projectId}`)
+      }
+    }
+
+    const onArchive = async(projectId: string)=>{
+      const response = await axios.patch(`api/projects/${projectId}/makeArchive`)
+      if(response.status==200){
+        toast.success("Project is archived.")
+        window.location.reload();
+      }else{
+        toast.error("Project is not archived.")
+      }
     }
 
     const {
@@ -89,6 +112,7 @@ const ProjectSection = ()=>{
 
     return(
         <div className="space-y-3 mb-5">
+          <VerifyPrivateModal />
           <DeleteModal isPending={deleteMutation.isPending} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} onSubmit={()=>onDelete(deleteModal.projectId)} />
           <h3 className="font-semibold text-lg">Recent Projects</h3>
           <Table>
@@ -105,7 +129,7 @@ const ProjectSection = ()=>{
                         {project.name}
                       </TableCell>
                       <TableCell
-                        onClick={()=> router.push(`/editor/${project.id}`)}
+                        onClick={()=>onClick(project.isPrivate, project.id)}
                         className="hidden md:table-cell cursor-pointer"
                       >
                         {project.width} x {project.height} px
@@ -129,21 +153,28 @@ const ProjectSection = ()=>{
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-60">
                           <DropdownMenuItem
-                          className="h-10 cursor-pointer"
-                          disabled={duplicateMutation.isPending}
-                          onClick={() => onCopy(project.id)}
-                          >
-                          <CopyIcon className="size-4 mr-2" />
-                          Make a copy
+                            className="h-10 cursor-pointer"
+                            disabled={duplicateMutation.isPending}
+                            onClick={() => onCopy(project.id)}
+                            >
+                            <CopyIcon className="size-4 mr-2" />
+                            Make a copy
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                          className="h-10 cursor-pointer"
-                          disabled={deleteMutation.isPending}
-                          onClick={() => deleteModal.onOpen(project.id)}
-                          >
-                          <Trash className="size-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
+                            className="h-10 cursor-pointer"
+                            onClick={()=>onArchive(project.id)}
+                            >
+                            <RiInboxArchiveLine className="size-4 mr-2" />
+                            Archive
+                         </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="h-10 cursor-pointer"
+                            disabled={deleteMutation.isPending}
+                            onClick={() => deleteModal.onOpen(project.id)}
+                            >
+                            <Trash className="size-4 mr-2" />
+                            Delete
+                         </DropdownMenuItem>
                         </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

@@ -55,7 +55,13 @@ export const SubscriptionModal = () => {
           <li className="flex items-center">
             <CheckCircle2 className="size-5 mr-2 fill-[#8B3DFF] text-white" />
             <p className="text-sm text-muted-foreground">
-              Background remover
+              AI background remover
+            </p>
+          </li>
+          <li className="flex items-center">
+            <CheckCircle2 className="size-5 mr-2 fill-[#8B3DFF] text-white" />
+            <p className="text-sm text-muted-foreground">
+              AI image generation
             </p>
           </li>
         </ul>

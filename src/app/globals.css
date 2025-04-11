@@ -196,6 +196,16 @@ body {
    .upload-button:hover {
      background-color: #7731d8 !important;
    }
+
+   .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
  }
  
  @layer utilities {

@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { fabric } from "fabric"
 import { debounce } from "lodash";
-// import {debounce} from "lodash"
 
 interface useAutoResizerProps{
     canvas: fabric.Canvas | null,
@@ -18,9 +17,6 @@ export const useAutoResizer=({
         }
         const width = container.offsetWidth
         const height = container.offsetHeight
-        // if (canvas.width === width && canvas.height === height) {
-        //     return; 
-        // }
         canvas.setHeight(height)
         canvas.setWidth(width)
         const center = canvas.getCenter()

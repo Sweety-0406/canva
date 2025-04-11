@@ -24,9 +24,10 @@ import ShadowColorSidebar from "./shadow-color-sidebar";
 import FilterSidebar from "./filter-sidebar";
 import DrawSidebar from "./draw-sidebar";
 import SettingSidebar from "./setting-sidebar";
-import axios from "axios";
-import toast from "react-hot-toast";
+import AiSidebar from "./ai-sidebar";
 import { useUpdateProject } from "../hooks/useUpdateProject";
+import MakePrivateModal from "./makePrivateModal";
+import RemovePrivateModal from "./remokePrivateModal";
 
 interface EditorProps{
   initialData: projectType
@@ -34,6 +35,7 @@ interface EditorProps{
 
 export const Editor = ({initialData}: EditorProps) => {
   const projectId = initialData.id
+  const [isPrivate, setIsPrivate] = useState(initialData.isPrivate);
   const {mutate} = useUpdateProject(projectId)
   const debouncedSave = useCallback(debounce((values: {
     json: string,
@@ -50,7 +52,7 @@ export const Editor = ({initialData}: EditorProps) => {
       setActiveTool("select");
     }
   }, [activeTool]);
-  const { init, editor } = useEditor({
+  const { init, editor, loadFont } = useEditor({
     defaultState: initialData.json,
     defaultWidth: initialData.width,
     defaultHeight: initialData.height,
@@ -99,8 +101,10 @@ export const Editor = ({initialData}: EditorProps) => {
 
   return (
     <div className="flex   flex-col w-full h-full">
-      <Navbar editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+      <Navbar isPrivate={isPrivate} editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
+        <MakePrivateModal setIsPrivate={setIsPrivate} projectId={projectId}/>
+        <RemovePrivateModal setIsPrivate={setIsPrivate} projectId={projectId}/>
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <ShapeSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FillColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
@@ -109,13 +113,14 @@ export const Editor = ({initialData}: EditorProps) => {
         <StrokeWidthSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <TextSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
-        <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} loadFont={loadFont}/>
         <ImageSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <RemoveBgSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <TemplateSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <SettingSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+        <AiSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <main className="flex-1  flex flex-col relative bg-muted overflow-x-auto">
           <Toolbar editor={editor} activeTool={activeTool} onChanveActiveTool={onChangeActiveTool} />
           <div className="flex-1 overflow-y-hidden h-full bg-muted" ref={containerRef}>

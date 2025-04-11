@@ -11,10 +11,7 @@ import {
   DialogContent,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import useSubscriptionModal from "../hooks/useSubscriptions";
-import { useCheckout } from "../hooks/useCheckout";
 import useFailedModal from "../hooks/useFailedModal";
 import { useRouter } from "next/navigation";
 

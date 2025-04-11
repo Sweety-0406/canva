@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { projects, projectsInsetSchema } from "@/db/schema";
 import { db } from "@/db/drizzle";
-import { eq , desc} from "drizzle-orm";
+import { eq , desc, and} from "drizzle-orm";
 import { z } from "zod";
 
 
@@ -87,7 +87,9 @@ export async function GET(req: Request) {
     const data = await db
       .select()
       .from(projects)
-      .where(eq(projects.userId, userId))
+      .where(
+        and(eq(projects.userId, userId), eq(projects.isArchive, false))
+      )
       .limit(intLimit)
       .offset((intPage - 1) * intLimit)
       .orderBy(desc(projects.updatedAt));

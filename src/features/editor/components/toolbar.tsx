@@ -41,7 +41,7 @@ const Toolbar=({
     const font = editor?.font
     const shadowColor = typeof fillColor === "string" ? fillColor : "black"
    
-
+    console.log(editor?.selectedObjects[0])
 
     //@ts-ignore
     const fontWeight = editor?.selectedObjects[0].get("fontWeight")
@@ -112,7 +112,7 @@ const Toolbar=({
                 </div>
             )}
             {selectedObjectType === "textbox" && (
-                <div className="flex items-center   h-full my-auto">
+                <div className="flex items-center  w-20 h-full my-auto">
                     <Hint 
                         label="Font"
                         side="bottom"
@@ -125,12 +125,12 @@ const Toolbar=({
                                 fontFamily: font
                             }}
                             className={`
-                                items-center border h-full rounded-sm  flex justify-center p-1 px-2
+                                items-center w-full flex-wrap border h-full rounded-sm  flex justify-center p-1 px-2
                                 ${activeTool==="font"? "bg-gray-100":"bg-none"}
                             `}
                             
                         >
-                            {font}
+                            <span className="truncate text-xs w-full text-center">{font}</span>
                         </Button>
                     </Hint>
                 </div>
@@ -301,7 +301,7 @@ const Toolbar=({
                     </Hint>
                 </div>
             )}
-            {!(selectedObjectType==="textbox" || selectedObjectType==="line" || selectedObjectType==="group")  && (
+            {!(selectedObjectType==="textbox"  )  && (
                 <div className={`
                     flex items-center  h-full my-auto
                 `}>

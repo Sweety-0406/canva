@@ -4,13 +4,9 @@ import { ActiveTool, Editor, projectType, templateType } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { getImages } from "@/app/api/getImages";
-import { TbLoader3 } from "react-icons/tb";
 import {RingLoader} from 'react-spinners'
 import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
-import Link from "next/link";
-import { UploadButton } from "@/lib/uploadthing";
 import { useGetTemplates } from "../hooks/useGetTemplates";
 import usePaywall from "../hooks/usePaywall";
 import { Crown } from "lucide-react";

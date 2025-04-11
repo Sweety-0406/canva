@@ -15,7 +15,7 @@ import { BsHexagonFill } from "react-icons/bs";
 import { VscHeartFilled } from "react-icons/vsc";
 import { FaArrowRight, FaArrowsUpDown  } from "react-icons/fa6";
 import { TbOvalFilled, TbOvalVerticalFilled, TbArrowNarrowRightDashed, TbArrowDownCircleFilled, TbArrowDownSquareFilled   } from "react-icons/tb";
- 
+import { BsOctagonFill } from "react-icons/bs"; 
 
 interface ShapeSidebarProps{
     editor: Editor | undefined,
@@ -28,6 +28,9 @@ const ShapeSidebar = ({
     activeTool,
     onChangeActiveTool
 }:ShapeSidebarProps)=>{
+    const fillColor = editor?.fillColor || "#000000"
+    const strokeColor = editor?.strokeColor || "#000000"
+    const strokeWidth = editor?.strokeWidth || 2
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
@@ -56,7 +59,40 @@ const ShapeSidebar = ({
                         <ShapeTool icon={IoStar} onClick={()=>editor?.addStar()}  />
                         <ShapeTool icon={PiPentagonFill} onClick={()=>editor?.addPentagon()}  />
                         <ShapeTool icon={BsHexagonFill} onClick={()=>editor?.addHexagon()}  />
-                        <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}  />
+                        <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}/>
+                        <ShapeTool icon={BsOctagonFill} onClick={()=>editor?.addOctagon()}/>
+                        <ShapeTool imgUrl="/images/6PointerStar.png" onClick={()=>editor?.add6PointerStar()}/>
+                        <ShapeTool imgUrl="/images/4PointerStar.png" onClick={()=>editor?.add4PointerStar()}/>
+                        <ShapeTool imgUrl="/images/8PointerStar.png" onClick={()=>editor?.add8PointerStar()}/>
+                        <ShapeTool imgUrl="/images/starBrust1.png" onClick={()=>editor?.addStarBrust1()}/>
+                        <ShapeTool imgUrl="/images/starBrust2.png" onClick={()=>editor?.addStarBrust2()}/>
+                        <ShapeTool imgUrl="/images/starBrust3.png" onClick={()=>editor?.addStarBrust3()}/>
+                        <ShapeTool imgUrl="/images/starBrust4.png" onClick={()=>editor?.addStarBrust4()}/>
+                        <ShapeTool imgUrl="/images/rightArrow.png" onClick={()=>editor?.addRightArrow()}/>
+                        <ShapeTool imgUrl="/images/leftArrow.png" onClick={()=>editor?.addLeftArrow()}/>
+                        <ShapeTool imgUrl="/images/downArrow.png" onClick={()=>editor?.addDownArrow()}/>
+                        <ShapeTool imgUrl="/images/upArrow.png" onClick={()=>editor?.addUpArrow()}/>
+                        <ShapeTool imgUrl="/images/arrowHorizontal.png" onClick={()=>editor?.addArrowHorizontal()}/>
+                        <ShapeTool imgUrl="/images/arrowBlock.png" onClick={()=>editor?.addArrowBlock()}/>
+                        <ShapeTool imgUrl="/images/arrowBlock2Right.png" onClick={()=>editor?.addArrowBlock2Right()}/>
+                        <ShapeTool imgUrl="/images/arrowBlockConcave.png" onClick={()=>editor?.addArrowBlockConcave()}/>
+                        <ShapeTool imgUrl="/images/arrowBlockConvex.png" onClick={()=>editor?.addArrowBlockConvex()}/>
+                        <ShapeTool imgUrl="/images/whiteOblongShape.png" onClick={()=>editor?.addWhiteOblongShape()}/>
+                        <ShapeTool imgUrl="/images/squareSpeechBubble.png" onClick={()=>editor?.addSquareSpeechBubble()}/>
+                        <ShapeTool imgUrl="/images/ovalSpeechBubble.png" onClick={()=>editor?.addOvalSpeechBubble()}/>
+                        <ShapeTool imgUrl="/images/plusShape.png" onClick={()=>editor?.addPlusShape()}/>
+                        <ShapeTool imgUrl="/images/cloudShape.png" onClick={()=>editor?.addCloudShape()}/>
+                        <ShapeTool imgUrl="/images/banner2.png" onClick={()=>editor?.addBanner2()}/>
+                        <ShapeTool imgUrl="/images/banner3.png" onClick={()=>editor?.addBanner3()}/>
+                        <ShapeTool imgUrl="/images/banner4.png" onClick={()=>editor?.addBanner4()}/>
+                        <ShapeTool imgUrl="/images/banner5.png" onClick={()=>editor?.addBanner5()}/>
+                        <ShapeTool imgUrl="/images/banner6.png" onClick={()=>editor?.addBanner6()}/>
+                        <ShapeTool imgUrl="/images/parallelogramRight.png" onClick={()=>editor?.addParallelogramRight()}/>
+                        <ShapeTool imgUrl="/images/parallelogramLeft.png" onClick={()=>editor?.addParallelogramLeft()}/>
+                        <ShapeTool imgUrl="/images/trapezoidalUp.png" onClick={()=>editor?.addTrapezoidUp()}/>
+                        <ShapeTool imgUrl="/images/trapezoidalDown.png" onClick={()=>editor?.addTrapezoidDown()}/>
+                        <ShapeTool imgUrl="/images/archDown.png" onClick={()=>editor?.addArchDown()}  iconClassName=" bg-white" />
+                        <ShapeTool imgUrl="/images/archUp.png" onClick={()=>editor?.addArchUp()}/>
                     </div>
                 </div>
                 <div className="mt-6">
@@ -64,13 +100,13 @@ const ShapeSidebar = ({
                         Lines
                     </div>
                     <div className="grid border-t pt-2 grid-cols-3 gap-2">
-                        <ShapeTool icon={TfiLayoutLineSolid} onClick={()=>editor?.addLine()} iconClassName="rotate-45 size-16"  />
-                        <ShapeTool icon={FaArrowRight} onClick={()=>editor?.addSingleHeadArrow()} iconClassName="size-16 " />
-                        <ShapeTool icon={TbArrowNarrowRightDashed} onClick={()=>editor?.addDashedSingleHeadArrow()} iconClassName="size-16 " />
-                        <ShapeTool icon={FaArrowsUpDown } onClick={()=>editor?.addDoubleHeadArrow()} iconClassName="rotate-90" />
-                        <ShapeTool icon={FaArrowsUpDown } onClick={()=>editor?.addDashedDoubleHeadArrow()} iconClassName="rotate-90" />
-                        <ShapeTool icon={TbArrowDownCircleFilled } onClick={()=>editor?.addArrowWithCircle()} iconClassName="-rotate-90" />
-                        <ShapeTool icon={TbArrowDownSquareFilled  } onClick={()=>editor?.addArrowWithRectangle()} iconClassName="-rotate-90" />
+                        <ShapeTool imgUrl="/images/line.png" onClick={()=>editor?.addLine(strokeWidth)} iconClassName="rotate-45 "  />
+                        <ShapeTool imgUrl="/images/singleHeadArrow.png" onClick={()=>editor?.addSingleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/dashedSingleHeadArrow.png"  onClick={()=>editor?.addDashedSingleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/doubleHeadArrow.png"  onClick={()=>editor?.addDoubleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/img2.png" onClick={()=>editor?.addDashedDoubleHeadArrow(strokeWidth)} iconClassName="size-16" />
+                        <ShapeTool imgUrl="/images/arrowWithCircle.png"   onClick={()=>editor?.addArrowWithCircle(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/arrowWithRectangle.png" onClick={()=>editor?.addArrowWithRectangle(strokeWidth)} />
                         
                     </div>
                 </div>
@@ -81,40 +117,3 @@ const ShapeSidebar = ({
 
 export default ShapeSidebar
 
-
-// "use client";
-
-// import { motion } from "motion/react";
-// import { ActiveTools } from "../types";
-// import ToolSidebarHeader from "./tool-sidebar-header";
-
-// interface ShapeSidebarProps {
-//     activeTools: ActiveTools,
-//     onChangeActiveTools: (tool: ActiveTools) => void    
-// }
-
-// const ShapeSidebar = ({
-//     activeTools,
-//     onChangeActiveTools
-// }: ShapeSidebarProps) => {
-//     const onClose = () => {
-//         onChangeActiveTools("select")
-//     }
-
-//     return (
-//         <motion.aside 
-//             initial={{ y: 320, opacity: 0 }}
-//             animate={activeTools === "shapes" ? { y: 0, opacity: 1 } : { y: 320, opacity: 0 }}
-//             exit={{y: 320, opacity: 0}}
-//             transition={{ type: "spring", stiffness: 200, damping: 30 }}
-//             className={`
-//                 ${activeTools === "shapes" ? "visible" : "hidden"}
-//                 w-80 bg-white border-r z-100
-//             `}
-//         >
-//             <ToolSidebarHeader onClose={onClose} title="Shapes" description="Add shapes to your canvas" />
-//         </motion.aside>
-//     )
-// }
-
-// export default ShapeSidebar;

@@ -12,7 +12,7 @@ export const useGetProject = (projectId: string) => {
         throw new Error("Failed to fetch project");
       }
 
-      return response.data.data; // Assuming `data` is nested insprojectIde `response.data`
+      return response.data.data; 
     },
   });
 

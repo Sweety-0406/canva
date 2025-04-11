@@ -54,9 +54,6 @@ const TextAlignSidebar = ({
                     ):(
                         <ShapeTool icon={CiTextAlignJustify} onClick={()=>editor?.changeTextAlign("justify")} />
                     )}
-                    {/* <ShapeTool icon={CiTextAlignJustify} onClick={()=>editor?.changeTextAlign("justify")}  />
-                    <ShapeTool icon={CiTextAlignLeft} onClick={()=>editor?.changeTextAlign("left")}  />
-                    <ShapeTool icon={CiTextAlignRight} onClick={()=>editor?.changeTextAlign("right")}  /> */}
                 </div>
             </ScrollArea>
         </aside>

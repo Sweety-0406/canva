@@ -86,7 +86,7 @@ export const SignUpCard = () => {
             Create an account
           </CardTitle>
           <CardDescription>
-            Use your email or another service to continue with Canva (it’s free)!
+            Use your email or another service to continue with PixelForge (it’s free)!
           </CardDescription>
           </CardHeader>
           {/* {!!error && (
@@ -190,7 +190,7 @@ export const SignUpCard = () => {
                 Create an account
               </CardTitle>
               <CardDescription>
-                Use your email or another service to continue with Canva (it’s free)!
+                Use your email or another service to continue with PixelForge (it’s free)!
               </CardDescription>
             </CardHeader>
             {/* {!!error && (

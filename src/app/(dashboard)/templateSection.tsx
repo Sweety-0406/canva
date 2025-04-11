@@ -8,8 +8,12 @@ import { projectType, templateType } from "@/features/editor/types";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import usePaywall from "@/features/editor/hooks/usePaywall";
 
-const TemplateSection = ()=>{
-    const router = useRouter();
+interface TemplateSectionProps{
+  page?:string
+}
+
+const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
+    const router = useRouter(); 
     const mutation = useCreateProject();
     const paywall = usePaywall()
   
@@ -17,7 +21,7 @@ const TemplateSection = ()=>{
       data, 
       isLoading, 
       isError
-    } = useGetTemplates("1","4");
+    } = useGetTemplates("1",page);
   
     const onClick = (template: templateType["data"][0]) => {
       console.log(paywall.shouldBlock)

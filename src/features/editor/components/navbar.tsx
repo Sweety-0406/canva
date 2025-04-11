@@ -24,8 +24,15 @@ import { cn } from "@/lib/utils";
 import UserButton from "./user-button";
 import { useMutation, useMutationState } from "@tanstack/react-query";
 import { BsCloudSlash } from "react-icons/bs";
+import { CiUnlock } from "react-icons/ci";
+import { CiLock } from "react-icons/ci";
+import { useGetProject } from "../hooks/useGetProject";
+import useMakePrivateModal from "../hooks/useMakePrivateModal";
+import MakePrivateModal from "./makePrivateModal";
+import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
   
 interface NavbarProps{
+    isPrivate:boolean,
     editor: Editor | undefined,
     id: string,
     activeTool: ActiveTool,
@@ -33,11 +40,15 @@ interface NavbarProps{
 }  
 
 const Navbar = ({
+    isPrivate,
     editor,
     id,
     activeTool,
     onChangeActiveTool
 }:NavbarProps)=>{ 
+    const query = useGetProject(id)
+    const makePrivateModal = useMakePrivateModal()
+    const removePrivateModal =  useRemovePrivateModal()
     const data = useMutationState({
         filters:{
             mutationKey: ["project", { projectId:id }],
@@ -61,6 +72,7 @@ const Navbar = ({
             }
         }
     })
+    
     return(
         <div className="bg-white flex items-center gap-3 h-12 border-b p-2 ">
             <Logo />
@@ -142,9 +154,35 @@ const Navbar = ({
                     </div>
                 </div>
             )}
+            <div>
+                {isPrivate ?(
+                    <Hint label="Private file" sideOffset={8}>
+                        <Button variant="ghost" 
+                            onClick={()=>{ 
+                                console.log("open"); 
+                                removePrivateModal.onOpen()
+                            }}
+                        >
+                            <CiLock />
+                        </Button>
+                    </Hint>
+                ):(
+                    <Hint label="Not a private file" sideOffset={8}>
+
+                        <Button variant="ghost" 
+                            onClick={()=>{ 
+                                console.log("open"); 
+                                makePrivateModal.onOpen()
+                            }}
+                        >
+                            <CiUnlock  />
+                        </Button>
+                    </Hint>
+                )}
+            </div>
             <div className="ml-auto flex items-center">
                 <DropdownMenu modal={false} >
-                    <DropdownMenuTrigger asChild className="flex  ">
+                    <DropdownMenuTrigger asChild className="flex mr-2 ">
                         <Button size={"sm"} variant="ghost">
                             Export
                             <Download  />

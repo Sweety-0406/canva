@@ -49,13 +49,6 @@ export const SignInCard = () => {
 
   return (
       <div>
-        {/* <div className="flex justify-center lg:hidden ">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="size-28  "
-          />
-        </div> */}
         <Card className="bg-purple-50  w-full lg:hidden block h-full p-8 shadow-md shadow-gray-500 ">
           <CardHeader className="px-0 pt-0">
           <CardTitle>

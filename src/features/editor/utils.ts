@@ -1,6 +1,5 @@
 import { fabric } from "fabric"
 import { RGBColor } from "react-color"
-// import {uuid as UUID} from "uuidv4"
 
 export const transformText = (objects:any)=>{
     if(!objects){

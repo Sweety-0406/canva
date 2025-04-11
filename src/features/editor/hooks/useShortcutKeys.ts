@@ -56,7 +56,6 @@ export const useShortcutKeys = ({
             e.preventDefault()
             canvas?.discardActiveObject()
             const allObjects = canvas?.getObjects().filter((ob)=>ob.name!="clip")
-            // const allObjects = canvas?.getObjects().filter((ob)=>ob.selectable)
             canvas?.setActiveObject(
                 new fabric.ActiveSelection(allObjects, {canvas})
             )

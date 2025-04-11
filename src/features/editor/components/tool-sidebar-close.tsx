@@ -13,7 +13,6 @@ const ToolSidebarClose=({onClose}:ToolSidebarCloseProps)=>{
     return(
         <button className='relative' onClick={onClose}>
             <PanelBottomClose className='size-5 mt-1 text-gray-600'/>
-            {/* <ArrowLeft className='size-5 mt- text-gray-600'/> */}
         </button>
     )
 }

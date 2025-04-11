@@ -38,7 +38,6 @@ const OpacitySidebar = ({
                             <RxTransparencyGrid  
                                 className="size-4 -mt- rounded-sm"
                             /> 
-                            {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChanveActiveTool}/> */}
                         </Hint>
                     </div>
                 </DropdownMenuTrigger>

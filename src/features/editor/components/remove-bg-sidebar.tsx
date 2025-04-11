@@ -73,7 +73,6 @@ const RemoveBgSidebar = ({
           <div className="p-4 space-y-4">
             <div className={cn(
               "relative aspect-square rounded-md overflow-hidden transition bg-muted",
-            //   mutation.isPending && "opacity-50",
             )}>
               <Image
                 src={imageSrc}
@@ -93,7 +92,6 @@ const RemoveBgSidebar = ({
           </div>
         </ScrollArea>
       )}
-      {/* <ToolSidebarClose onClick={onClose} /> */}
     </aside>
   );
 };

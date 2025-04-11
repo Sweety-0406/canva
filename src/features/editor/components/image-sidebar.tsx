@@ -49,9 +49,9 @@ const ImageSidebar = ({
             console.log(response.data.data.results);
     
             if (pageNum === 1) {
-                setSearchData(response.data.data.results); // Replace data for new search
+                setSearchData(response.data.data.results); 
             } else {
-                setSearchData((prev) => [...prev, ...response.data.data.results]); // Append new results
+                setSearchData((prev) => [...prev, ...response.data.data.results]); 
             }
     
             setTotalPages(response.data.data.total_pages);
@@ -85,7 +85,7 @@ const ImageSidebar = ({
                 w-64 bg-white border-r
             `}
         >
-            <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your canva" />
+            <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your PixelForge" />
             <ScrollArea className="p-1 h-[85vh]">
                 <div>
                     <UploadButton 

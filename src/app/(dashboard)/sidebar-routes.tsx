@@ -7,6 +7,7 @@ import { FaCrown } from "react-icons/fa";
 import SidebarItem from "./sidebar-item"
 import { usePathname } from "next/navigation"
 import { FaRegCreditCard } from "react-icons/fa";
+import { RiInboxArchiveLine } from "react-icons/ri";
 import { useCheckout } from "@/features/editor/hooks/useCheckout"
 import { useBilling } from "@/features/editor/hooks/useBilling"
 import usePaywall from "@/features/editor/hooks/usePaywall"
@@ -38,7 +39,7 @@ const SidebarRoutes = ()=>{
                             disabled={mutation.isPending}
                         >
                             <FaCrown size={10} className="fill-yellow-500 text-yellow-500" />
-                            <div>Upgrade to Canva Pro</div>
+                            <div>Upgrade to PixelForge Pro</div>
                         </Button>
                     </div>
                     <div className="py-3">
@@ -65,10 +66,14 @@ const SidebarRoutes = ()=>{
                     onClick={onClick}
                 />
                 <SidebarItem
+                    href="/archive"
+                    icon={RiInboxArchiveLine}
+                    label="Archive "
+                />
+                <SidebarItem
                     href="mailto:kiyaranandi02@gmail.com"
                     icon={MessageCircleQuestion}
                     label="Get help "
-                    onClick={()=>{}}
                 />
             </ul>
         </div>

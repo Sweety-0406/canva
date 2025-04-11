@@ -24,7 +24,6 @@ const DrawSidebar = ({
     const strokeTypeValue = editor?.strokeType || []
 
     const strokeWidthValue = editor?.strokeWidth || 5
-    // const strokeTypeValue = editor?.strokeType || []
 
     const onClose = ()=>{
         onChangeActiveTool("select")
@@ -84,16 +83,6 @@ const DrawSidebar = ({
                             Stroke type
                         </Label>
                     </div>
-                    {/* <div className="m-1 pb-2  ">
-                        <Slider 
-                            onValueChange={(values)=>onChangeOpacity(values[0])}
-                            value={[opacityValue]}
-                            max={1}
-                            min={0}
-                            step={0.01}
-                            className="cursor-pointer"
-                        />
-                    </div> */}
                     <div className="p-1 flex flex-col gap-2">
                         <Button 
                             onClick={()=>onChangeStrokeType([])}

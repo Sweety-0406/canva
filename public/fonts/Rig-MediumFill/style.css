@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Rig Solid';
+    src: local('Rig Solid Medium Fill'), local('Rig-Solid-Medium-Fill'),
+        url('Rig-MediumFill.woff2') format('woff2'),
+        url('Rig-MediumFill.woff') format('woff'),
+        url('Rig-MediumFill.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
