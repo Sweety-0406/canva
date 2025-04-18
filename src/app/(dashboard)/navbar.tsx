@@ -8,8 +8,11 @@ import { Link, MessageCircleQuestion } from "lucide-react"
 import { PiSealQuestionBold } from "react-icons/pi";import SidebarItem from "./sidebar-item"
 import { BiArchiveIn } from "react-icons/bi";
 import { RiInboxArchiveLine } from "react-icons/ri"
+import { LuLayoutTemplate } from "react-icons/lu"
+import { useRouter } from "next/navigation"
 
 const Navbar = ()=>{
+    const router = useRouter()
     return(
         <div>
             <nav className=" hidden h-[58px] lg:flex justify-end pr-5 ">
@@ -22,11 +25,28 @@ const Navbar = ()=>{
                 <div className="mt-2 flex gap-3">
                     <div className="block lg:hidden">
                         <Hint 
+                            label="Templates"
+                            side="bottom"
+                        >
+                            <Button 
+                                onClick={()=>router.push("/templates")}
+                                size="lg" 
+                                variant="ghost"
+                                className={`
+                                    items-center  rounded-sm hover:bg-white  flex justify-center  px-3
+                                `}
+                            >
+                                <LuLayoutTemplate className="size-6 " />
+                            </Button>
+                        </Hint>
+                    </div>
+                    <div className="block lg:hidden">
+                        <Hint 
                             label="Archive"
                             side="bottom"
                         >
                             <Button 
-                                onClick={()=>"/archive"}
+                                onClick={()=>router.push("/archive")}
                                 size="lg" 
                                 variant="ghost"
                                 className={`

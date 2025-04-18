@@ -7,8 +7,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { FaRegFileAlt } from "react-icons/fa";
@@ -28,10 +26,14 @@ import { CiUnlock } from "react-icons/ci";
 import { CiLock } from "react-icons/ci";
 import { useGetProject } from "../hooks/useGetProject";
 import useMakePrivateModal from "../hooks/useMakePrivateModal";
-import MakePrivateModal from "./makePrivateModal";
 import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import useChangeFileNameModal from "../hooks/useChangeFileName";
+import { useState } from "react";
   
+
 interface NavbarProps{
+    name: string,
     isPrivate:boolean,
     editor: Editor | undefined,
     id: string,
@@ -40,6 +42,7 @@ interface NavbarProps{
 }  
 
 const Navbar = ({
+    name,
     isPrivate,
     editor,
     id,
@@ -49,6 +52,8 @@ const Navbar = ({
     const query = useGetProject(id)
     const makePrivateModal = useMakePrivateModal()
     const removePrivateModal =  useRemovePrivateModal()
+    const changeFileName = useChangeFileNameModal()
+    
     const data = useMutationState({
         filters:{
             mutationKey: ["project", { projectId:id }],
@@ -76,6 +81,22 @@ const Navbar = ({
     return(
         <div className="bg-white flex items-center gap-3 h-12 border-b p-2 ">
             <Logo />
+            <div className="flex items-center  w-20 h-full my-auto">
+                <Hint 
+                    label={name}
+                    side="bottom"
+                    >
+                    <Button 
+                        size="sm" 
+                        variant="ghost"
+                        className={`
+                            items-center w-full flex-wrap border h-full rounded-sm  flex justify-center p-1 px-2
+                        `}
+                    >
+                        <span className="truncate  w-full text-center">{name}</span>
+                    </Button>
+                </Hint>
+            </div>
             <div >
                 <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild className="flex  ">
@@ -84,12 +105,19 @@ const Navbar = ({
                             <ChevronDown className="size-20" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className=" flex  w-56 gap-2">
-                        <DropdownMenuItem onClick={()=> openFilePicker()}>
+                    <DropdownMenuContent align="start" className=" flex flex-col w-56 gap-2">
+                        <DropdownMenuItem className="hover:cursor-pointer" onClick={()=> openFilePicker()}>
                                 <FaRegFileAlt />
                             <div >
                                 <h1>Open</h1>
                                 <p className="text-xs  text-gray-500">Open a JSON file</p>
+                            </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="hover:cursor-pointer" onClick={()=>changeFileName.onOpen()}>
+                                <MdOutlineDriveFileRenameOutline />
+                            <div >
+                                <h1>Rename</h1>
+                                <p className="text-xs  text-gray-500">Change the file name</p>
                             </div>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -159,7 +187,6 @@ const Navbar = ({
                     <Hint label="Private file" sideOffset={8}>
                         <Button variant="ghost" 
                             onClick={()=>{ 
-                                console.log("open"); 
                                 removePrivateModal.onOpen()
                             }}
                         >
@@ -189,28 +216,28 @@ const Navbar = ({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent  align="start" className=" flex flex-col w-60 mr-2">
-                        <DropdownMenuItem onClick={()=> editor?.saveJson()} className="flex items-center w-full">
+                        <DropdownMenuItem  onClick={()=> editor?.saveJson()} className="flex items-center hover:cursor-pointer  w-full">
                             <File />
                             <div >
                                 <h1>JSON</h1>
                                 <p className="text-xs  text-gray-500">Save for later editing</p>
                             </div>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=> editor?.savePng()} className="flex items-center w-full">
+                        <DropdownMenuItem  onClick={()=> editor?.savePng()} className="flex items-center  hover:cursor-pointer w-full">
                             <File />
                             <div >
                                 <h1>PNG</h1>
                                 <p className="text-xs  text-gray-500">Best for sharing on web</p>
                             </div>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=> editor?.saveJpg()} className="flex items-center w-full">
+                        <DropdownMenuItem  onClick={()=> editor?.saveJpg()} className="flex items-center  hover:cursor-pointer w-full">
                                 <File />
                             <div >
                                 <h1>JPEG</h1>
                                 <p className="text-xs  text-gray-500">Best for printing</p>
                             </div>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=> editor?.saveSvg()} className="flex items-center w-full">
+                        <DropdownMenuItem  onClick={()=> editor?.saveSvg()} className="flex items-center  hover:cursor-pointer w-full">
                                 <File />
                             <div >
                                 <h1>SVG</h1>

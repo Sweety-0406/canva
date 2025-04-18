@@ -41,7 +41,9 @@ const Toolbar=({
     const font = editor?.font
     const shadowColor = typeof fillColor === "string" ? fillColor : "black"
    
-    console.log(editor?.selectedObjects[0])
+    const fetchColor = ()=>{
+        
+    }
 
     //@ts-ignore
     const fontWeight = editor?.selectedObjects[0].get("fontWeight")

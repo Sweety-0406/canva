@@ -28,6 +28,7 @@ import AiSidebar from "./ai-sidebar";
 import { useUpdateProject } from "../hooks/useUpdateProject";
 import MakePrivateModal from "./makePrivateModal";
 import RemovePrivateModal from "./remokePrivateModal";
+import ChangeFileNameModal from "./changeFileNameModal";
 
 interface EditorProps{
   initialData: projectType
@@ -36,6 +37,7 @@ interface EditorProps{
 export const Editor = ({initialData}: EditorProps) => {
   const projectId = initialData.id
   const [isPrivate, setIsPrivate] = useState(initialData.isPrivate);
+  const [fileName, setFileName] = useState(initialData.name)
   const {mutate} = useUpdateProject(projectId)
   const debouncedSave = useCallback(debounce((values: {
     json: string,
@@ -101,8 +103,9 @@ export const Editor = ({initialData}: EditorProps) => {
 
   return (
     <div className="flex   flex-col w-full h-full">
-      <Navbar isPrivate={isPrivate} editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+      <Navbar name={fileName} isPrivate={isPrivate} editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
+        <ChangeFileNameModal fileName={fileName} setFileName={setFileName} projectId={projectId}/>
         <MakePrivateModal setIsPrivate={setIsPrivate} projectId={projectId}/>
         <RemovePrivateModal setIsPrivate={setIsPrivate} projectId={projectId}/>
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />

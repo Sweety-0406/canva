@@ -115,6 +115,7 @@ export const projects = pgTable(
     thumbnailUrl: text("thumbnailUrl"),
     isTemplate: boolean("isTemplate"),
     isPrivate: boolean("isPrivate"),
+    isRemove: boolean("isRemove"),
     isArchive: boolean("isArchive"),
     hashedPassword: text("hashedPassword"),
     isPro: boolean("isPro"),

@@ -105,6 +105,28 @@ const ImageSidebar = ({
                         toast.error(` ${error.message}`);
                         }}
                     />
+                    <div >
+                        <UploadButton 
+                            className=""
+                            appearance={{
+                                button: "w-full upload-button mb-2 text-sm font-medium bg-purple-400",
+                                allowedContent: "hidden"
+                            }}
+                            content={{
+                                button: "Upload Video"
+                            }}
+                            endpoint="videoUploader" 
+                            onClientUploadComplete={(res) => {
+                                console.log("video property:", res)
+                                editor?.addVideo(res[0].ufsUrl )
+                                // editor?.addVideo("http://localhost:3000/v1.mp4");
+                            }}
+                            onUploadError={(error: Error) => {
+                                toast.error(`${error.message}`);
+                            }}
+                        />
+
+                    </div>
                     <div className="flex gap-2 mb-2">
                         <Input 
                             className="ml-[2px]" 

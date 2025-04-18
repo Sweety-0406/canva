@@ -192,6 +192,65 @@ const buildEditor =({
                 }
             )
         },
+
+        addVideo: (url: string) => {
+            console.log("Video URL:", url);
+          
+            const videoEl = document.createElement("video");
+            const source = document.createElement("source");
+          
+            // Set up the video element
+            videoEl.width = 480;
+            videoEl.height = 360;
+            videoEl.muted = true;
+            videoEl.autoplay = true;
+            videoEl.loop = true;
+            videoEl.playsInline = true;
+            videoEl.crossOrigin = "anonymous"; 
+          
+            // Attach video source
+            source.src = url;
+            videoEl.appendChild(source);
+          
+            videoEl.onended = () => videoEl.play(); // Looping fallback
+          
+            videoEl.addEventListener("loadeddata", () => {
+              videoEl.play(); // Ensure it starts playing
+          
+              const fabricVideo = new fabric.Image(videoEl, {
+                left: 200,
+                top: 200,
+                originX: "center",
+                originY: "center",
+                objectCaching: false,
+              });
+          
+              const workspace = getWorkspace();
+              if (workspace?.width && workspace?.height) {
+                fabricVideo.scaleToWidth(workspace.width);
+                fabricVideo.scaleToHeight(workspace.height);
+              }
+          
+              center(fabricVideo);
+              canvas.add(fabricVideo);
+              canvas.setActiveObject(fabricVideo);
+          
+              // Start render loop
+              const render = () => {
+                canvas.renderAll();
+                requestAnimationFrame(render);
+              };
+              render();
+            });
+          
+            videoEl.addEventListener("error", (e) => {
+              console.error("Video failed to load", e);
+            });
+        },  
+    
+
+          
+          
         changeImageFilter: (value: string)=>{
             const objects = canvas.getActiveObjects()
             objects.forEach((object)=>{
@@ -473,55 +532,6 @@ const buildEditor =({
             canvas.setActiveObject(object)
             
         },
-        // addSingleHeadArrow:(strokeWidth: number, arrowLength = 150)=>{
-        //     var triangle = new fabric.Triangle({
-        //         width: 10, 
-        //         height: 15, 
-        //         fill: strokeColor, 
-        //         stroke: strokeColor,
-        //         strokeWidth: strokeWidth,
-        //         opacity: 1,
-        //         left: 85 + arrowLength, 
-        //         top: 65,
-        //         angle: 90
-        //     });
-            
-        //     var line = new fabric.Line([50, 100, 50 + arrowLength, 100], {
-        //         left: 75,
-        //         top: 70,
-        //         stroke: strokeColor,  
-        //         strokeDashArray: [],
-        //         strokeWidth: strokeWidth,
-        //         opacity: 1
-        //     });
-            
-        //     triangle.set({
-        //         fill: strokeColor,
-        //         stroke: strokeColor
-        //     });
-            
-        //     line.set({
-        //         stroke: strokeColor,
-        //     });
-            
-        //     var objs = [line, triangle];
-            
-        //     var alltogetherObj = new fabric.Group(objs);
-            
-        //     alltogetherObj.forEachObject(obj => {
-        //         obj.set({
-        //             fill: strokeColor,
-        //             stroke: strokeColor,
-        //         });
-        //     });
-        //     alltogetherObj.setCoords();
-            
-        //     center(alltogetherObj);
-        //     canvas.add(alltogetherObj);
-        //     canvas.setActiveObject(alltogetherObj);
-            
-        // },
-        // Complete rewrite of the arrow creation function
         addSingleHeadArrow: (strokeWidth) => {
             // Define dimensions
             const arrowLength = 150;

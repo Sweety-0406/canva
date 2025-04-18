@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useGetProject } from "@/features/editor/hooks/useGetProject";
+import { RingLoader } from "react-spinners";
 
 
 
@@ -31,7 +32,14 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
   if (isLoading || !data) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
-        <Loader className="size-6 animate-spin text-muted-foreground" />
+        <div className="flex flex-1 h-[70vh] justify-center  items-center">
+          <div className=''>
+              <RingLoader
+                  size={50}
+                  color='#7721f7'
+              />
+          </div>
+        </div>
       </div>
     );
   }

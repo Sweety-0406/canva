@@ -22,6 +22,7 @@ import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
 import { RiInboxArchiveLine } from "react-icons/ri";
 import axios from "axios"
 import toast from "react-hot-toast"
+import { RingLoader } from "react-spinners"
 
 const ProjectSection = ()=>{
     const router = useRouter()
@@ -68,11 +69,18 @@ const ProjectSection = ()=>{
     if (status === "pending") {
         return (
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">
+            <h3 className="font-semibold text-3xl">
               Recent projects
             </h3>
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-              <Loader className="size-6 animate-spin text-muted-foreground" />
+              <div className="flex flex-1 h-[70vh] justify-center  items-center">
+                <div className=''>
+                    <RingLoader
+                        size={50}
+                        color='#7721f7'
+                    />
+                </div>
+              </div>
             </div>
           </div>
         )
@@ -81,7 +89,7 @@ const ProjectSection = ()=>{
     if (status === "error") {
         return (
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">
+            <h3 className="font-semibold text-3xl">
               Recent projects
             </h3>
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
@@ -114,7 +122,7 @@ const ProjectSection = ()=>{
         <div className="space-y-3 mb-5">
           <VerifyPrivateModal />
           <DeleteModal isPending={deleteMutation.isPending} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} onSubmit={()=>onDelete(deleteModal.projectId)} />
-          <h3 className="font-semibold text-lg">Recent Projects</h3>
+          <h3 className="font-semibold text-3xl">Recent Projects</h3>
           <Table>
             <TableBody>
               {data.pages.map((group, i)=>(

@@ -68,22 +68,6 @@ export const colors=[
     material.deepPurple["500"],
 ]
 
-// export const fonts = [
-//     "Arial",
-//     "Arial Black",
-//     "Tahoma",
-//     "Trebuchet MS",
-//     "Verdana",
-//     "Segoe UI",
-//     "Lucida Sans Unicode",
-//     "Times New Roman",
-//     "Georgia",
-//     "Bookman Old Style",
-//     "Courier New",
-//     "Lucida Console",
-//     "Impact",
-//     "Brush Script MT",
-// ]
 
 
 export type ActiveTool = 
@@ -215,6 +199,7 @@ export interface Editor{
     onCopy:()=>void,
     onPaste:()=>void,
     addImage:(value: string)=>void,
+    addVideo: (url: string) =>void,
     changeImageFilter:(value:string)=>void,
     deleteObject:()=>void,
     changeOpacity:(value:number)=>void

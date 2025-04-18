@@ -11,6 +11,7 @@ import { RiInboxArchiveLine } from "react-icons/ri";
 import { useCheckout } from "@/features/editor/hooks/useCheckout"
 import { useBilling } from "@/features/editor/hooks/useBilling"
 import usePaywall from "@/features/editor/hooks/usePaywall"
+import { LuLayoutTemplate } from "react-icons/lu";
 
 const SidebarRoutes = ()=>{
     const pathname = usePathname()
@@ -60,15 +61,20 @@ const SidebarRoutes = ()=>{
             </div>
             <ul className="flex flex-col gap-y-1 px-2">
                 <SidebarItem
-                    href={pathname}
-                    icon={FaRegCreditCard}
-                    label="Billing"
-                    onClick={onClick}
+                    href="/templates"
+                    icon={LuLayoutTemplate}
+                    label="Templates "
                 />
                 <SidebarItem
                     href="/archive"
                     icon={RiInboxArchiveLine}
                     label="Archive "
+                />
+                <SidebarItem
+                    href={pathname}
+                    icon={FaRegCreditCard}
+                    label="Billing"
+                    onClick={onClick}
                 />
                 <SidebarItem
                     href="mailto:kiyaranandi02@gmail.com"

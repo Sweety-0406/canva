@@ -7,6 +7,7 @@ import TemplateCard from "./templateCard";
 import { projectType, templateType } from "@/features/editor/types";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import usePaywall from "@/features/editor/hooks/usePaywall";
+import { RingLoader } from "react-spinners";
 
 interface TemplateSectionProps{
   page?:string
@@ -47,11 +48,18 @@ const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
     if (isLoading) {
       return (
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">
+          <h3 className="font-semibold text-3xl">
             Start from a template
           </h3>
           <div className="flex items-center justify-center h-32">
-            <Loader className="size-6 text-muted-foreground animate-spin" />
+            <div className="flex flex-1  justify-center  items-center">
+              <div className=''>
+                  <RingLoader 
+                      size={50}
+                      color='#7721f7'
+                  />
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -60,7 +68,7 @@ const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
     if (isError) {
       return (
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg">
+          <h3 className="font-semibold text-3xl">
             Start from a template
           </h3>
           <div className="flex flex-col gap-y-4 items-center justify-center h-32">
@@ -81,7 +89,7 @@ const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
   
     return (
       <div>
-        <h3 className="font-semibold text-lg">
+        <h3 className="font-semibold text-3xl mt-4 mb-4">
           Start from a template
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
