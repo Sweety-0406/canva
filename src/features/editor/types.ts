@@ -89,6 +89,7 @@ export type ActiveTool =
     |"remove-bg"
     |"templates"
     |"shadow"
+    |"blur"
 
 
 export const filters = [
@@ -176,6 +177,8 @@ export type buildEditorProps = {
     setTextShadow: (value:string) => void
     fontSize: number,
     setFontSize: (value:number) => void
+    blur: number,
+    setBlur: (value:number) => void
 }  
 
 export interface Editor{
@@ -217,6 +220,7 @@ export interface Editor{
     changeUnderline:(value: boolean)=>void,
     changeTextAlign:(value: string)=>void,
     changeFontSize:(value: number)=>void,
+    changeBlur:(value: number)=>void,
     changeTextShadow:( color: string)=>void,
     addCircle:()=>void,
     addLine:(strokeWidth: number)=>void,
@@ -286,6 +290,7 @@ export interface Editor{
     lineThrough: boolean,
     textAlign: string,
     fontSize: number,
+    blur: number,
     textShadow: string
     
 }

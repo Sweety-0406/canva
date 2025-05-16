@@ -4,6 +4,7 @@ import { ActiveTool, Editor } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ColorPicker from "./color-picker" 
+import { motion } from "framer-motion"
 
 interface ShadowColorSidebarProps{
     editor: Editor | undefined,
@@ -28,11 +29,12 @@ const ShadowColorSidebar = ({
     const value = typeof textShadow ==="object"? textShadow?.color:"black" 
     console.log(textShadow)
     return(
-        <aside 
-            className={`
-                ${activeTool==="shadow" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div 
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Shadow color" description="Add shadow color to your element" />
             <ScrollArea className="p-1">
@@ -40,7 +42,7 @@ const ShadowColorSidebar = ({
                     <ColorPicker  value={value} onChange={onChange} />
                 </div>
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

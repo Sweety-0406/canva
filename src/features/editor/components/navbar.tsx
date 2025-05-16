@@ -20,7 +20,7 @@ import { MdOutlineCloudDone } from "react-icons/md";
 import { ActiveTool, Editor } from "../types";
 import { cn } from "@/lib/utils";
 import UserButton from "./user-button";
-import { useMutation, useMutationState } from "@tanstack/react-query";
+import {useMutationState } from "@tanstack/react-query";
 import { BsCloudSlash } from "react-icons/bs";
 import { CiUnlock } from "react-icons/ci";
 import { CiLock } from "react-icons/ci";
@@ -29,7 +29,8 @@ import useMakePrivateModal from "../hooks/useMakePrivateModal";
 import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import useChangeFileNameModal from "../hooks/useChangeFileName";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { TbLoader3 } from "react-icons/tb";
   
 
 interface NavbarProps{
@@ -79,12 +80,13 @@ const Navbar = ({
     })
     
     return(
-        <div className="bg-white flex items-center gap-3 h-12 border-b p-2 ">
+        <div className="bg-white z-[60] flex items-center gap-3 h-12 border-b p-2 ">
             <Logo />
             <div className="flex items-center  w-20 h-full my-auto">
                 <Hint 
                     label={name}
                     side="bottom"
+                    // sideOffset={8}
                     >
                     <Button 
                         size="sm" 
@@ -105,21 +107,28 @@ const Navbar = ({
                             <ChevronDown className="size-20" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className=" flex flex-col w-56 gap-2">
-                        <DropdownMenuItem className="hover:cursor-pointer" onClick={()=> openFilePicker()}>
-                                <FaRegFileAlt />
-                            <div >
-                                <h1>Open</h1>
-                                <p className="text-xs  text-gray-500">Open a JSON file</p>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="hover:cursor-pointer" onClick={()=>changeFileName.onOpen()}>
-                                <MdOutlineDriveFileRenameOutline />
-                            <div >
-                                <h1>Rename</h1>
-                                <p className="text-xs  text-gray-500">Change the file name</p>
-                            </div>
-                        </DropdownMenuItem>
+                    <DropdownMenuContent asChild align="start" className=" flex flex-col w-56 gap-2">
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <DropdownMenuItem className="hover:cursor-pointer" onClick={()=> openFilePicker()}>
+                                    <FaRegFileAlt />
+                                <div >
+                                    <h1>Open</h1>
+                                    <p className="text-xs  text-gray-500">Open a JSON file</p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="hover:cursor-pointer" onClick={()=>changeFileName.onOpen()}>
+                                    <MdOutlineDriveFileRenameOutline />
+                                <div >
+                                    <h1>Rename</h1>
+                                    <p className="text-xs  text-gray-500">Change the file name</p>
+                                </div>
+                            </DropdownMenuItem>
+                        </motion.div>
                     </DropdownMenuContent>
                 </DropdownMenu>
 
@@ -160,31 +169,24 @@ const Navbar = ({
             <Separator orientation="vertical" />
             {isPending && (
                 <div className="flex gap-2 text-gray-500 ">
-                    <Loader className="animate-spin" size={20} />
-                    <div className="text-sm capitalize">
-                        saving...
-                    </div>
+                    <TbLoader3 className="animate-spin" size={20} />
                 </div>
             )}
             {!isPending && isError && (
                 <div className="flex gap-2 text-gray-500 ">
                     <BsCloudSlash size={20} />
-                    <div className="text-sm capitalize">
-                        Failed to save
-                    </div>
                 </div>
             )}
             {!isPending && !isError && (
-                <div className="flex gap-2 text-gray-500 ">
-                    <MdOutlineCloudDone size={20} />
-                    <div className="text-sm capitalize">
-                        saved
+                <Hint label="All changes saved" sideOffset={8}>
+                    <div className="flex gap-2 text-gray-500 ">
+                        <MdOutlineCloudDone size={20} />
                     </div>
-                </div>
+                </Hint>
             )}
             <div>
                 {isPrivate ?(
-                    <Hint label="Private file" sideOffset={8}>
+                    <Hint label="Private file" sideOffset={6}>
                         <Button variant="ghost" 
                             onClick={()=>{ 
                                 removePrivateModal.onOpen()
@@ -194,11 +196,10 @@ const Navbar = ({
                         </Button>
                     </Hint>
                 ):(
-                    <Hint label="Not a private file" sideOffset={8}>
+                    <Hint label="Not a private file" sideOffset={6}>
 
                         <Button variant="ghost" 
                             onClick={()=>{ 
-                                console.log("open"); 
                                 makePrivateModal.onOpen()
                             }}
                         >
@@ -215,35 +216,42 @@ const Navbar = ({
                             <Download  />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent  align="start" className=" flex flex-col w-60 mr-2">
-                        <DropdownMenuItem  onClick={()=> editor?.saveJson()} className="flex items-center hover:cursor-pointer  w-full">
-                            <File />
-                            <div >
-                                <h1>JSON</h1>
-                                <p className="text-xs  text-gray-500">Save for later editing</p>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem  onClick={()=> editor?.savePng()} className="flex items-center  hover:cursor-pointer w-full">
-                            <File />
-                            <div >
-                                <h1>PNG</h1>
-                                <p className="text-xs  text-gray-500">Best for sharing on web</p>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem  onClick={()=> editor?.saveJpg()} className="flex items-center  hover:cursor-pointer w-full">
+                    <DropdownMenuContent asChild align="start" className=" flex flex-col w-60 mr-2">
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <DropdownMenuItem  onClick={()=> editor?.saveJson()} className="flex items-center hover:cursor-pointer  w-full">
                                 <File />
-                            <div >
-                                <h1>JPEG</h1>
-                                <p className="text-xs  text-gray-500">Best for printing</p>
-                            </div>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem  onClick={()=> editor?.saveSvg()} className="flex items-center  hover:cursor-pointer w-full">
+                                <div >
+                                    <h1>JSON</h1>
+                                    <p className="text-xs  text-gray-500">Save for later editing</p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem  onClick={()=> editor?.savePng()} className="flex items-center  hover:cursor-pointer w-full">
                                 <File />
-                            <div >
-                                <h1>SVG</h1>
-                                <p className="text-xs  text-gray-500">Best for editing in vector software</p>
-                            </div>
-                        </DropdownMenuItem>
+                                <div >
+                                    <h1>PNG</h1>
+                                    <p className="text-xs  text-gray-500">Best for sharing on web</p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem  onClick={()=> editor?.saveJpg()} className="flex items-center  hover:cursor-pointer w-full">
+                                    <File />
+                                <div >
+                                    <h1>JPEG</h1>
+                                    <p className="text-xs  text-gray-500">Best for printing</p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem  onClick={()=> editor?.saveSvg()} className="flex items-center  hover:cursor-pointer w-full">
+                                    <File />
+                                <div >
+                                    <h1>SVG</h1>
+                                    <p className="text-xs  text-gray-500">Best for editing in vector software</p>
+                                </div>
+                            </DropdownMenuItem>
+                        </motion.div>
                     </DropdownMenuContent>
                 </DropdownMenu>
                 <UserButton />

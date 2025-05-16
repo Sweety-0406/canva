@@ -8,6 +8,7 @@ import usePaywall from "../hooks/usePaywall";
 import ToolSidebarHeader from "./tool-sidebar-header";
 import axios from "axios";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 interface RemoveBgSidebarProps {
   editor: Editor | undefined;
@@ -49,11 +50,16 @@ const RemoveBgSidebar = ({
   };
 
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-64 h-full flex flex-col",
-        activeTool === "remove-bg" ? "visible" : "hidden",
-      )}
+    <motion.div
+      // className={cn(
+      //   "bg-white relative border-r z-[40] w-64 h-full flex flex-col",
+      //   activeTool === "remove-bg" ? "visible" : "hidden",
+      // )}
+      initial={{ opacity: 0, x: -240 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -240 }}
+      transition={{ duration: 0.5 }}
+      className="w-64 bg-white border-r absolute z-40 h-full left-16"
     >
       <ToolSidebarHeader
       onClose={onClose}
@@ -92,7 +98,7 @@ const RemoveBgSidebar = ({
           </div>
         </ScrollArea>
       )}
-    </aside>
+    </motion.div>
   );
 };
 

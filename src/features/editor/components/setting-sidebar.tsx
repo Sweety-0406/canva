@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
 
 interface SettingSidebarProps{
     editor: Editor | undefined,
@@ -58,11 +59,12 @@ const SettingSidebar = ({
     }
 
     return(
-        <aside 
-            className={`
-                ${activeTool==="settings" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div 
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Setting" description="Personalize your workspace " />
             <ScrollArea className="p-1 h-[85vh]">
@@ -98,7 +100,7 @@ const SettingSidebar = ({
                     <ColorPicker value={background as string} onChange={onChangnBackground} />
                 </div>
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

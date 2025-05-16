@@ -3,7 +3,7 @@ import TemplateSection from "../templateSection"
 const TemplatePage = ()=>{
     return(
         <div className="p-2">
-            <TemplateSection page="100" />
+            <TemplateSection page="100" r="200" />
         </div>
     )
 }

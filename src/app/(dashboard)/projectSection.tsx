@@ -8,7 +8,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {formatDistanceToNow} from "date-fns"
-import { AlertTriangle, CopyIcon, FileIcon, Loader, MoreHorizontal, Search, Trash } from "lucide-react"
+import { AlertTriangle, CopyIcon, FileIcon, MoreHorizontal, Search, Trash } from "lucide-react"
 import React from "react"
 import { useRouter } from "next/navigation"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -22,7 +22,7 @@ import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
 import { RiInboxArchiveLine } from "react-icons/ri";
 import axios from "axios"
 import toast from "react-hot-toast"
-import { RingLoader } from "react-spinners"
+import Loader from "@/features/editor/components/loader"
 
 const ProjectSection = ()=>{
     const router = useRouter()
@@ -75,10 +75,7 @@ const ProjectSection = ()=>{
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
               <div className="flex flex-1 h-[70vh] justify-center  items-center">
                 <div className=''>
-                    <RingLoader
-                        size={50}
-                        color='#7721f7'
-                    />
+                    <Loader r="100" />
                 </div>
               </div>
             </div>
@@ -119,7 +116,7 @@ const ProjectSection = ()=>{
     }    
 
     return(
-        <div className="space-y-3 mb-5">
+        <div className="space-y-3 pb-5">
           <VerifyPrivateModal />
           <DeleteModal isPending={deleteMutation.isPending} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} onSubmit={()=>onDelete(deleteModal.projectId)} />
           <h3 className="font-semibold text-3xl">Recent Projects</h3>
@@ -130,7 +127,7 @@ const ProjectSection = ()=>{
                   {group.data.map((project)=>(
                     <TableRow key={project.id}>
                       <TableCell
-                        onClick={()=> router.push(`/editor/${project.id}`)}
+                        onClick={()=> {console.log("project:" +project); router.push(`/editor/${project.id}`)}}
                         className="font-medium flex items-center gap-x-2 cursor-pointer"
                       >
                         <FileIcon className = "size-6"/>

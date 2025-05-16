@@ -3,26 +3,25 @@
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@radix-ui/react-dropdown-menu"
 import { ActiveTool, Editor } from "../types"
 import { Slider } from "@/components/ui/slider"
-import { RxTransparencyGrid } from "react-icons/rx"
+import { MdLensBlur } from "react-icons/md";
 import Hint from "./hint"
 import { motion } from "framer-motion"
 
-interface OpacitySidebarProps{
+interface BlurSidebarProps{
     editor: Editor | undefined,
     activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
-const OpacitySidebar = ({
+const BlurSidebar = ({
     editor,
     activeTool,
-    onChangeActiveTool
-}:OpacitySidebarProps)=>{
-    const value = editor?.selectedObjects[0]?.opacity || 1
+}:BlurSidebarProps)=>{
+    const value = editor?.blur || 0
 
 
-    const onChangeOpacity=(value:number)=>{
-        editor?.changeOpacity(value)
+    const onChangeBlurValue=(value:number)=>{
+        editor?.changeBlur(value)
     }
 
 
@@ -32,11 +31,11 @@ const OpacitySidebar = ({
                 <DropdownMenuTrigger >
                     <div className={`mt-2 ${activeTool==="opacity"?"bg-muted":"bg-transparent"}`}>
                         <Hint 
-                            label="Transparency"
+                            label="Blur"
                             side="bottom"
                             customClassName="mt-[6px]"
                             >
-                            <RxTransparencyGrid  
+                            <MdLensBlur  
                                 className="size-4 -mt- rounded-sm"
                             /> 
                         </Hint>
@@ -51,7 +50,7 @@ const OpacitySidebar = ({
                         className="w-44 rounded-md bg-white shadow-md p-4 mt-4"
                     >
                         <Slider 
-                        onValueChange={(values)=>onChangeOpacity(values[0])}
+                        onValueChange={(values)=>onChangeBlurValue(values[0])}
                         value={[value]}
                         max={1}
                         min={0}
@@ -66,5 +65,5 @@ const OpacitySidebar = ({
     )
 }
 
-export default OpacitySidebar
+export default BlurSidebar
 

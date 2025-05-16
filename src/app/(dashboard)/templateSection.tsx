@@ -1,19 +1,19 @@
 "use client"
 
 import { useGetTemplates } from "@/features/editor/hooks/useGetTemplates";
-import { Loader, TriangleAlert } from "lucide-react";
+import { TriangleAlert } from "lucide-react";
 import { useRouter } from "next/navigation";
 import TemplateCard from "./templateCard";
 import { projectType, templateType } from "@/features/editor/types";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import usePaywall from "@/features/editor/hooks/usePaywall";
-import { RingLoader } from "react-spinners";
-
+import Loader from "@/features/editor/components/loader";
 interface TemplateSectionProps{
-  page?:string
+  page?:string,
+  r?: string
 }
 
-const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
+const TemplateSection = ({page="10", r="100"}:TemplateSectionProps)=>{
     const router = useRouter(); 
     const mutation = useCreateProject();
     const paywall = usePaywall()
@@ -54,10 +54,7 @@ const TemplateSection = ({page="10"}:TemplateSectionProps)=>{
           <div className="flex items-center justify-center h-32">
             <div className="flex flex-1  justify-center  items-center">
               <div className=''>
-                  <RingLoader 
-                      size={50}
-                      color='#7721f7'
-                  />
+                  <Loader r={r}/>
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@ import usePaywall from "../hooks/usePaywall";
 import ToolSidebarHeader from "./tool-sidebar-header";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 interface AiSidebarProps {
   editor: Editor | undefined;
@@ -54,11 +55,16 @@ const AiSidebar = ({
   };
 
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "ai" ? "visible" : "hidden",
-      )}
+    <motion.div
+      // className={cn(
+      //   "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
+      //   activeTool === "ai" ? "visible" : "hidden",
+      // )}
+      initial={{ opacity: 0, x: -240 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -240 }}
+      transition={{ duration: 0.5 }}
+      className="w-64 bg-white border-r absolute z-40 h-full left-16"
     >
       <ToolSidebarHeader
         onClose={onClose}
@@ -87,7 +93,7 @@ const AiSidebar = ({
           </Button>
         </form>
       </ScrollArea>
-    </aside>
+    </motion.div>
   );
 };
 

@@ -20,7 +20,7 @@ const SideBar = ({
     onChangeActiveTool
 }:SideBarProps)=>{
     return(
-        <aside className=" h-full border-r  bg-white ">
+        <aside className=" h-full border-r z-50 bg-white ">
             <ul className="flex flex-col"> 
                 <SideBarItems
                     label="Design"

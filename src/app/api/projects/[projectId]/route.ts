@@ -47,7 +47,7 @@ export async function PATCH(req : Request, { params }: { params: IParams }) {
         if(!session?.user || !session?.user?.id) {
             return NextResponse.json({error:"Unathorized"},{status: 401})
         }
-        const {projectId} = params
+        const {projectId} = await params
         if (!projectId) {
             return NextResponse.json({ error: "Missing projectId in URL" }, { status: 400 });
         }
@@ -96,7 +96,7 @@ export async function DELETE(
     {params}:{params:IParams}
 ){
    try {
-        const {projectId} = params
+        const {projectId} = await params
         const session = await auth()
         if(!session?.user || !session?.user.id) {
             return NextResponse.json({error:"Unathorized"},{status: 401})

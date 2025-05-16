@@ -5,8 +5,7 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { getImages } from "@/app/api/getImages";
-import { TbLoader3 } from "react-icons/tb";
-import {RingLoader} from 'react-spinners'
+import Loader from "@/features/editor/components/loader"
 import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,6 +16,7 @@ import { CiSearch } from "react-icons/ci";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 
 interface ImageSidebarProps{
@@ -79,11 +79,12 @@ const ImageSidebar = ({
         }
     };
     return(
-        <aside 
-            className={`
-                ${activeTool==="images" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div 
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your PixelForge" />
             <ScrollArea className="p-1 h-[85vh]">
@@ -119,7 +120,6 @@ const ImageSidebar = ({
                             onClientUploadComplete={(res) => {
                                 console.log("video property:", res)
                                 editor?.addVideo(res[0].ufsUrl )
-                                // editor?.addVideo("http://localhost:3000/v1.mp4");
                             }}
                             onUploadError={(error: Error) => {
                                 toast.error(`${error.message}`);
@@ -142,10 +142,7 @@ const ImageSidebar = ({
                 {isLoading && (
                     <div className="flex flex-1 h-[70vh] justify-center  items-center">
                         <div className=''>
-                            <RingLoader
-                                size={50}
-                                color='#7721f7'
-                            />
+                            <Loader r="100" />
                         </div>
                     </div>
                 )}
@@ -228,7 +225,7 @@ const ImageSidebar = ({
                     </div>
                 )}
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

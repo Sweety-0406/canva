@@ -5,6 +5,7 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { TfiText } from "react-icons/tfi";
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion";
 
 interface TextSidebarProps{
     editor: Editor | undefined,
@@ -23,11 +24,12 @@ const TextSidebar = ({
     }
 
     return(
-        <aside 
-            className={`
-                ${activeTool==="text" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div 
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Text" description="Add text to your element" />
             <ScrollArea className="p-1">
@@ -77,7 +79,7 @@ const TextSidebar = ({
                     </Button>
                 </div>
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

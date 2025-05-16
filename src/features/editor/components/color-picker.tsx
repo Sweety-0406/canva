@@ -13,7 +13,6 @@ const ColorPicker = ({
     value,
     onChange,
 }:ColorPickerProps)=>{
-    const clr = typeof value === "undefined" ? "transparent" : value;
     return(
         <div className="w-full space-y-4  ">
             <ChromePicker 

@@ -55,6 +55,8 @@ const buildEditor =({
     setTextAlign,
     fontSize,
     setFontSize,
+    blur,
+    setBlur,
     textShadow,
     setTextShadow
 
@@ -183,16 +185,23 @@ const buildEditor =({
                     image.scaleToWidth(workspace?.width || 0)
                     image.scaleToHeight(workspace?.height || 0)
 
+                    const blurFilter = new fabric.Image.filters.Blur({
+                        blur: blur, // Range: 0 to ~1, adjust to taste
+                    });
+
+                    image.filters = [blurFilter]; // Assign the filter(s)
+                    image.applyFilters();
+
                     center(image)
                     canvas.add(image)
                     canvas.setActiveObject(image)
+                    canvas.requestRenderAll();
                 },
                 {
                     crossOrigin: "anonymous"
                 }
             )
         },
-
         addVideo: (url: string) => {
             console.log("Video URL:", url);
           
@@ -247,10 +256,6 @@ const buildEditor =({
               console.error("Video failed to load", e);
             });
         },  
-    
-
-          
-          
         changeImageFilter: (value: string)=>{
             const objects = canvas.getActiveObjects()
             objects.forEach((object)=>{
@@ -383,6 +388,20 @@ const buildEditor =({
             });
             canvas.renderAll()
         },
+        changeBlur: (value: number) => {
+            setBlur(value)
+            canvas.getActiveObjects().forEach((obj) => {
+                if (obj instanceof fabric.Image) {
+                    // Set or update the blur filter
+                    const blurFilter = new fabric.Image.filters.Blur({ blur: value });
+
+                    obj.filters = [blurFilter]; // Replace any existing filters
+                    obj.applyFilters(); // Apply the filters to the image
+                }
+            });
+
+            canvas.requestRenderAll();
+        },
         changeFontSize:(value:number)=>{
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
@@ -397,7 +416,7 @@ const buildEditor =({
                 }
             });
             canvas.renderAll()
-        },
+        },       
         changeUnderline:(value:boolean)=>{
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
@@ -830,6 +849,7 @@ const buildEditor =({
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
                 opacity:1,
+                
             })
             center(object)
             canvas.add(object)
@@ -1746,6 +1766,7 @@ const buildEditor =({
         underline,
         textAlign,
         fontSize,
+        blur,
         textShadow 
     }
 }
@@ -1775,6 +1796,7 @@ export const useEditor=({
     const [lineThrough, setLineThrough] = useState(false)
     const [textAlign, setTextAlign] = useState("left")
     const [fontSize, setFontSize] = useState(32)
+    const [blur, setBlur] = useState(0)
     const [textShadow, setTextShadow] = useState("white")
     const [fontsLoaded, setFontsLoaded] = useState<FontsLoaded>({});
  
@@ -1837,6 +1859,8 @@ export const useEditor=({
                 selectedObjects,
                 font,
                 setFont,
+                blur,
+                setBlur,
                 fontWeight,
                 setFontWeight,
                 fontStyle,

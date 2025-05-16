@@ -7,6 +7,7 @@ import ColorPicker from "./color-picker"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
+import { motion } from "framer-motion"
 
 interface StrokeWidthSidebarProps{
     editor: Editor | undefined,
@@ -35,11 +36,12 @@ const StrokeWidthSidebar = ({
     }
 
     return(
-        <aside 
-            className={`
-                ${activeTool==="stroke-width" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div 
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Stroke Options" description="Modify the stroke of your element" />
             <ScrollArea >
@@ -79,7 +81,7 @@ const StrokeWidthSidebar = ({
                     </Button>
                 </div>
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

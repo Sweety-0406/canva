@@ -32,10 +32,10 @@ export const SubscriptionModal = () => {
             height={130}
           />
           <DialogTitle className="text-center">
-            Upgrade to a paid plan
+            Upgrade to PixelForge pro
           </DialogTitle>
           <DialogDescription className="text-center">
-            Upgrade to a paid plan to unlock more features
+            PixelForge Pro has all the tools you need to design graphics for any project.
           </DialogDescription>
         </DialogHeader>
         <Separator />

@@ -3,14 +3,15 @@ import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 export const BackgroundGradientAnimation = ({
-  gradientBackgroundStart = "rgb(108, 0, 162)",
-  gradientBackgroundEnd = "rgb(0, 17, 82)",
-  firstColor = "18, 113, 255",
-  secondColor = "221, 74, 255",
-  thirdColor = "100, 220, 255",
-  fourthColor = "200, 50, 50",
-  fifthColor = "180, 180, 50",
-  pointerColor = "140, 100, 255",
+  gradientBackgroundStart = "#f5faff",  // Light pastel blue
+gradientBackgroundEnd = "#e3f2fd",    // Soft blue gradient end
+
+firstColor = "0, 137, 123",    // Teal
+secondColor = "255, 112, 67", // Soft coral
+thirdColor = "41, 182, 246",   // Light blue
+fourthColor = "240, 98, 146",  // Pink
+fifthColor = "255, 202, 40",  // Warm yellow
+pointerColor = "126, 87, 194",
   size = "80%",
   blendingValue = "hard-light",
   children,
@@ -89,7 +90,7 @@ export const BackgroundGradientAnimation = ({
   return (
     <div
       className={cn(
-        "text-white aspect-[5/1] min-h-[348px] flex gap-x-6 p-6 items-center rounded-xl relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        "text-white aspect-[5/1] min-h-[348px] flex gap-x-6 p-6 items-center shadow-lg shadow-gray-200 rounded-xl relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
         containerClassName
       )}
     >

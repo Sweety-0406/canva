@@ -66,7 +66,8 @@ const config = {
   			fourth: 'moveHorizontal 40s ease infinite',
   			fifth: 'moveInCircle 20s ease infinite',
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+			
   		},
   		keyframes: {
   			moveHorizontal: {

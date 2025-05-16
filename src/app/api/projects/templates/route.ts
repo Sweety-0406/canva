@@ -39,8 +39,8 @@ export async function GET(req: Request) {
         .limit(intLimit)
         .offset((intPage - 1) * intLimit)
         .orderBy(
-          asc(projects.isPro),
-          desc(projects.updatedAt),
+          
+          desc(projects.createdAt),
         );
 
     return NextResponse.json({data: data});

@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import { filters } from "../types";
 import Image from "next/image"
+import { motion } from "framer-motion"
 
 interface FilterSidebarProps{
     editor: Editor | undefined,
@@ -22,11 +23,12 @@ const FilterSidebar = ({
         onChangeActiveTool("select")
     }
     return(
-        <aside 
-            className={`
-                ${activeTool==="filter" ? "visible":"hidden"}
-                w-64 bg-white border-r
-            `}
+        <motion.div  
+            initial={{ opacity: 0, x: -240 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -240 }}
+            transition={{ duration: 0.5 }}
+            className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Fonts" description="Change font of your text" />
             <ScrollArea className="p-1 h-[85vh]">
@@ -46,7 +48,7 @@ const FilterSidebar = ({
                     
                 </div>
             </ScrollArea>
-        </aside>
+        </motion.div>
     )
 }
 

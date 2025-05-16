@@ -2,12 +2,13 @@
 "use client";
 
 import { Editor } from "@/features/editor/components/editor";
-import { Loader, TriangleAlert } from "lucide-react";
+import {  TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useGetProject } from "@/features/editor/hooks/useGetProject";
-import { RingLoader } from "react-spinners";
+import Loader from "@/features/editor/components/loader"
+
 
 
 
@@ -34,10 +35,7 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
       <div className="h-full flex flex-col items-center justify-center">
         <div className="flex flex-1 h-[70vh] justify-center  items-center">
           <div className=''>
-              <RingLoader
-                  size={50}
-                  color='#7721f7'
-              />
+              <Loader />
           </div>
         </div>
       </div>
@@ -61,6 +59,15 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
   }
 
   return <Editor initialData={data} />
+  // return (
+  //   <div className="h-full flex flex-col items-center justify-center">
+  //     <div className="flex flex-1 h-[70vh] justify-center  items-center">
+  //       <div className=''>
+  //           <Loader />
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
  
 export default EditorProjectIdPage;

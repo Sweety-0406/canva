@@ -8,7 +8,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {formatDistanceToNow} from "date-fns"
-import { AlertTriangle, CopyIcon, FileIcon, Loader, MoreHorizontal, Search, Trash } from "lucide-react"
+import { AlertTriangle, CopyIcon, FileIcon, MoreHorizontal, Search, Trash } from "lucide-react"
 import React from "react"
 import { useRouter } from "next/navigation"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -22,7 +22,7 @@ import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
 import { RiInboxUnarchiveLine } from "react-icons/ri";import axios from "axios"
 import toast from "react-hot-toast"
 import { useGetArchiveProjects } from "@/features/editor/hooks/useGetArchiveProjects"
-import { RingLoader } from "react-spinners"
+import Loader from "@/features/editor/components/loader"
 
 const ProjectSection = ()=>{
     const router = useRouter()
@@ -73,13 +73,10 @@ const ProjectSection = ()=>{
               Recent archive projects
             </h3>
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-            <div className="flex flex-1 h-[70vh] justify-center  items-center">
-              <div className=''>
-                  <RingLoader
-                      size={50}
-                      color='#7721f7'
-                  />
-              </div>
+            <div className="flex flex-1 h-[70vh] my-auto justify-center  items-center">
+              {/* <div className='h-full'> */}
+                <Loader r="200" />
+              {/* </div> */}
             </div>
             </div>
           </div>
