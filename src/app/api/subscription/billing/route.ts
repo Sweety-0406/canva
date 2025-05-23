@@ -1,13 +1,11 @@
 import { auth } from "@/auth";
 import { db } from "@/db/drizzle";
 import { subscriptions } from "@/db/schema";
-import { checkIsActive } from "@/lib/checkIsActive";
 import { stripe } from "@/lib/stripe";
-import { error } from "console";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const userSession = await auth();
     if (!userSession?.user || !userSession?.user?.id) {

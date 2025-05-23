@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { ActiveTool, Editor } from "@/features/editor/types";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import usePaywall from "../hooks/usePaywall";
 import ToolSidebarHeader from "./tool-sidebar-header";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -12,16 +10,13 @@ import { motion } from "framer-motion";
 
 interface AiSidebarProps {
   editor: Editor | undefined;
-  activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 };
 
 const AiSidebar = ({
   editor,
-  activeTool,
   onChangeActiveTool,
 }: AiSidebarProps) => {
-  const { shouldBlock, triggerPaywall } = usePaywall();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
 
@@ -33,20 +28,18 @@ const AiSidebar = ({
 
 
     try {
-        const response = await axios.post("/api/ai", { prompt: value }, {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        });
+      const response = await axios.post("/api/ai", { prompt: value }, {
+          headers: {
+              "Content-Type": "application/json",
+          }
+      });
 
-
-        editor?.addImage(response.data.image);
-        console.log(response.data.image)
-    } catch (err) {
-        toast.error("Somethign went wrong");
-        
+      editor?.addImage(response.data.image);
+      console.log(response.data.image)
+    } catch {
+      toast.error("Somethign went wrong");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
   };
 

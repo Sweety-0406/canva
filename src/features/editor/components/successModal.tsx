@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { CheckCircle2 } from "lucide-react";
 
 import {
   Dialog,
@@ -12,7 +11,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useFailedModal from "../hooks/useFailedModal";
 import { useRouter } from "next/navigation";
 import useSuccessModal from "../hooks/uesSuccessModal";
 

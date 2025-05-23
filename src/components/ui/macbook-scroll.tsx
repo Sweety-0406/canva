@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MotionValue, motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
@@ -27,12 +27,10 @@ import Image from "next/image";
 
 export const MacbookScroll = ({
   src,
-  showGradient,
   title,
   badge,
 }: {
   src?: string;
-  showGradient?: boolean;
   title?: string | React.ReactNode;
   badge?: React.ReactNode;
 }) => {
@@ -63,7 +61,6 @@ export const MacbookScroll = ({
   const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
     <div
@@ -636,12 +633,11 @@ export const OptionKey = ({ className }: { className: string }) => {
 
 const AceternityLogo = () => {
   return (
-    <img
+    <Image
       width="66"
       height="65"
       src="/logo.png"
-      className="size-20 text-white"
-    />
+      className="size-20 text-white" alt={"Logo"}    />
   
   );
 };

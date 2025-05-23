@@ -55,7 +55,8 @@ export const Editor = ({initialData}: EditorProps) => {
       setActiveTool("select");
     }
   }, [activeTool]);
-  const { init, editor, loadFont } = useEditor({
+  // const { init, editor, loadFont } = useEditor({
+  const { init, editor } = useEditor({
     defaultState: initialData.json,
     defaultWidth: initialData.width,
     defaultHeight: initialData.height,
@@ -103,7 +104,7 @@ export const Editor = ({initialData}: EditorProps) => {
   }, [init]); 
 
   return (
-    <div className="flex   flex-col w-full h-full">
+    <div className="flex overflow-hidden  flex-col w-full h-full">
       <Navbar name={fileName} isPrivate={isPrivate} editor={editor} id={projectId} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
       <div className="flex w-full top-12 absolute h-[calc(100%-48px)] bg-muted" >
         <ChangeFileNameModal fileName={fileName} setFileName={setFileName} projectId={projectId}/>
@@ -112,49 +113,50 @@ export const Editor = ({initialData}: EditorProps) => {
         <SideBar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
         <AnimatePresence mode="wait">
           {activeTool === "text" && (
-            <TextSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <TextSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "shadow" && (
-            <ShadowColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <ShadowColorSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "stroke-width" && (
-            <StrokeWidthSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <StrokeWidthSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "stroke-color" && (
-            <StrokeColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <StrokeColorSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "shapes" && (
-            <ShapeSidebar key="shape-sidebar" editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <ShapeSidebar key="shape-sidebar" editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "textAlign" && (
-            <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <TextAlignSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "fill" && (
-            <FillColorSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <FillColorSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "font" && (
-            <FontSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} loadFont={loadFont}/>
+            <FontSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} />
+            // <FontSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} loadFont={loadFont}/>
           )}
           {activeTool === "remove-bg" && (
-            <RemoveBgSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <RemoveBgSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "images" && (
-            <ImageSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <ImageSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "templates" && (
-            <TemplateSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <TemplateSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "filter" && (
-            <FilterSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <FilterSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "draw" && (
-            <DrawSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <DrawSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "settings" && (
-            <SettingSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <SettingSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "ai" && (
-            <AiSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
+            <AiSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} />
           )}
         </AnimatePresence>
         <main className="flex-1  flex flex-col relative bg-muted overflow-x-auto">

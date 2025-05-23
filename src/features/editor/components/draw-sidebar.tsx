@@ -11,13 +11,11 @@ import { motion } from "framer-motion"
 
 interface DrawSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const DrawSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:DrawSidebarProps)=>{
     const strokeColorvalue = editor?.strokeColor || "#00000"

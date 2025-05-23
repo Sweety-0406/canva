@@ -1,8 +1,7 @@
-import { auth } from "@/auth";
 import { db } from "@/db/drizzle";
 import { subscriptions } from "@/db/schema";
 import { stripe } from "@/lib/stripe";
-import { eq, jaccardDistance } from "drizzle-orm";
+import { eq} from "drizzle-orm";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -20,6 +19,7 @@ export async function POST(req : Request) {
             process.env.STRIPE_WEBHOOK_SECRET!
         )
     } catch (error) {
+        console.log(error)
         return NextResponse.json({error: "Invalid signature"}, {status:400})
     }
         

@@ -43,8 +43,8 @@ const UserButton = () => {
     return null;
   }
 
-  const name = session.data?.user?.name!;
-  const imageUrl = session.data?.user?.image;
+  const name = session.data?.user?.name ?? "User";
+  const imageUrl = session.data?.user?.image ?? "";
 
   return (
     <DropdownMenu modal={false}>

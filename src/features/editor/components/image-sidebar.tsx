@@ -4,7 +4,7 @@ import { ActiveTool, Editor } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import { getImages } from "@/app/api/getImages";
+import { useImages } from "@/app/api/getImages";
 import Loader from "@/features/editor/components/loader"
 import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
@@ -21,21 +21,34 @@ import { motion } from "framer-motion";
 
 interface ImageSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
+}
+
+export interface UnsplashImage {
+  id: string;
+  alt_description: string | null;
+  urls: {
+    regular: string;
+    small: string;
+  };
+  links: {
+    html: string;
+  };
+  user: {
+    name: string;
+  };
 }
 
 const ImageSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:ImageSidebarProps)=>{
     const [searchKey, setSearchKey] = useState("")
-    const {data, isLoading, isError} = getImages()
-    const [searchData, setSearchData] = useState<any[]>([])
+    const {data, isLoading, isError} = useImages()
+    const [searchData, setSearchData] = useState<UnsplashImage[]>([])
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    // console.log(data)
+    console.log(data)
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
@@ -56,8 +69,8 @@ const ImageSidebar = ({
     
             setTotalPages(response.data.data.total_pages);
             setPage(pageNum);
-        } catch (error) {
-            console.error("Error fetching images:", error);
+        } catch{
+            console.error("Error fetching images", );
             
         }
     };
@@ -87,7 +100,7 @@ const ImageSidebar = ({
             className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your PixelForge" />
-            <ScrollArea className="p-1 h-[85vh]">
+            <ScrollArea className="p-1 h-[84vh]">
                 <div>
                     <UploadButton 
                         className=""
@@ -148,7 +161,7 @@ const ImageSidebar = ({
                 )}
                 {searchData.length==0? (
                     <div className="grid grid-cols-2 gap-1">
-                        {data && data.map((image: any)=>{
+                        {data && data.map((image: UnsplashImage)=>{
                             return(
                                 
                                 <button
@@ -177,7 +190,7 @@ const ImageSidebar = ({
                 ):(
                     <div >
                         <div className="grid grid-cols-2 gap-1">
-                            {searchData && searchData.map((image: any)=>{
+                            {searchData && searchData.map((image: UnsplashImage)=>{
                                 return(
                                     <button 
                                         key={image.id}

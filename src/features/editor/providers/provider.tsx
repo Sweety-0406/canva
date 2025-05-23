@@ -1,5 +1,5 @@
 "use client"
-import React, { Children } from "react"
+import React from "react"
 import { QueryProviders } from "./query-provider"
 
 const Provider = ({children}:{children: React.ReactNode})=>{

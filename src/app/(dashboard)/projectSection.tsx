@@ -1,4 +1,7 @@
+
+
 "use client"
+
 
 import { useGetProjects } from "@/features/editor/hooks/useGetProjects"
 import {
@@ -22,9 +25,14 @@ import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
 import { RiInboxArchiveLine } from "react-icons/ri";
 import axios from "axios"
 import toast from "react-hot-toast"
-import Loader from "@/features/editor/components/loader"
+import ProjectSkeleton from "./projectSkeleton";
 
-const ProjectSection = ()=>{
+
+interface ProjectSkeletonProps{
+  projectNumber: number
+}
+
+const ProjectSection = ({projectNumber}:ProjectSkeletonProps)=>{
     const router = useRouter()
     const duplicateMutation = useDuplicateProject()
     const deleteMutation = useDeleteProject()
@@ -68,17 +76,14 @@ const ProjectSection = ()=>{
 
     if (status === "pending") {
         return (
-          <div className="space-y-4">
-            <h3 className="font-semibold text-3xl">
-              Recent projects
+          <div className="space-y-4 ">
+            <h3 className="font-semibold text-xl">
+              Recent Projects
             </h3>
-            <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-              <div className="flex flex-1 h-[70vh] justify-center  items-center">
-                <div className=''>
-                    <Loader r="100" />
-                </div>
-              </div>
+            <div className="mb-4">
+              <ProjectSkeleton projectNumber={projectNumber}/>
             </div>
+            
           </div>
         )
     }
@@ -86,8 +91,8 @@ const ProjectSection = ()=>{
     if (status === "error") {
         return (
           <div className="space-y-4">
-            <h3 className="font-semibold text-3xl">
-              Recent projects
+            <h3 className="font-semibold text-xl">
+              Recent Projects
             </h3>
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
               <AlertTriangle className="size-6 text-muted-foreground" />
@@ -102,8 +107,8 @@ const ProjectSection = ()=>{
     if (!data.pages.length || !data.pages[0].data.length){
         return (
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">
-              Recent projects
+            <h3 className="font-semibold text-xl">
+              Recent Projects
             </h3>
             <div className="flex flex-col gap-y-4 items-center justify-center h-32">
               <Search className="size-6 text-muted-foreground" />
@@ -119,7 +124,7 @@ const ProjectSection = ()=>{
         <div className="space-y-3 pb-5">
           <VerifyPrivateModal />
           <DeleteModal isPending={deleteMutation.isPending} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} onSubmit={()=>onDelete(deleteModal.projectId)} />
-          <h3 className="font-semibold text-3xl">Recent Projects</h3>
+          <h3 className="font-semibold text-xl">Recent Projects</h3>
           <Table>
             <TableBody>
               {data.pages.map((group, i)=>(
@@ -127,7 +132,7 @@ const ProjectSection = ()=>{
                   {group.data.map((project)=>(
                     <TableRow key={project.id}>
                       <TableCell
-                        onClick={()=> {console.log("project:" +project); router.push(`/editor/${project.id}`)}}
+                        onClick={()=>onClick(project.isPrivate, project.id)}
                         className="font-medium flex items-center gap-x-2 cursor-pointer"
                       >
                         <FileIcon className = "size-6"/>
@@ -140,7 +145,7 @@ const ProjectSection = ()=>{
                         {project.width} x {project.height} px
                       </TableCell>
                       <TableCell
-                        onClick={()=> router.push(`/editor/${project.id}`)}
+                        onClick={()=>onClick(project.isPrivate, project.id)}
                         className="hidden md:table-cell cursor-pointer"
                       >
                         {formatDistanceToNow(project.updatedAt, {addSuffix: true})}
@@ -191,13 +196,13 @@ const ProjectSection = ()=>{
           </Table>
           {hasNextPage && ( 
               <div className="w-full flex items-center justify-center pt-4">
-              <Button
+                <Button
                   variant="ghost"
                   onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}
-              >
+                >
                   Load more
-              </Button>
+                </Button>
               </div>
           )}
 

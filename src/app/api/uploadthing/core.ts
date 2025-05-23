@@ -7,23 +7,25 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   imageUploader: f({image: {maxFileSize: "4MB"}})
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       const session = await auth()
 
       if (!session?.user) throw new UploadThingError("Unauthorized");
       return { userId: session.user?.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      console.log(metadata)
       return { url: file.ufsUrl };
     }),
 
-  videoUploader: f({ video: { maxFileSize: "512MB" } }) // ✅ Add this
-    .middleware(async ({ req }) => {
+  videoUploader: f({ video: { maxFileSize: "512MB" } }) 
+    .middleware(async () => {
       const session = await auth();
       if (!session?.user) throw new UploadThingError("Unauthorized");
       return { userId: session.user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      console.log(metadata)
       return { url: file.ufsUrl };
     }),
 } satisfies FileRouter;

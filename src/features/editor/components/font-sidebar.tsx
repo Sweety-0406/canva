@@ -3,17 +3,13 @@
 import { ActiveTool, Editor } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { TfiText } from "react-icons/tfi";
 import { Button } from "@/components/ui/button"
 import localFont from "next/font/local";
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface FontSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void,
-    loadFont: (fontFamily: string) => void;  
 }
 
 
@@ -362,9 +358,7 @@ const Wonderblend = localFont({
 
 const FontSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool,
-    loadFont
 }:FontSidebarProps)=>{
     const value = editor?.font 
     
@@ -452,7 +446,7 @@ const FontSidebar = ({
           className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Fonts" description="Change font of your text" />
-            <ScrollArea className="p-1 h-[85vh]">
+            <ScrollArea className="p-1 h-[84vh]">
                 <div className="mt-2 flex flex-col gap-3 w-[248px]">
                 {fonts.map(({ name, className }) => (
                     <Button

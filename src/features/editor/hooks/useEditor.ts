@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react"
 import  {fabric}  from "fabric"
 import { useAutoResizer } from "./useAutoResizer"
-import { buildEditorProps, Editor, EditorHookProps, fontStyleType, KEYS } from "../types"
+import { buildEditorProps, Editor, EditorHookProps, KEYS } from "../types"
 import { useCanvasEvents } from "./useCanvasEvents"
 import { isTextType, createFilter, downloadCanvasImage, transformText } from "../utils"
 import { useClipboard } from "./useClipboard"
@@ -9,12 +9,7 @@ import { useHistory } from "./useHistory"
 import { useShortcutKeys } from "./useShortcutKeys"
 import { useWindowEvents } from "./useWindowEvents"
 import useLoadState from "./useLoadState"
-import WebFont from 'webfontloader';
 
-type FontData = {
-    name: string;
-    urls: string[];
-};
   
 type FontsLoaded = {
     [fontFamily: string]: boolean;
@@ -58,7 +53,11 @@ const buildEditor =({
     blur,
     setBlur,
     textShadow,
-    setTextShadow
+    setTextShadow,
+    gradientColor,
+    setGradientColor,
+    gradientType,
+    setGradientType
 
 }:buildEditorProps):Editor=>{
     const generateSaveOptions = ()=>{
@@ -117,7 +116,7 @@ const buildEditor =({
     const center = (object: fabric.Object )=>{
         const workspace = getWorkspace();
         const center = workspace?.getCenterPoint();
-        //@ts-ignore
+        //@ts-expect-error typescript error
         canvas._centerObject(object, center)
     }
     return{
@@ -161,6 +160,93 @@ const buildEditor =({
             canvas.renderAll()
             save()
         },
+
+        changeGradientBackground: ( value: string[], gradientType: string, angle: number, object?: fabric.Object) => {
+            const workspace = getWorkspace();
+            if (!workspace) return;
+            setGradientColor(value)
+            setGradientType(gradientType)
+            const target = object ?? workspace;
+            const objWidth = object ? object.getScaledWidth() : workspace.width! * workspace.scaleX!;
+            const objHeight = object ? object.getScaledHeight() : workspace.height! * workspace.scaleY!;
+
+            function generateColorStops(colors: string[]): fabric.IGradientOptions['colorStops'] {
+                const total = colors.length;
+                return colors.map((color, index) => ({
+                offset: index / (total - 1),
+                color,
+                }));
+            }
+
+            function createLinearGradientAtAngle(
+                width: number,
+                height: number,
+                colors: string[],
+                angleDegrees: number
+            ): fabric.Gradient {
+                const angleRadians = (angleDegrees * Math.PI) / 180;
+                const halfDiag = Math.sqrt(width * width + height * height) / 2;
+
+                const xCenter = width / 2;
+                const yCenter = height / 2;
+
+                const x1 = xCenter - halfDiag * Math.cos(angleRadians);
+                const y1 = yCenter - halfDiag * Math.sin(angleRadians);
+                const x2 = xCenter + halfDiag * Math.cos(angleRadians);
+                const y2 = yCenter + halfDiag * Math.sin(angleRadians);
+
+                return new fabric.Gradient({
+                type: 'linear',
+                gradientUnits: 'pixels',
+                coords: { x1, y1, x2, y2 },
+                colorStops: generateColorStops(colors),
+                });
+            }
+
+            function createRadialGradient(
+                width: number,
+                height: number,
+                colors: string[]
+            ): fabric.Gradient {
+                const xCenter = width / 2;
+                const yCenter = height / 2;
+                const radius = Math.max(width, height) / 2;
+
+                return new fabric.Gradient({
+                    type: 'radial',
+                    gradientUnits: 'pixels',
+                    coords: {
+                        x1: xCenter,
+                        y1: yCenter,
+                        r1: 0,
+                        x2: xCenter,
+                        y2: yCenter,
+                        r2: radius,
+                    },
+                    colorStops: generateColorStops(colors),
+                });
+            }
+
+
+            const linearGradient = createLinearGradientAtAngle(
+                objWidth,
+                objHeight,
+                value,
+                angle+90 
+            );
+            
+            const radialGradient = createRadialGradient(
+                objWidth,
+                objHeight,
+                value,
+            );
+            
+            target.set('fill', gradientType === 'linear' ? linearGradient : radialGradient);
+
+            canvas.renderAll();
+            save()
+        },
+
         enableDrawing:()=>{
             canvas.discardActiveObject()
             canvas.renderAll()
@@ -312,15 +398,12 @@ const buildEditor =({
                 if (element instanceof fabric.Group) {
                     // Iterate over objects in the group
                     element.getObjects().forEach(obj => {
-                        if (isTextType(obj.type)) {
-                            obj.set({ fill: value });
+                        if(isTextType(obj.type)) {
+                            obj.set({ stroke: value });
                         } else {
                             obj.set({ stroke: value, fill:value });
                         }
                     });
-                }
-                else if(isTextType(element.type)){
-                    element.set({fill: value})
                 }else{
                     element.set({stroke: value})
                 }
@@ -349,7 +432,7 @@ const buildEditor =({
             setFont(value)
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
-                    //@ts-ignore
+                    //@ts-expect-error typescript error
                     element.set({fontFamily: value})
                     // element._set("fontFamily", value)
                 }
@@ -361,11 +444,11 @@ const buildEditor =({
                 if(isTextType(element.type)){
                     if(value==700){
                         setFontWeight(300)
-                        //@ts-ignore
+                        //@ts-expect-error typescript error
                         element.set({fontWeight: 300})
                     }else{
                         setFontWeight(700)
-                        //@ts-ignore
+                        //@ts-expect-error typescript error
                         element.set({fontWeight: 700})
                     }
                 }
@@ -377,11 +460,11 @@ const buildEditor =({
                 if(isTextType(element.type)){
                     if(value=="normal"){
                         setFontStyle("italic")
-                        //@ts-ignore
+                        //@ts-expect-error typescript error
                         element.set({fontStyle: "italic"})
                     }else{
                         setFontStyle("normal")
-                        //@ts-ignore
+                        //@ts-expect-error typescript error
                         element.set({fontStyle: "normal"})
                     }
                 }
@@ -411,7 +494,7 @@ const buildEditor =({
                         value=10
                     }
                     setFontSize(value)
-                    //@ts-ignore
+                    //@ts-expect-error typescript error
                     element.set({fontSize: value})
                 }
             });
@@ -421,7 +504,7 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
                     setUnderline(!value)
-                    //@ts-ignore
+                    //@ts-expect-error typescript error
                     element.set({underline: !value})
                 }
             });
@@ -431,7 +514,7 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
                     setLineThrough(!value)
-                    //@ts-ignore
+                    //@ts-expect-error typescript error
                     element.set({linethrough: !value})
                 }
             });
@@ -442,7 +525,7 @@ const buildEditor =({
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
                     setTextAlign(value)
-                    //@ts-ignore
+                    //@ts-expect-error typescript error
                     element.set({textAlign: value})
                 }
             });
@@ -465,12 +548,10 @@ const buildEditor =({
             canvas.renderAll()
         },
         addText:(value, option)=>{
-            var shadow = new fabric.Shadow({
-                color: fillColor,
-                blur: 20,
-            });
             const object = new fabric.Textbox(value,{
                 fill: fillColor,
+                stroke: strokeColor,  
+                strokeWidth: 1,  
                 fontFamily:font,
                 fontStyle: "normal",
                 textAlign:"left",
@@ -487,6 +568,55 @@ const buildEditor =({
             canvas.add(object)
             canvas.setActiveObject(object)
         },
+
+        // addText: (value, option) => {
+        //     let fillValue: string | fabric.Gradient;
+        //     console.log(value)
+        //     if (typeof value === "string" && value.startsWith("linear-gradient")) {
+        //         // Convert CSS gradient string to a fabric.Gradient manually (basic support)
+        //         const gradient = new fabric.Gradient({
+        //         type: "linear",
+        //         gradientUnits: "percentage",
+        //         coords: { x1: 0, y1: 0, x2: 1, y2: 0 }, // Horizontal gradient
+        //         colorStops: [
+        //             { offset: 0, color: "#ff00cc" }, // You can parse the string to extract these dynamically
+        //             { offset: 1, color: "#3333ff" },
+        //         ],
+        //         });
+
+        //         fillValue = gradient;
+        //     } else {
+        //         fillValue = fillColor; // regular solid color
+        //     }
+
+        //     const shadow = new fabric.Shadow({
+        //         color: fillColor,
+        //         blur: 20,
+        //     });
+
+        //     const object = new fabric.Textbox(value, {
+        //         fill: fillValue,
+        //         stroke: strokeColor,
+        //         strokeWidth: 1,
+        //         fontFamily: font,
+        //         fontStyle: "normal",
+        //         textAlign: "left",
+        //         fontSize: fontSize,
+        //         height: 100,
+        //         fontWeight: fontWeight,
+        //         linethrough: false,
+        //         underline: false,
+        //         width: 260,
+        //         shadow: textShadow,
+        //         ...option,
+        //     });
+
+        //     center(object);
+        //     canvas.add(object);
+        //     canvas.setActiveObject(object);
+        // },
+
+
         addCircle:()=>{
             const object=new fabric.Circle({
                 height: 100,
@@ -604,7 +734,7 @@ const buildEditor =({
             return arrow;
         },
         addDashedSingleHeadArrow:(strokeWidth: number)=>{
-            var triangle = new fabric.Triangle({
+            const triangle = new fabric.Triangle({
                 width: 10, 
                 height: 15, 
                 fill: strokeColor, 
@@ -616,7 +746,7 @@ const buildEditor =({
                 angle: 90
             });
             
-            var line = new fabric.Line([50, 100, 200, 100], {
+            const line = new fabric.Line([50, 100, 200, 100], {
                 left: 75,
                 top: 70,
                 stroke: strokeColor,  
@@ -634,9 +764,9 @@ const buildEditor =({
                 stroke: strokeColor,
             });
             
-            var objs = [line, triangle];
+            const objs = [line, triangle];
             
-            var alltogetherObj = new fabric.Group(objs);
+            const alltogetherObj = new fabric.Group(objs);
             
             alltogetherObj.forEachObject(obj => {
                 obj.set({
@@ -652,14 +782,14 @@ const buildEditor =({
             
         },
         addDoubleHeadArrow: (strokeWidth: number) => {
-            var line = new fabric.Line([50, 100, 200, 100], {
+            const line = new fabric.Line([50, 100, 200, 100], {
                 stroke: strokeColor,  
                 // strokeDashArray: [] , 
                 strokeWidth: strokeWidth,
                 opacity: 1
             });
         
-            var leftTriangle = new fabric.Triangle({
+            const leftTriangle = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -671,7 +801,7 @@ const buildEditor =({
                 angle: -90 
             });
         
-            var rightTriangle = new fabric.Triangle({
+            const rightTriangle = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -683,10 +813,9 @@ const buildEditor =({
                 angle: 90 
             });
         
-            var objs = [line, leftTriangle, rightTriangle];
-        
+            const objs = [line, leftTriangle, rightTriangle];
             
-            var alltogetherObj = new fabric.Group(objs);
+            const alltogetherObj = new fabric.Group(objs);
         
             // Ensure bounding box and positioning is correct
             alltogetherObj.setCoords();
@@ -696,14 +825,14 @@ const buildEditor =({
             canvas.setActiveObject(alltogetherObj);
         },        
         addDashedDoubleHeadArrow: (strokeWidth: number) => {
-            var line = new fabric.Line([50, 100, 200, 100], {
+            const line = new fabric.Line([50, 100, 200, 100], {
                 stroke: strokeColor,  
                 strokeDashArray: [5,5] , 
                 strokeWidth: strokeWidth,
                 opacity: 1
             });
         
-            var leftTriangle = new fabric.Triangle({
+            const leftTriangle = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -715,7 +844,7 @@ const buildEditor =({
                 angle: -90 
             });
         
-            var rightTriangle = new fabric.Triangle({
+            const rightTriangle = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -727,10 +856,9 @@ const buildEditor =({
                 angle: 90 
             });
         
-            var objs = [line, leftTriangle, rightTriangle];
-        
+            const objs = [line, leftTriangle, rightTriangle];
             
-            var alltogetherObj = new fabric.Group(objs);
+            const alltogetherObj = new fabric.Group(objs);
         
             // Ensure bounding box and positioning is correct
             alltogetherObj.setCoords();
@@ -740,14 +868,14 @@ const buildEditor =({
             canvas.setActiveObject(alltogetherObj);
         }, 
         addArrowWithCircle: (strokeWidth: number) => {
-            var line = new fabric.Line([50, 100, 200, 100], {
+            const line = new fabric.Line([50, 100, 200, 100], {
                 stroke: strokeColor,  
                 strokeDashArray: strokeType || [],
                 strokeWidth: strokeWidth,
                 opacity: 1
             });
         
-            var arrowhead = new fabric.Triangle({
+            const arrowhead = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -759,7 +887,7 @@ const buildEditor =({
                 angle: 90 
             });
         
-            var LeftCircle = new fabric.Circle({
+            const LeftCircle = new fabric.Circle({
                 radius: 5,
                 fill: strokeColor,
                 stroke: strokeColor,
@@ -771,9 +899,9 @@ const buildEditor =({
                 originY: "center"
             });
         
-            var objs = [line, LeftCircle, arrowhead];
+            const objs = [line, LeftCircle, arrowhead];
         
-            var alltogetherObj = new fabric.Group(objs);
+            const alltogetherObj = new fabric.Group(objs);
         
             alltogetherObj.setCoords();
         
@@ -782,14 +910,14 @@ const buildEditor =({
             canvas.setActiveObject(alltogetherObj);
         },
         addArrowWithRectangle: (strokeWidth: number) => {
-            var line = new fabric.Line([50, 100, 200, 100], {
+            const line = new fabric.Line([50, 100, 200, 100], {
                 stroke: strokeColor,  
                 strokeDashArray: strokeType || [],
                 strokeWidth: strokeWidth,
                 opacity: 1
             });
         
-            var arrowhead = new fabric.Triangle({
+            const arrowhead = new fabric.Triangle({
                 width: 10,
                 height: 15,
                 fill: strokeColor,
@@ -801,7 +929,7 @@ const buildEditor =({
                 angle: 90 
             });
         
-            var LeftRectangle = new fabric.Rect({
+            const LeftRectangle = new fabric.Rect({
                 width: 10,
                 height: 10,
                 fill: strokeColor,
@@ -814,9 +942,9 @@ const buildEditor =({
                 originY: "center"
             });
         
-            var objs = [line, LeftRectangle, arrowhead];
+            const objs = [line, LeftRectangle, arrowhead];
         
-            var alltogetherObj = new fabric.Group(objs);
+            const alltogetherObj = new fabric.Group(objs);
         
             alltogetherObj.setCoords();
         
@@ -1767,7 +1895,9 @@ const buildEditor =({
         textAlign,
         fontSize,
         blur,
-        textShadow 
+        textShadow ,
+        gradientColor,
+        gradientType
     }
 }
 
@@ -1799,7 +1929,8 @@ export const useEditor=({
     const [blur, setBlur] = useState(0)
     const [textShadow, setTextShadow] = useState("white")
     const [fontsLoaded, setFontsLoaded] = useState<FontsLoaded>({});
- 
+    const [gradientType, setGradientType] = useState('linear')
+    const [gradientColor, setGradientColor] = useState(['#E77777', '#77E77F', '#778DE7'])
 
     const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas, saveCallback})
     const {copy, paste} = useClipboard({canvas})
@@ -1874,7 +2005,11 @@ export const useEditor=({
                 fontSize,
                 setFontSize,
                 textShadow,
-                setTextShadow
+                setTextShadow,
+                gradientType,
+                setGradientType,
+                gradientColor,
+                setGradientColor
             })
         }
         return undefined
@@ -1901,7 +2036,9 @@ export const useEditor=({
         underline,
         lineThrough,
         textAlign,
-        textShadow
+        textShadow,
+        gradientColor,
+        gradientType
     ])
 
     

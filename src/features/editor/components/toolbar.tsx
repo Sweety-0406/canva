@@ -7,7 +7,7 @@ import { AiOutlineAlibaba } from "react-icons/ai";
 import { BsBorderWidth } from "react-icons/bs";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown  } from "react-icons/io";
 import { RiBrushAiFill } from "react-icons/ri";
-import { isTextType } from "../utils";
+// import { isTextType } from "../utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa6";
 import { CiTextAlignCenter, CiTextAlignJustify, CiTextAlignLeft, CiTextAlignRight  } from "react-icons/ci";
 import OpacitySidebar from "./opacity-sidebar";
@@ -18,7 +18,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import { PiSelectionBackgroundDuotone } from "react-icons/pi";
 import { AnimatePresence, motion } from "framer-motion";
 import BlurSidebar from "./blur-sidebar";
-
+import { PiFlipHorizontalFill,PiFlipVerticalFill  } from "react-icons/pi";
 
 interface  ToolBarProps{
     editor: Editor | undefined,
@@ -40,27 +40,46 @@ const Toolbar=({
     const strokeColor = editor?.selectedObjects[0].stroke
     const fillColor = editor?.selectedObjects[0].fill
     const font = editor?.font
-    const shadowColor = typeof fillColor === "string" ? fillColor : "black"
+    // const shadowColor = typeof fillColor === "string" ? fillColor : "black"
    
 
 
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const fontWeight = editor?.selectedObjects[0].get("fontWeight")
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const fontStyle = editor?.selectedObjects[0].get("fontStyle")
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const underline = editor?.selectedObjects[0].get("underline")
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const lineThrough = editor?.selectedObjects[0].get("linethrough")
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const textAlign = editor?.selectedObjects[0].get("textAlign")
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const fontSize = editor?.selectedObjects[0].get("fontSize")
-    const textShadow = editor?.selectedObjects[0].get("shadow")
+    // const textShadow = editor?.selectedObjects[0].get("shadow")
 
     
     const selectedObjectType = editor?.selectedObjects[0].type;
-    const isTextTypeObject = isTextType(selectedObjectType) 
+    // const isTextTypeObject = isTextType(selectedObjectType) 
+
+    const flipImageHorizontally = () => {
+        onChangeActiveTool("flip-horizontally")
+        const activeObject = editor?.selectedObjects[0];
+        if (activeObject && activeObject.type === "image") {
+            activeObject.set("flipX", !activeObject.flipX);
+            editor.canvas.renderAll();
+        }
+    };
+
+    const flipImageVertically = () => {
+        onChangeActiveTool("flip-vertically")
+        const activeObject = editor?.selectedObjects[0];
+        if (activeObject && activeObject.type === "image") {
+            activeObject.set("flipY", !activeObject.flipY);
+            editor.canvas.renderAll();
+        }
+    };
+
     return( 
         <AnimatePresence>
             <div className="flex  relative justify-center py-4  ">
@@ -82,8 +101,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="fill"? "bg-gray-100":"bg-none"}
+                                        items-center hover:bg-muted h-full rounded-sm  flex justify-center p-1 px-2
+                                        ${activeTool==="fill"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                 >
                                     <RiBrushAiFill 
@@ -96,6 +115,30 @@ const Toolbar=({
                             </Hint>
                         </div>
                     )}
+                    <div className="flex items-center  h-full my-auto">
+                        <Hint 
+                            label="Stroke color"
+                            side="bottom"
+                            >
+                            <Button 
+                                onClick={()=>onChangeActiveTool("stroke-color")}
+                                size="sm" 
+                                variant="ghost"
+                                className={`
+                                    items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                    ${activeTool==="stroke-color"? "bg-[#a570ff33]":"bg-none"}
+                                `}
+                                
+                            >
+                                <AiOutlineAlibaba 
+                                    className="size-4 rounded-sm "
+                                    style={{
+                                        color: typeof strokeColor === "string" ? strokeColor : "black"
+                                    }}
+                                />
+                            </Button>
+                        </Hint>
+                    </div>
                     {selectedObjectType === "textbox"  && (
                         <div className="flex items-center  h-full my-auto">
                             <Hint 
@@ -107,8 +150,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="shadow"? "bg-gray-100":"bg-none"}
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="shadow"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                     
                                 >
@@ -134,8 +177,8 @@ const Toolbar=({
                                         fontFamily: font
                                     }}
                                     className={`
-                                        items-center w-full flex-wrap border h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="font"? "bg-gray-100":"bg-none"}
+                                        items-center w-full hover:bg-muted flex-wrap border h-full rounded-sm  flex justify-center p-1 px-2
+                                        ${activeTool==="font"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                     
                                 >
@@ -149,7 +192,6 @@ const Toolbar=({
                             <Hint 
                                 label="Font Size"
                                 side="bottom"
-                                customClassName="mt-1"
                             >
                                 <input 
                                     type="number"
@@ -177,8 +219,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center  h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${fontWeight===700 ? "bg-gray-100":"bg-none"}
+                                        items-center  h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${fontWeight===700 ? "bg-[#a570ff33] text-[#612dae]":"bg-none text-black"}
                                     `}
                                 >
                                     <FaBold />
@@ -199,8 +241,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center  h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${fontStyle==="italic" ? "bg-gray-100":"bg-none"}
+                                        items-center  h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${fontStyle==="italic" ? "bg-[#a570ff33] text-[#612dae]":"bg-none text-black"}
                                     `}
                                 >
                                     <FaItalic />
@@ -221,8 +263,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center  h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${underline===true ? "bg-gray-100":"bg-none"}
+                                        items-center  h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${underline===true ? "bg-[#a570ff33] text-[#612dae]":"bg-none text-black"}
                                     `}
                                 >
                                     <FaUnderline />
@@ -243,8 +285,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center  h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${lineThrough===true ? "bg-gray-100":"bg-none"}
+                                        items-center  h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${lineThrough===true ? "bg-[#a570ff33] text-[#612dae]":"bg-none text-black"}
                                     `}
                                 >
                                     <FaStrikethrough />
@@ -263,8 +305,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="textAlign"? "bg-gray-100":"bg-none"}
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="textAlign"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                     
                                 >
@@ -284,32 +326,6 @@ const Toolbar=({
                             </Hint>
                         </div>
                     )}
-                    {!isTextTypeObject && (
-                        <div className="flex items-center  h-full my-auto">
-                            <Hint 
-                                label="Stroke color"
-                                side="bottom"
-                                >
-                                <Button 
-                                    onClick={()=>onChangeActiveTool("stroke-color")}
-                                    size="sm" 
-                                    variant="ghost"
-                                    className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="stroke-color"? "bg-gray-100":"bg-none"}
-                                    `}
-                                    
-                                >
-                                    <AiOutlineAlibaba 
-                                        className="size-4 rounded-sm "
-                                        style={{
-                                            color: typeof strokeColor === "string" ? strokeColor : "black"
-                                        }}
-                                    />
-                                </Button>
-                            </Hint>
-                        </div>
-                    )}
                     {!(selectedObjectType==="textbox"  )  && (
                         <div className={`
                             flex items-center  h-full my-auto
@@ -323,8 +339,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="stroke-width"? "bg-gray-100":"bg-none"}
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="stroke-width"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                 >
                                     <BsBorderWidth 
@@ -347,8 +363,8 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="remove-bg"? "bg-gray-100":"bg-none"}
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="remove-bg"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                 >
                                     <PiSelectionBackgroundDuotone 
@@ -359,7 +375,7 @@ const Toolbar=({
                         </div>
                     )}
                     {selectedObjectType==="image"  && (
-                        <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="blur"?"bg-muted":"bg-transparent"}`}>
+                        <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="blur"?"bg-[#a570ff33]":"bg-transparent"}`}>
                             <BlurSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
                         </div>
                     )}
@@ -376,11 +392,59 @@ const Toolbar=({
                                     size="sm" 
                                     variant="ghost"
                                     className={`
-                                        items-center h-full rounded-sm  flex justify-center p-1 px-2
-                                        ${activeTool==="filter"? "bg-gray-100":"bg-none"}
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="filter"? "bg-[#a570ff33]":"bg-none"}
                                     `}
                                 >
                                     <RiColorFilterAiLine 
+                                        className="size-4 rounded-sm "
+                                    />    
+                                </Button>
+                            </Hint>
+                        </div>
+                    )}
+                    {selectedObjectType==="image"  && (
+                        <div className={`
+                            flex items-center  h-full my-auto
+                        `}>
+                            <Hint 
+                                label="Flip horizontally"
+                                side="bottom"
+                            >
+                                <Button 
+                                    onClick={()=>flipImageHorizontally()}
+                                    size="sm" 
+                                    variant="ghost"
+                                    className={`
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="flip-horizontally"? "bg-[#a570ff33]":"bg-none"}
+                                    `}
+                                >
+                                    <PiFlipHorizontalFill 
+                                        className="size-4 rounded-sm "
+                                    />    
+                                </Button>
+                            </Hint>
+                        </div>
+                    )}
+                    {selectedObjectType==="image"  && (
+                        <div className={`
+                            flex items-center  h-full my-auto
+                        `}>
+                            <Hint 
+                                label="Flip vertically"
+                                side="bottom"
+                            >
+                                <Button 
+                                    onClick={()=>flipImageVertically()}
+                                    size="sm" 
+                                    variant="ghost"
+                                    className={`
+                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                                        ${activeTool==="flip-vertically"? "bg-[#a570ff33]":"bg-none"}
+                                    `}
+                                >
+                                    <PiFlipVerticalFill  
                                         className="size-4 rounded-sm "
                                     />    
                                 </Button>
@@ -397,7 +461,7 @@ const Toolbar=({
                                 size="sm" 
                                 variant="ghost"
                                 className={`
-                                    items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                    items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
                                 `}
                             >
                                 <IoIosArrowRoundUp 
@@ -416,7 +480,7 @@ const Toolbar=({
                                 size="sm" 
                                 variant="ghost"
                                 className={`
-                                    items-center h-full rounded-sm  flex justify-center p-1 px-2
+                                    items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
                                 `}
                             >
                                 <IoIosArrowRoundDown  
@@ -425,7 +489,7 @@ const Toolbar=({
                             </Button>
                         </Hint>
                     </div>
-                    <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="opacity"?"bg-muted":"bg-transparent"}`}>
+                    <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="opacity"?"bg-[#a570ff33]":"bg-transparent"}`}>
                         <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
                     </div>
                     <div className="flex items-center  h-full my-auto">
@@ -440,6 +504,7 @@ const Toolbar=({
                                 }}
                                 size="sm" 
                                 variant="ghost"
+                                className="hover:bg-muted"
                             >
                                 <IoCopyOutline  />
                             </Button>
@@ -456,6 +521,7 @@ const Toolbar=({
                                 }}
                                 size="sm" 
                                 variant="ghost"
+                                className="hover:bg-muted"
                             >
                                 <RiDeleteBin6Line  />
                             </Button>

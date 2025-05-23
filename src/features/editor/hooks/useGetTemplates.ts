@@ -1,6 +1,5 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { projectsType, templateType } from "../types";
 
 export const useGetTemplates = (page:string,limit: string ) => {
   const query = useQuery({

@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 
 
-export async function POST(req : Request) {
+export async function POST() {
     try {
         const authSession = await auth()
         if(!authSession?.user || !authSession?.user?.id || !authSession?.user?.email) {

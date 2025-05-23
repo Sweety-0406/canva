@@ -8,28 +8,24 @@ import ShapeTool from "./shape-tool"
 import { FaCircle, FaSquare, FaSquareFull  } from "react-icons/fa";
 import { IoTriangle } from "react-icons/io5";
 import { FaDiamond } from "react-icons/fa6";
-import { TfiLayoutLineSolid } from "react-icons/tfi";
 import { IoStar } from "react-icons/io5";
 import { PiPentagonFill } from "react-icons/pi";
 import { BsHexagonFill } from "react-icons/bs";
 import { VscHeartFilled } from "react-icons/vsc";
-import { FaArrowRight, FaArrowsUpDown  } from "react-icons/fa6";
-import { TbOvalFilled, TbOvalVerticalFilled, TbArrowNarrowRightDashed, TbArrowDownCircleFilled, TbArrowDownSquareFilled   } from "react-icons/tb";
+import { TbOvalFilled, TbOvalVerticalFilled} from "react-icons/tb";
 import { BsOctagonFill } from "react-icons/bs"; 
 
 interface ShapeSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const ShapeSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:ShapeSidebarProps)=>{
-    const fillColor = editor?.fillColor || "#000000"
-    const strokeColor = editor?.strokeColor || "#000000"
+    // const fillColor = editor?.fillColor || "#000000"
+    // const strokeColor = editor?.strokeColor || "#000000"
     const strokeWidth = editor?.strokeWidth || 2
     const onClose = ()=>{
         onChangeActiveTool("select")
@@ -44,7 +40,7 @@ const ShapeSidebar = ({
             className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Shapes" description="Add shapes to your canvas" />
-            <ScrollArea className="p-1 h-[85vh]">
+            <ScrollArea className="p-1 h-[84vh]">
                 <div>
                     <div className="text-sm p1-2">
                         Shapes

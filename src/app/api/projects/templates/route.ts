@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { projects,  } from "@/db/schema";
 import { db } from "@/db/drizzle";
-import { eq , desc, asc} from "drizzle-orm";
+import { eq , desc} from "drizzle-orm";
 import { z } from "zod";
 
 
@@ -17,8 +17,6 @@ export async function GET(req: Request) {
     if (!session?.user || !session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
-    const userId = session.user.id;
 
     const { searchParams } = new URL(req.url);
     const page = searchParams.get("page");

@@ -1,10 +1,9 @@
 
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { projects, projectsInsetSchema } from "@/db/schema";
+import { projects} from "@/db/schema";
 import { db } from "@/db/drizzle";
-import { eq , desc, and} from "drizzle-orm";
-import { z } from "zod";
+import { eq ,and} from "drizzle-orm";
 
 interface IParams{
     projectId:string

@@ -1,10 +1,8 @@
 "use client"
 
-// import Carousel from "@/app/landingPage/components/carousel";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { RiDoubleQuotesL } from "react-icons/ri";
-import Carousel from "./carousel";
 
 const CommentSection=()=>{
     const[step, setStep] = useState(1);
@@ -17,31 +15,31 @@ const CommentSection=()=>{
             <div className="flex justify-center h-40  text-center text-lg px-2 mt-6 text-gray-700">
                 {step==1 && (
                     <div>
-                        <p>@canva is simply outstanding as a tool to create designs. Using Canva is such a seamless experience that once you sit down to design, you don't feel like getting up. It's addictive and useful. Keep going Canva.</p>
+                        <p>@canva is simply outstanding as a tool to create designs. Using Canva is such a seamless experience that once you sit down to design, you don&apos;t feel like getting up. It&apos;s addictive and useful. Keep going Canva.</p>
                         <p className="mt-10 text-sm">@navneet4</p>
                     </div>
                 )}
                 {step==2 && (
                     <div>
-                        <p>@canva is an incredible app for designing pretty much anything you need! A huge selection of templates, fonts and colours; endless choices at the tip of your fingers; easy editing and sending/sharing. Best app I’ve used for a long time. If you haven’t tried it... try it!</p>
+                        <p>@canva is an incredible app for designing pretty much anything you need! A huge selection of templates, fonts and colours; endless choices at the tip of your fingers; easy editing and sending/sharing. Best app I&apos;ve used for a long time. If you haven&apos;t tried it... try it!</p>
                         <p className="mt-10 text-sm">@SpotOnDomain</p>
                     </div>
                 )}
                 {step==3 && (
                     <div>
-                        <p>I don’t know where I was without @canva They have absolutely great graphics for any social media platform. Whether it be a YouTube thumbnail, an Instagram Post or whatever you want to create. Let @canva make the design process easier for you.</p>
+                        <p>I don&apos;t know where I was without @canva They have absolutely great graphics for any social media platform. Whether it be a YouTube thumbnail, an Instagram Post or whatever you want to create. Let @canva make the design process easier for you.</p>
                         <p className="mt-10 text-sm">@IGchef_andrewb</p>
                     </div>
                 )}
                 {step==4 && (
                     <div>
-                        <p>Omg I love you guys! Thanks for making it so easy for me to use your templates. There’s so many selections and your site and app are very easy to use and navigate !!!</p>
+                        <p>Omg I love you guys! Thanks for making it so easy for me to use your templates. There&apos;s so many selections and your site and app are very easy to use and navigate !!!</p>
                         <p className="mt-10 text-sm">@curlyfrosista</p>
                     </div>
                 )}
                 {step==5 && (
                     <div>
-                        <p>@canva is such a life changing tool! One of the most well thought out websites I've ever seen. I use it to showcase my work with the community and it never ceases to amaze me! Kudos for all the love and effort you've put into it's development! #canvadesigns</p>
+                        <p>@canva is such a life changing tool! One of the most well thought out websites I&apos;ve ever seen. I use it to showcase my work with the community and it never ceases to amaze me! Kudos for all the love and effort you&apos;ve put into it&apos;s development! #canvadesigns</p>
                         <p className="mt-10 text-sm">@mahimagirdhar</p>
                     </div>
                 )}

@@ -1,9 +1,7 @@
 "use client"
 
-import Image from "next/image";
 import React from "react";
 import { Carousel, Card } from "@/components/ui/apple-cards-carousel";
-import { Description } from "@radix-ui/react-dialog";
 
 const CarouselSection = ()=>{
     const cards = data.map((card, index) => (

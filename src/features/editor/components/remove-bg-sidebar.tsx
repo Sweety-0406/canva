@@ -12,13 +12,11 @@ import { motion } from "framer-motion";
 
 interface RemoveBgSidebarProps {
   editor: Editor | undefined;
-  activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 };
 
 const RemoveBgSidebar = ({
   editor,
-  activeTool,
   onChangeActiveTool,
 }: RemoveBgSidebarProps) => {
   const { shouldBlock, triggerPaywall } = usePaywall();
@@ -27,7 +25,7 @@ const RemoveBgSidebar = ({
 
   const selectedObject = editor?.selectedObjects[0];
 
-  // @ts-ignore
+  //@ts-expect-error typescript error
   const imageSrc = selectedObject?._originalElement?.currentSrc;
 
   const onClose = () => {
@@ -51,10 +49,6 @@ const RemoveBgSidebar = ({
 
   return (
     <motion.div
-      // className={cn(
-      //   "bg-white relative border-r z-[40] w-64 h-full flex flex-col",
-      //   activeTool === "remove-bg" ? "visible" : "hidden",
-      // )}
       initial={{ opacity: 0, x: -240 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -240 }}

@@ -1,7 +1,7 @@
 import clientApi from "@/lib/apiClient";
 import { useQuery } from "@tanstack/react-query";
 
-export const getImages = ()=>{
+export const useImages = ()=>{
     const query = useQuery({
         queryKey:["images"],
         queryFn: async()=>{
@@ -13,8 +13,8 @@ export const getImages = ()=>{
                 }
                 const {data} = await response.data
                 return data
-            } catch (error: any) {
-                throw new Error(error)
+            } catch  {
+                throw new Error("Error: something went wrong")
             }
         }
     })

@@ -34,7 +34,7 @@ export async function GET(
             return NextResponse.json({error: "Not found"},{ status:404})
         }
         return NextResponse.json({data: data[0]},{status: 200})
-   } catch (error) {
+   } catch  {
         return NextResponse.json({error: "Server error"}, {status: 500})
    }
 }
@@ -119,7 +119,7 @@ export async function DELETE(
         }
 
         return NextResponse.json({data: {projectId}},{status: 200})
-    } catch (error) {
+    } catch {
         return NextResponse.json({error: "Server error"}, {status: 500})
     }
 }

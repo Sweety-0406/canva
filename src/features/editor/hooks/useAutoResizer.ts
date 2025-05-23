@@ -24,7 +24,7 @@ export const useAutoResizer=({
         
         const localWorkSpace = canvas.getObjects().find((obj)=>obj.name === 'clip')
         
-        //@ts-ignore
+        //@ts-expect-error typescript error
         const scale = fabric.util.findScaleToFit(localWorkSpace,{
             width,
             height

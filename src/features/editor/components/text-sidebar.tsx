@@ -9,13 +9,11 @@ import { motion } from "framer-motion";
 
 interface TextSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const TextSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:TextSidebarProps)=>{
     const value = editor?.font 

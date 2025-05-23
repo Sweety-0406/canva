@@ -21,8 +21,6 @@ import { useBilling } from "@/features/editor/hooks/useBilling";
 import usePaywall from "@/features/editor/hooks/usePaywall";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Logo from "@/features/editor/components/logo";
 
 const UserButton = () => {
   const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
@@ -47,8 +45,8 @@ const UserButton = () => {
     return null;
   }
 
-  const name = session.data?.user?.name!;
-  const imageUrl = session.data?.user?.image;
+  const name = session.data?.user?.name ?? "User";
+  const imageUrl = session.data?.user?.image ?? "";
 
   return (
     <DropdownMenu modal={false}>

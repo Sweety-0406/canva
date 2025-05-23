@@ -5,20 +5,18 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ShapeTool from "./shape-tool";
 import { CiTextAlignCenter, CiTextAlignJustify, CiTextAlignLeft, CiTextAlignRight  } from "react-icons/ci";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface TextAlignSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const TextAlignSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:TextAlignSidebarProps)=>{
-    //@ts-ignore
+    //@ts-expect-error typescript error
     const value = editor?.selectedObjects[0]?.get("textAlign") 
 
     const onClose = ()=>{

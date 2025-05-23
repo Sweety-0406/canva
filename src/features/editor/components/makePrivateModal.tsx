@@ -23,7 +23,7 @@ const MakePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
   const isOpen = makePrivateModal.isOpen;
   const close = makePrivateModal.onClose;
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -37,6 +37,7 @@ const MakePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
         toast.error("Something went wrong. Try again!");
       }
     } catch (err) {
+      console.log(err)
       toast.error("An error occurred.");
     } finally {
       setIsLoading(false);

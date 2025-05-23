@@ -11,16 +11,15 @@ import { motion } from "framer-motion"
 
 interface StrokeColorSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const StrokeColorSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:StrokeColorSidebarProps)=>{
-    const value = editor?.strokeColor || "#000000"
+    const value = editor?.selectedObjects[0].stroke || "#000000"
+    // const value = editor?.strokeColor || "#000000"
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const selectedObjects = editor?.selectedObjects
@@ -59,7 +58,7 @@ const StrokeColorSidebar = ({
             className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Stroke color" description="Add stroke color to your element" />
-            <ScrollArea className="p-1">
+            <ScrollArea className="p-1 h-[84vh]">
                 {colors.length > 0 && (
                     <div>
                         <div className="flex gap-1 text-slate-500 text-sm mb-1 w-full">

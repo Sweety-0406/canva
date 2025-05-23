@@ -3,11 +3,9 @@ import SideBarItems from "./sideBar-items"
 import { LayoutTemplate, PencilLine } from "lucide-react";
 import { ImagePlus } from 'lucide-react';
 import { RemoveFormatting } from 'lucide-react';
-import { Type } from 'lucide-react';
 import { Settings } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
 import { Shapes } from 'lucide-react';
-import { RiPencilLine } from "react-icons/ri";
 import { ActiveTool} from "../types";
 
 interface SideBarProps{

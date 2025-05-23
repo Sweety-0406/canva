@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
 export const useCheckout = () => {
@@ -10,6 +10,7 @@ export const useCheckout = () => {
         const response = await axios.post("/api/subscription/checkout");
         return response.data;
       } catch (error) {
+        console.log(error)
         throw new Error( "Failed to create session");
       }
     },

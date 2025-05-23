@@ -4,7 +4,8 @@ import GitHub from "next-auth/providers/github"
 import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "./db/drizzle"
 import Credentials from 'next-auth/providers/credentials';
-import { JWT } from "next-auth/jwt"
+// import { JWT } from "next-auth/jwt"
+import "next-auth/jwt"
 import bcrypt from "bcryptjs"
 import {z} from "zod"
 import { users } from "./db/schema"
@@ -68,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     jwt({ token, user }) {
-      if (user) { // User is available during sign-in
+      if (user) { 
         token.id = user.id
       }
       return token

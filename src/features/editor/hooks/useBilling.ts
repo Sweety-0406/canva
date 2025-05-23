@@ -10,6 +10,7 @@ export const useBilling = () => {
         const response = await axios.post("/api/subscription/billing");
         return response.data;
       } catch (error) {
+        console.log(error)
         throw new Error( "Failed to create session");
       }
     },

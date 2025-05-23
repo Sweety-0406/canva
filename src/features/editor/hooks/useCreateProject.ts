@@ -18,6 +18,7 @@ export const useCreateProject = () => {
         const response = await axios.post("/api/projects",json);
         return response.data;
       } catch (error) {
+        console.log(error)
         throw new Error( "Something went wrong");
       }
     },

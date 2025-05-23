@@ -5,7 +5,7 @@ import { checkIsActive } from "@/lib/checkIsActive";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await auth();
     if (!session?.user || !session?.user?.id) {

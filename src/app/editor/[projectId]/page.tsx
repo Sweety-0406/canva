@@ -7,20 +7,17 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useGetProject } from "@/features/editor/hooks/useGetProject";
-import Loader from "@/features/editor/components/loader"
+import EditorSkeleton from "./editorSkeleton";
 
 
 
+// interface EditorProjectIdPageProps {
+//   params: {
+//     projectId: string;
+//   };
+// };
 
-interface EditorProjectIdPageProps {
-  params: {
-    projectId: string;
-  };
-};
-
-const EditorProjectIdPage = ({
-  params,
-}: EditorProjectIdPageProps) => {
+const EditorProjectIdPage = () => {
   const {projectId} = useParams()
   
 const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "";
@@ -32,13 +29,7 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
 
   if (isLoading || !data) {
     return (
-      <div className="h-full flex flex-col items-center justify-center">
-        <div className="flex flex-1 h-[70vh] justify-center  items-center">
-          <div className=''>
-              <Loader />
-          </div>
-        </div>
-      </div>
+      <EditorSkeleton />
     );
   }
 
@@ -59,15 +50,7 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
   }
 
   return <Editor initialData={data} />
-  // return (
-  //   <div className="h-full flex flex-col items-center justify-center">
-  //     <div className="flex flex-1 h-[70vh] justify-center  items-center">
-  //       <div className=''>
-  //           <Loader />
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+
 };
  
 export default EditorProjectIdPage;

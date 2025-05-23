@@ -22,7 +22,7 @@ const RemovePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
   const isOpen = removePrivateModal.isOpen;
   const close = removePrivateModal.onClose;
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e:  React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -36,6 +36,7 @@ const RemovePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
         toast.error("Something went wrong. Please try again!");
       }
     } catch (err) {
+      console.log(err)
       toast.error("An error occurred.");
     } finally {
       setIsLoading(false);

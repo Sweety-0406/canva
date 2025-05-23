@@ -15,7 +15,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { SiFacebook } from "react-icons/si";
 import { Separator } from "@/components/ui/separator"
 
 

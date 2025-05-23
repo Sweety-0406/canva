@@ -1,7 +1,6 @@
 import { fabric } from "fabric";
 import React, { useEffect, useRef } from "react";
 import { KEYS } from "../types";
-import { Cannabis } from "lucide-react";
 
 interface useLoadStateProps{
     autoZoom: ()=>void;

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { FaRegFileAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Download, File, Loader } from "lucide-react";
+import { ChevronDown, Download, File } from "lucide-react";
 import { MousePointerClick } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
 import { Redo } from 'lucide-react';
@@ -24,14 +24,13 @@ import {useMutationState } from "@tanstack/react-query";
 import { BsCloudSlash } from "react-icons/bs";
 import { CiUnlock } from "react-icons/ci";
 import { CiLock } from "react-icons/ci";
-import { useGetProject } from "../hooks/useGetProject";
+// import { useGetProject } from "../hooks/useGetProject";
 import useMakePrivateModal from "../hooks/useMakePrivateModal";
 import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import useChangeFileNameModal from "../hooks/useChangeFileName";
 import { motion } from "framer-motion";
 import { TbLoader3 } from "react-icons/tb";
-  
 
 interface NavbarProps{
     name: string,
@@ -50,7 +49,7 @@ const Navbar = ({
     activeTool,
     onChangeActiveTool
 }:NavbarProps)=>{ 
-    const query = useGetProject(id)
+    // const query = useGetProject(id)
     const makePrivateModal = useMakePrivateModal()
     const removePrivateModal =  useRemovePrivateModal()
     const changeFileName = useChangeFileNameModal()
@@ -67,7 +66,7 @@ const Navbar = ({
     const isPending = currentState === "pending"
     const {openFilePicker} = useFilePicker({
         accept: ".json",
-        onFilesSuccessfullySelected:({plainFiles}: any)=>{
+        onFilesSuccessfullySelected:({plainFiles}: { plainFiles: File[] })=>{
             if(plainFiles && plainFiles.length >0){
                 const file = plainFiles[0]
                 const reader = new FileReader();
@@ -82,7 +81,7 @@ const Navbar = ({
     return(
         <div className="bg-white z-[60] flex items-center gap-3 h-12 border-b p-2 ">
             <Logo />
-            <div className="flex items-center  w-20 h-full my-auto">
+            <div className="flex items-center ml-3  w-20 h-full my-auto">
                 <Hint 
                     label={name}
                     side="bottom"

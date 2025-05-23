@@ -23,7 +23,7 @@ const ChangeFileNameModal = ({ fileName, projectId, setFileName }: ModalProps) =
   const isOpen = changeFileNameModal.isOpen;
   const close = changeFileNameModal.onClose;
 
-  const submitHandler = async (e: any) => {
+  const submitHandler = async (e:  React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -35,7 +35,7 @@ const ChangeFileNameModal = ({ fileName, projectId, setFileName }: ModalProps) =
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-    } catch (err) {
+    } catch{
       toast.error("Error updating file name.");
     } finally {
       setName(fileName);

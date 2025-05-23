@@ -105,12 +105,5 @@
   
  }
  
- /* @layer base {
-   * {
-     @apply "#fffff";
-   }
-   body {
-     @apply bg-background text-foreground;
-   }
- } */
+
  

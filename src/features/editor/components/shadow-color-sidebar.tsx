@@ -8,13 +8,11 @@ import { motion } from "framer-motion"
 
 interface ShadowColorSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const ShadowColorSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:ShadowColorSidebarProps)=>{
     const textShadow = editor?.selectedObjects[0]?.get("shadow")    
@@ -23,11 +21,11 @@ const ShadowColorSidebar = ({
     }
 
     const onChange=(value:string)=>{
-        console.log(typeof value)
+        // console.log(typeof value)
         editor?.changeTextShadow( value)
     }
     const value = typeof textShadow ==="object"? textShadow?.color:"black" 
-    console.log(textShadow)
+    // console.log(textShadow)
     return(
         <motion.div 
             initial={{ opacity: 0, x: -240 }}
@@ -37,7 +35,7 @@ const ShadowColorSidebar = ({
             className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Shadow color" description="Add shadow color to your element" />
-            <ScrollArea className="p-1">
+            <ScrollArea className="p-1 h-[84vh]">
                 <div className="m-1">
                     <ColorPicker  value={value} onChange={onChange} />
                 </div>

@@ -3,7 +3,6 @@
 import { ActiveTool, Editor } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import ColorPicker from "./color-picker" 
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
@@ -11,13 +10,11 @@ import { motion } from "framer-motion"
 
 interface StrokeWidthSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const StrokeWidthSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:StrokeWidthSidebarProps)=>{
     const strokeWidthValue = editor?.strokeWidth || 5

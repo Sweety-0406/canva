@@ -1,6 +1,5 @@
 "use client"
 
-import { useGetProjects } from "@/features/editor/hooks/useGetProjects"
 import {
     Table,
     TableBody,
@@ -22,7 +21,7 @@ import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
 import { RiInboxUnarchiveLine } from "react-icons/ri";import axios from "axios"
 import toast from "react-hot-toast"
 import { useGetArchiveProjects } from "@/features/editor/hooks/useGetArchiveProjects"
-import Loader from "@/features/editor/components/loader"
+import ProjectSkeleton from "./projectSkeleton"
 
 const ProjectSection = ()=>{
     const router = useRouter()
@@ -72,13 +71,7 @@ const ProjectSection = ()=>{
             <h3 className="font-semibold text-3xl">
               Recent archive projects
             </h3>
-            <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-            <div className="flex flex-1 h-[70vh] my-auto justify-center  items-center">
-              {/* <div className='h-full'> */}
-                <Loader r="200" />
-              {/* </div> */}
-            </div>
-            </div>
+            <ProjectSkeleton projectNumber={8}/>
           </div>
         )
     }

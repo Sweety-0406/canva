@@ -10,13 +10,11 @@ import { motion } from "framer-motion"
 interface OpacitySidebarProps{
     editor: Editor | undefined,
     activeTool: ActiveTool,
-    onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const OpacitySidebar = ({
     editor,
     activeTool,
-    onChangeActiveTool
 }:OpacitySidebarProps)=>{
     const value = editor?.selectedObjects[0]?.opacity || 1
 
@@ -34,10 +32,9 @@ const OpacitySidebar = ({
                         <Hint 
                             label="Transparency"
                             side="bottom"
-                            customClassName="mt-[6px]"
                             >
                             <RxTransparencyGrid  
-                                className="size-4 -mt- rounded-sm"
+                                className="size-4 rounded-sm"
                             /> 
                         </Hint>
                     </div>

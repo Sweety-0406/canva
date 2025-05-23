@@ -1,9 +1,6 @@
 "use client"
 
-import { ArrowLeft } from 'lucide-react';
 import { PanelRightClose  } from 'lucide-react';
-import { PanelBottomClose  } from 'lucide-react';
-
 
 interface ToolSidebarCloseProps{
     onClose:()=>void

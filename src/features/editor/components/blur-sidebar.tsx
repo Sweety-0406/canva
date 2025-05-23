@@ -33,7 +33,6 @@ const BlurSidebar = ({
                         <Hint 
                             label="Blur"
                             side="bottom"
-                            customClassName="mt-[6px]"
                             >
                             <MdLensBlur  
                                 className="size-4 -mt- rounded-sm"

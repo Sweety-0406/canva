@@ -1,6 +1,6 @@
 "use client"
 
-import { ActiveTool, Editor, projectType, templateType } from "../types"
+import { ActiveTool, Editor, projectType } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
@@ -15,16 +15,14 @@ import { motion } from "framer-motion"
 
 interface TemplateSidebarProps{
     editor: Editor | undefined,
-    activeTool: ActiveTool,
     onChangeActiveTool: (tool:ActiveTool)=>void    
 }
 
 const TemplateSidebar = ({
     editor,
-    activeTool,
     onChangeActiveTool
 }:TemplateSidebarProps)=>{
-    const {data, isLoading, isError} = useGetTemplates("1","20")
+    const {data, isLoading, isError} = useGetTemplates("1","1000")
     const paywall = usePaywall()
     const onClose = ()=>{
         onChangeActiveTool("select")
@@ -45,7 +43,7 @@ const TemplateSidebar = ({
             className="w-64 bg-white border-r absolute z-40 h-full left-16"
         >
             <ToolSidebarHeader onClose={onClose} title="Templates" description="Choose from a variety of templates to get started" />
-            <ScrollArea className="p-1 h-[85vh]">
+            <ScrollArea className="p-1 h-[81.5vh]">
                 {isLoading && (
                     <div className="flex flex-1 h-[70vh] justify-center  items-center">
                         <div className=''>

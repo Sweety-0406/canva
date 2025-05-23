@@ -1,6 +1,7 @@
 import { fabric } from "fabric"
 import * as material from "material-colors"
-import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
+import { Gradient, ITextOptions } from "fabric/fabric-impl"
+// import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
 export type projectType={
     json: string,
@@ -40,6 +41,7 @@ export const KEYS = [
 ]
 
 export const colors=[
+    "transparent",
     "#FFFFFF",
     material.red["500"],
     material.pink["500"],
@@ -66,6 +68,8 @@ export const colors=[
     material.blue["500"],
     material.indigo["500"],
     material.deepPurple["500"],
+    "linear-gradient(to right, #ff00cc, #3333ff)",
+    "linear-gradient(to bottom, #22E12F, #000)", 
 ]
 
 
@@ -90,6 +94,8 @@ export type ActiveTool =
     |"templates"
     |"shadow"
     |"blur"
+    |"flip-horizontally"
+    |"flip-vertically"
 
 
 export const filters = [
@@ -179,6 +185,10 @@ export type buildEditorProps = {
     setFontSize: (value:number) => void
     blur: number,
     setBlur: (value:number) => void
+    gradientType: string,
+    setGradientType: (value:string) => void
+    gradientColor: string[],
+    setGradientColor: (value:string[]) => void
 }  
 
 export interface Editor{
@@ -197,6 +207,7 @@ export interface Editor{
     zoomOut:()=>void,
     changeSize:(value:{width:number, height: number})=>void,
     changeBackground:(value: string)=>void,
+    changeGradientBackground:(value: string[],gradientType:string, angle: number, object?:fabric.Object)=>void,
     enableDrawing:()=>void,
     disableDrawing:()=>void,
     onCopy:()=>void,
@@ -208,7 +219,7 @@ export interface Editor{
     changeOpacity:(value:number)=>void
     bringForward:()=>void,
     sendBackward:()=>void,
-    addText:(value: string, option?: ITextOptions)=>void,
+    addText:(value: string, option?: ITextOptions | Gradient)=>void,
     changeFillColor:(value: string)=>void,
     changeStrokeColor:(value: string)=>void,
     changeStrokeWidth:(value: number)=>void,
@@ -291,7 +302,9 @@ export interface Editor{
     textAlign: string,
     fontSize: number,
     blur: number,
-    textShadow: string
+    textShadow: string,
+    gradientColor: string[],
+    gradientType: string
     
 }
 

@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import Hint from "./hint"
-import { GrZoomIn, GrZoomOut } from "react-icons/gr";
 import { Editor } from "../types";
 import { Expand } from 'lucide-react';
+import { TbZoomInArea, TbZoomOutArea  } from "react-icons/tb";
 
 interface FooterProps{
     editor: Editor | undefined
@@ -28,7 +28,7 @@ const Footer=({editor}: FooterProps)=>{
                     onClick={()=>{editor?.zoomIn()}}
                     size="sm" 
                 >
-                    <GrZoomIn />
+                    <TbZoomInArea  />
                 </Button>
             </Hint>
             <Hint label="Zoom-out" side="top" >
@@ -37,7 +37,7 @@ const Footer=({editor}: FooterProps)=>{
                     onClick={()=>{editor?.zoomOut()}}
                     size="sm" 
                 >
-                    <GrZoomOut />
+                    <TbZoomOutArea  />
                 </Button>
             </Hint>
         </div>

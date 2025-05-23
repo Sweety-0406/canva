@@ -90,7 +90,7 @@ pointerColor = "126, 87, 194",
   return (
     <div
       className={cn(
-        "text-white aspect-[5/1] min-h-[348px] flex gap-x-6 p-6 items-center shadow-lg shadow-gray-200 rounded-xl relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        "text-white aspect-[5/1] min-h-[248px] flex gap-x-6 p-6 items-center shadow-lg shadow-gray-200 rounded-xl relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
         containerClassName
       )}
     >

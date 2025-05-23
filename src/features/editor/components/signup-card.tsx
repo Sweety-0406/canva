@@ -5,8 +5,6 @@ import Link from "next/link";
 import toast from "react-hot-toast"
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { TriangleAlert } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
@@ -28,7 +26,6 @@ export const SignUpCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const register = async(e: React.FormEvent<HTMLFormElement>)=>{
     setIsLoading(true)
@@ -47,7 +44,7 @@ export const SignUpCard = () => {
           callbackUrl: "/",
         });
       }
-    } catch (error:any) {
+    } catch {
        toast.error("Email already exists")
     }
     setIsLoading(false)

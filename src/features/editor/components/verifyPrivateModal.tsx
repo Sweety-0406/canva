@@ -3,17 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import useMakePrivateModal from "../hooks/useMakePrivateModal";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useVerifyPrivateModal from "../hooks/useVerifyPrivateModal";
 import { useRouter } from "next/navigation";
-
-
-interface ModalProps{
-  projectId: string,
-}
 
 
 const VerifyPrivateModal=()=>{
@@ -28,7 +22,7 @@ const VerifyPrivateModal=()=>{
       },300)
     },[onClose]);
 
-    const submitHandler=async (e: any)=>{
+    const submitHandler=async (e: React.MouseEvent<HTMLButtonElement>)=>{
       e.preventDefault()
       console.log(projectId)
       const response = await axios.post(`/api/projects/${projectId}/verifyProjectFile`,{password})
