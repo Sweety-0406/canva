@@ -9,8 +9,7 @@ export const useBilling = () => {
       try {
         const response = await axios.post("/api/subscription/billing");
         return response.data;
-      } catch (error) {
-        console.log(error)
+      } catch{
         throw new Error( "Failed to create session");
       }
     },

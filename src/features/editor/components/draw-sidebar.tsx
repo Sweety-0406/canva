@@ -36,7 +36,6 @@ const DrawSidebar = ({
     }
 
     const onChangeStrokeType=(value: number[])=>{
-        console.log(JSON.stringify(strokeTypeValue))
         editor?.changeStrokeType(value)
     }
 
@@ -48,10 +47,10 @@ const DrawSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-64 bg-white border-r absolute z-40 h-full left-16"
+            className="w-72  bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Draw" description="Change the brush attributes" />
-            <ScrollArea className="p-1 h-[85vh]">
+            <ScrollArea className="p-3 h-[84vh]">
                 <div className="m-1">
                     <div className=" pb-2">
                         <Label>

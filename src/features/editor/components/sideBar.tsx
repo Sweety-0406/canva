@@ -7,6 +7,7 @@ import { Settings } from 'lucide-react';
 import { WandSparkles } from 'lucide-react';
 import { Shapes } from 'lucide-react';
 import { ActiveTool} from "../types";
+import { Sticker } from 'lucide-react';
 
 interface SideBarProps{
     activeTool: ActiveTool,
@@ -19,7 +20,7 @@ const SideBar = ({
 }:SideBarProps)=>{
     return(
         <aside className=" h-full border-r z-50 bg-white ">
-            <ul className="flex flex-col"> 
+            <ul className="flex flex-col gap-1"> 
                 <SideBarItems
                     label="Design"
                     icon={LayoutTemplate}
@@ -45,6 +46,12 @@ const SideBar = ({
                     isActive={activeTool==="shapes"}
                 />
                 <SideBarItems
+                    label="Sticker"
+                    icon={Sticker}
+                    onClick={()=>onChangeActiveTool("stickers")}
+                    isActive={activeTool==="stickers"}
+                />
+                <SideBarItems
                     label="Draw"
                     icon={PencilLine }
                     onClick={()=>onChangeActiveTool("draw")}
@@ -61,6 +68,7 @@ const SideBar = ({
                     icon={Settings}
                     onClick={()=>onChangeActiveTool("settings")}
                     isActive={activeTool==="settings"}
+                    customCss="transform rotate-180 duration-700"
                 />
             </ul>
         </aside>

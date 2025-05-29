@@ -30,6 +30,7 @@ import MakePrivateModal from "./makePrivateModal";
 import RemovePrivateModal from "./remokePrivateModal";
 import ChangeFileNameModal from "./changeFileNameModal";
 import { AnimatePresence } from "framer-motion";
+import StickerSidebar from "./sticker-sidebar";
 
 interface EditorProps{
   initialData: projectType
@@ -45,7 +46,6 @@ export const Editor = ({initialData}: EditorProps) => {
     height: number,
     width: number
   })=>{
-    console.log("save")
     mutate(values)
   }, 500),[mutate])
 
@@ -68,7 +68,6 @@ export const Editor = ({initialData}: EditorProps) => {
 
   const onChangeActiveTool = useCallback((tool: ActiveTool)=>{
     if(tool==="draw"){
-      console.log("draw")
       editor?.enableDrawing()
     }
     if(activeTool==="draw"){
@@ -119,16 +118,20 @@ export const Editor = ({initialData}: EditorProps) => {
             <ShadowColorSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "stroke-width" && (
-            <StrokeWidthSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
+            <StrokeWidthSidebar editor={editor} activeTool={activeTool} />
           )}
           {activeTool === "stroke-color" && (
             <StrokeColorSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "shapes" && (
-            <ShapeSidebar key="shape-sidebar" editor={editor} onChangeActiveTool={onChangeActiveTool} />
+            <ShapeSidebar  editor={editor} onChangeActiveTool={onChangeActiveTool} />
+          )}
+          {activeTool === "stickers" && (
+            <StickerSidebar  editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "textAlign" && (
-            <TextAlignSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
+            <TextAlignSidebar onChangeActiveTool={onChangeActiveTool} editor={editor} activeTool={activeTool} />
+            // <TextAlignSidebar editor={editor} onChangeActiveTool={onChangeActiveTool} />
           )}
           {activeTool === "fill" && (
             <FillColorSidebar editor={editor}  onChangeActiveTool={onChangeActiveTool} />

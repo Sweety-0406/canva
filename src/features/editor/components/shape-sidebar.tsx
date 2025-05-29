@@ -15,6 +15,7 @@ import { VscHeartFilled } from "react-icons/vsc";
 import { TbOvalFilled, TbOvalVerticalFilled} from "react-icons/tb";
 import { BsOctagonFill } from "react-icons/bs"; 
 
+
 interface ShapeSidebarProps{
     editor: Editor | undefined,
     onChangeActiveTool: (tool:ActiveTool)=>void    
@@ -24,23 +25,20 @@ const ShapeSidebar = ({
     editor,
     onChangeActiveTool
 }:ShapeSidebarProps)=>{
-    // const fillColor = editor?.fillColor || "#000000"
-    // const strokeColor = editor?.strokeColor || "#000000"
     const strokeWidth = editor?.strokeWidth || 2
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
     return(
         <motion.div 
-            key="shape-sidebar"
             initial={{ opacity: 0, x: -240 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-64 bg-white border-r absolute z-40 h-full left-16"
+            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Shapes" description="Add shapes to your canvas" />
-            <ScrollArea className="p-1 h-[84vh]">
+            <ScrollArea className="p-3 h-[84vh]">
                 <div>
                     <div className="text-sm p1-2">
                         Shapes
@@ -59,38 +57,38 @@ const ShapeSidebar = ({
                         <ShapeTool icon={BsHexagonFill} onClick={()=>editor?.addHexagon()}  />
                         <ShapeTool icon={VscHeartFilled} onClick={()=>editor?.addHeart()}/>
                         <ShapeTool icon={BsOctagonFill} onClick={()=>editor?.addOctagon()}/>
-                        <ShapeTool imgUrl="/images/6PointerStar.png" onClick={()=>editor?.add6PointerStar()}/>
-                        <ShapeTool imgUrl="/images/4PointerStar.png" onClick={()=>editor?.add4PointerStar()}/>
-                        <ShapeTool imgUrl="/images/8PointerStar.png" onClick={()=>editor?.add8PointerStar()}/>
-                        <ShapeTool imgUrl="/images/starBrust1.png" onClick={()=>editor?.addStarBrust1()}/>
-                        <ShapeTool imgUrl="/images/starBrust2.png" onClick={()=>editor?.addStarBrust2()}/>
-                        <ShapeTool imgUrl="/images/starBrust3.png" onClick={()=>editor?.addStarBrust3()}/>
-                        <ShapeTool imgUrl="/images/starBrust4.png" onClick={()=>editor?.addStarBrust4()}/>
-                        <ShapeTool imgUrl="/images/rightArrow.png" onClick={()=>editor?.addRightArrow()}/>
-                        <ShapeTool imgUrl="/images/leftArrow.png" onClick={()=>editor?.addLeftArrow()}/>
-                        <ShapeTool imgUrl="/images/downArrow.png" onClick={()=>editor?.addDownArrow()}/>
-                        <ShapeTool imgUrl="/images/upArrow.png" onClick={()=>editor?.addUpArrow()}/>
-                        <ShapeTool imgUrl="/images/arrowHorizontal.png" onClick={()=>editor?.addArrowHorizontal()}/>
-                        <ShapeTool imgUrl="/images/arrowBlock.png" onClick={()=>editor?.addArrowBlock()}/>
-                        <ShapeTool imgUrl="/images/arrowBlock2Right.png" onClick={()=>editor?.addArrowBlock2Right()}/>
-                        <ShapeTool imgUrl="/images/arrowBlockConcave.png" onClick={()=>editor?.addArrowBlockConcave()}/>
-                        <ShapeTool imgUrl="/images/arrowBlockConvex.png" onClick={()=>editor?.addArrowBlockConvex()}/>
-                        <ShapeTool imgUrl="/images/whiteOblongShape.png" onClick={()=>editor?.addWhiteOblongShape()}/>
-                        <ShapeTool imgUrl="/images/squareSpeechBubble.png" onClick={()=>editor?.addSquareSpeechBubble()}/>
-                        <ShapeTool imgUrl="/images/ovalSpeechBubble.png" onClick={()=>editor?.addOvalSpeechBubble()}/>
-                        <ShapeTool imgUrl="/images/plusShape.png" onClick={()=>editor?.addPlusShape()}/>
-                        <ShapeTool imgUrl="/images/cloudShape.png" onClick={()=>editor?.addCloudShape()}/>
-                        <ShapeTool imgUrl="/images/banner2.png" onClick={()=>editor?.addBanner2()}/>
-                        <ShapeTool imgUrl="/images/banner3.png" onClick={()=>editor?.addBanner3()}/>
-                        <ShapeTool imgUrl="/images/banner4.png" onClick={()=>editor?.addBanner4()}/>
-                        <ShapeTool imgUrl="/images/banner5.png" onClick={()=>editor?.addBanner5()}/>
-                        <ShapeTool imgUrl="/images/banner6.png" onClick={()=>editor?.addBanner6()}/>
-                        <ShapeTool imgUrl="/images/parallelogramRight.png" onClick={()=>editor?.addParallelogramRight()}/>
-                        <ShapeTool imgUrl="/images/parallelogramLeft.png" onClick={()=>editor?.addParallelogramLeft()}/>
-                        <ShapeTool imgUrl="/images/trapezoidalUp.png" onClick={()=>editor?.addTrapezoidUp()}/>
-                        <ShapeTool imgUrl="/images/trapezoidalDown.png" onClick={()=>editor?.addTrapezoidDown()}/>
-                        <ShapeTool imgUrl="/images/archDown.png" onClick={()=>editor?.addArchDown()}  iconClassName=" bg-white" />
-                        <ShapeTool imgUrl="/images/archUp.png" onClick={()=>editor?.addArchUp()}/>
+                        <ShapeTool imgUrl="/images/6PointerStar.svg" onClick={()=>editor?.add6PointerStar()}/>
+                        <ShapeTool imgUrl="/images/4PointerStar.svg" onClick={()=>editor?.add4PointerStar()}/>
+                        <ShapeTool imgUrl="/images/8PointerStar.svg" onClick={()=>editor?.add8PointerStar()}/>
+                        <ShapeTool imgUrl="/images/starBrust1.svg" onClick={()=>editor?.addStarBrust1()}/>
+                        <ShapeTool imgUrl="/images/starBrust2.svg" onClick={()=>editor?.addStarBrust2()}/>
+                        <ShapeTool imgUrl="/images/starBrust3.svg" onClick={()=>editor?.addStarBrust3()}/>
+                        <ShapeTool imgUrl="/images/starBrust4.svg" onClick={()=>editor?.addStarBrust4()}/>
+                        <ShapeTool imgUrl="/images/rightArrow.svg" onClick={()=>editor?.addRightArrow()}/>
+                        <ShapeTool imgUrl="/images/leftArrow.svg" onClick={()=>editor?.addLeftArrow()}/>
+                        <ShapeTool imgUrl="/images/downArrow.svg" onClick={()=>editor?.addDownArrow()}/>
+                        <ShapeTool imgUrl="/images/upArrow.svg" onClick={()=>editor?.addUpArrow()}/>
+                        <ShapeTool imgUrl="/images/arrowHorizontal.svg" onClick={()=>editor?.addArrowHorizontal()}/>
+                        <ShapeTool imgUrl="/images/arrowBlock.svg" onClick={()=>editor?.addArrowBlock()}/>
+                        <ShapeTool imgUrl="/images/arrowBlock2Right.svg" onClick={()=>editor?.addArrowBlock2Right()}/>
+                        <ShapeTool imgUrl="/images/arrowBlockConcave.svg" onClick={()=>editor?.addArrowBlockConcave()}/>
+                        <ShapeTool imgUrl="/images/arrowBlockConvex.svg" onClick={()=>editor?.addArrowBlockConvex()}/>
+                        <ShapeTool imgUrl="/images/whiteOblongShape.svg" onClick={()=>editor?.addWhiteOblongShape()}/>
+                        <ShapeTool imgUrl="/images/squareSpeechBubble.svg" onClick={()=>editor?.addSquareSpeechBubble()}/>
+                        <ShapeTool imgUrl="/images/ovalSpeechBubble.svg" onClick={()=>editor?.addOvalSpeechBubble()}/>
+                        <ShapeTool imgUrl="/images/plusShape.svg" onClick={()=>editor?.addPlusShape()}/>
+                        <ShapeTool imgUrl="/images/cloudShape.svg" onClick={()=>editor?.addCloudShape()}/>
+                        <ShapeTool imgUrl="/images/banner2.svg" onClick={()=>editor?.addBanner2()}/>
+                        <ShapeTool imgUrl="/images/banner3.svg" onClick={()=>editor?.addBanner3()}/>
+                        <ShapeTool imgUrl="/images/banner4.svg" onClick={()=>editor?.addBanner4()}/>
+                        <ShapeTool imgUrl="/images/banner5.svg" onClick={()=>editor?.addBanner5()}/>
+                        <ShapeTool imgUrl="/images/banner6.svg" onClick={()=>editor?.addBanner6()}/>
+                        <ShapeTool imgUrl="/images/parallelogramRight.svg" onClick={()=>editor?.addParallelogramRight()}/>
+                        <ShapeTool imgUrl="/images/parallelogramLeft.svg" onClick={()=>editor?.addParallelogramLeft()}/>
+                        <ShapeTool imgUrl="/images/trapezoidalUp.svg" onClick={()=>editor?.addTrapezoidUp()}/>
+                        <ShapeTool imgUrl="/images/trapezoidalDown.svg" onClick={()=>editor?.addTrapezoidDown()}/>
+                        <ShapeTool imgUrl="/images/archDown.svg" onClick={()=>editor?.addArchDown()}  iconClassName=" bg-white" />
+                        <ShapeTool imgUrl="/images/archUp.svg" onClick={()=>editor?.addArchUp()}/>
                     </div>
                 </div>
                 <div className="mt-6">
@@ -98,13 +96,13 @@ const ShapeSidebar = ({
                         Lines
                     </div>
                     <div className="grid border-t pt-2 grid-cols-3 gap-2">
-                        <ShapeTool imgUrl="/images/line.png" onClick={()=>editor?.addLine(strokeWidth)} iconClassName="rotate-45 "  />
-                        <ShapeTool imgUrl="/images/singleHeadArrow.png" onClick={()=>editor?.addSingleHeadArrow(strokeWidth)}  />
-                        <ShapeTool imgUrl="/images/dashedSingleHeadArrow.png"  onClick={()=>editor?.addDashedSingleHeadArrow(strokeWidth)}  />
-                        <ShapeTool imgUrl="/images/doubleHeadArrow.png"  onClick={()=>editor?.addDoubleHeadArrow(strokeWidth)}  />
-                        <ShapeTool imgUrl="/images/img2.png" onClick={()=>editor?.addDashedDoubleHeadArrow(strokeWidth)} iconClassName="size-16" />
-                        <ShapeTool imgUrl="/images/arrowWithCircle.png"   onClick={()=>editor?.addArrowWithCircle(strokeWidth)}  />
-                        <ShapeTool imgUrl="/images/arrowWithRectangle.png" onClick={()=>editor?.addArrowWithRectangle(strokeWidth)} />
+                        <ShapeTool imgUrl="/images/line.svg" onClick={()=>editor?.addLine(strokeWidth)} iconClassName="rotate-45 "  />
+                        <ShapeTool imgUrl="/images/singleHeadArrow.svg" onClick={()=>editor?.addSingleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/dashedSingleHeadArrow.svg"  onClick={()=>editor?.addDashedSingleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/doubleHeadArrow.svg"  onClick={()=>editor?.addDoubleHeadArrow(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/dashedDoubleHeadArrow.svg" onClick={()=>editor?.addDashedDoubleHeadArrow(strokeWidth)} iconClassName="size-16" />
+                        <ShapeTool imgUrl="/images/arrowWithCircle.svg"   onClick={()=>editor?.addArrowWithCircle(strokeWidth)}  />
+                        <ShapeTool imgUrl="/images/arrowWithRectangle.svg" onClick={()=>editor?.addArrowWithRectangle(strokeWidth)} />
                         
                     </div>
                 </div>

@@ -7,7 +7,6 @@ export const useImages = ()=>{
         queryFn: async()=>{
             try {
                 const response = await clientApi.get("/api/images")
-                console.log("msg:",response)
                 if(!response){
                     throw new Error("Failed to fetch the data")
                 }

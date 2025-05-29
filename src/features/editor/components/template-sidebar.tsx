@@ -40,15 +40,17 @@ const TemplateSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-64 bg-white border-r absolute z-40 h-full left-16"
+            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Templates" description="Choose from a variety of templates to get started" />
-            <ScrollArea className="p-1 h-[81.5vh]">
+            <ScrollArea className="p-3 h-[81.5vh]">
                 {isLoading && (
-                    <div className="flex flex-1 h-[70vh] justify-center  items-center">
-                        <div className=''>
-                            <Loader r="100" />
-                        </div>
+                    <div className="grid grid-cols-2  gap-1">
+                        {Array.from({ length: 14 }).map((_, idx) => (
+                            <div key={idx} className="bg-gray-200 rounded-lg animate-pulse overflow-hidden">
+                            <div className="w-full aspect-video bg-gray-300" /> 
+                            </div>
+                        ))}
                     </div>
                 )}
                 <div className="grid grid-cols-2 gap-1">

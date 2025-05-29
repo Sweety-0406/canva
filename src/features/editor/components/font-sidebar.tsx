@@ -365,7 +365,6 @@ const FontSidebar = ({
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
-    console.log(value)
     
     const fonts = [
         { name: "ARIAL", className: ARIAL.className },
@@ -443,11 +442,11 @@ const FontSidebar = ({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -240 }}
           transition={{ duration: 0.5 }}
-          className="w-64 bg-white border-r absolute z-40 h-full left-16"
+          className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Fonts" description="Change font of your text" />
             <ScrollArea className="p-1 h-[84vh]">
-                <div className="mt-2 flex flex-col gap-3 w-[248px]">
+                <div className="mt-2 flex flex-col gap-3 w-[268px]">
                 {fonts.map(({ name, className }) => (
                     <Button
                         key={name}

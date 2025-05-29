@@ -68,15 +68,33 @@ export const colors=[
     material.blue["500"],
     material.indigo["500"],
     material.deepPurple["500"],
-    "linear-gradient(to right, #ff00cc, #3333ff)",
-    "linear-gradient(to bottom, #22E12F, #000)", 
 ]
 
-
+export const gradientDefaultColros=[
+    ["#737373", "#000000"],
+    ["#c89116", "#000000"],
+    ["#000000", "#3533cd"],
+    ["#ffffff", "#a6a6a6"],
+    ["#fff7ad", "#ffa9f9"],
+    ["#cdffd8", "#94b9ff"],
+    ["#ff3131", "#ff914d"],
+    ["#ff5757", "#8c52ff"],
+    ["#5170ff", "#ff66c4"],
+    ["#004aad", "#cd6ce6"],
+    ["#8c52ff", "#5ce1e6"],
+    ["#5de0e6", "#004aad"],
+    ["#8c52ff", "#00bf63"],
+    ["#0097b2", "#7ed957"],
+    ["#0cc0df", "#ffde59"],
+    ["#ffde59", "#ff914d"],
+    ["#ff66c4", "#ffde59"],
+    ["#8c52ff", "#ff914d"],
+]
 
 export type ActiveTool = 
     "select"
     |"shapes"
+    |"stickers"
     |"text"
     |"textAlign"
     |"images"
@@ -213,6 +231,7 @@ export interface Editor{
     onCopy:()=>void,
     onPaste:()=>void,
     addImage:(value: string)=>void,
+    addSVGImage:(url: string)=>void,
     addVideo: (url: string) =>void,
     changeImageFilter:(value:string)=>void,
     deleteObject:()=>void,
@@ -232,7 +251,7 @@ export interface Editor{
     changeTextAlign:(value: string)=>void,
     changeFontSize:(value: number)=>void,
     changeBlur:(value: number)=>void,
-    changeTextShadow:( color: string)=>void,
+    changeTextShadow:( color: string )=>void,
     addCircle:()=>void,
     addLine:(strokeWidth: number)=>void,
     addSingleHeadArrow:(strokeWidth: number)=>void,

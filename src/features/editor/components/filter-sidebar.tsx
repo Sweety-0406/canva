@@ -97,7 +97,7 @@ const FilterSidebar = ({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -240 }}
       transition={{ duration: 0.5 }}
-      className="w-64 bg-white border-r absolute z-40 h-full left-16"
+      className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
     >
       <ToolSidebarHeader
         onClose={onClose}
@@ -105,7 +105,7 @@ const FilterSidebar = ({
         description="Apply filters to your image"
       />
 
-      <ScrollArea className="p-2 h-[84vh]">
+      <ScrollArea className="p-3 h-[84vh]">
         <div className="grid grid-cols-2 gap-3">
           {previews.map((preview) => (
             <div

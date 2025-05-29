@@ -24,9 +24,7 @@ const VerifyPrivateModal=()=>{
 
     const submitHandler=async (e: React.MouseEvent<HTMLButtonElement>)=>{
       e.preventDefault()
-      console.log(projectId)
       const response = await axios.post(`/api/projects/${projectId}/verifyProjectFile`,{password})
-      console.log(response);
       if(response.status==200){
         setTimeout(()=>{
           onClose();

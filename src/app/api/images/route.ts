@@ -50,8 +50,7 @@ export async function POST(req: Request){
         total_results: images.data.total, 
         current_page: page,
     })
-   } catch (error) {
-        console.log(error)
+   } catch{
         return NextResponse.json({error: "error"})
    }
 }

@@ -288,8 +288,22 @@ const buildEditor =({
                 }
             )
         },
+        addSVGImage:(url: string)=>{
+            console.log(url)
+            const svgString = url
+            fabric.loadSVGFromString(svgString, (objects, options) => {
+            const obj = fabric.util.groupSVGElements(objects, options);
+            obj.scaleToWidth(400); 
+            // obj.set({ objectType: 'svg' });
+            (obj as fabric.Object & { objectType?: string }).set({ objectType: 'custom-svg' });
+
+            canvas.add(obj);
+            canvas.centerObject(obj);
+            canvas.renderAll();
+            })
+
+        },
         addVideo: (url: string) => {
-            console.log("Video URL:", url);
           
             const videoEl = document.createElement("video");
             const source = document.createElement("source");
@@ -401,7 +415,8 @@ const buildEditor =({
                         if(isTextType(obj.type)) {
                             obj.set({ stroke: value });
                         } else {
-                            obj.set({ stroke: value, fill:value });
+                            obj.set({ stroke: value});
+                            // obj.set({ stroke: value, fill:value });
                         }
                     });
                 }else{
@@ -521,7 +536,6 @@ const buildEditor =({
             canvas.renderAll()
         },
         changeTextAlign:(value:string)=>{
-            console.log(value)
             canvas.getActiveObjects().forEach(element => {
                 if(isTextType(element.type)){
                     setTextAlign(value)
@@ -531,7 +545,7 @@ const buildEditor =({
             });
             canvas.renderAll()
         },
-        changeTextShadow:(color: string)=>{
+        changeTextShadow:(color: string )=>{
             const shadow = new fabric.Shadow({
                 color: color, 
                 blur: 30, 
@@ -542,9 +556,8 @@ const buildEditor =({
                 if(isTextType(element.type)){
                     setTextShadow((color))
                     element.set({shadow: shadow})
-
                 }
-            });
+            }); 
             canvas.renderAll()
         },
         addText:(value, option)=>{
@@ -568,54 +581,6 @@ const buildEditor =({
             canvas.add(object)
             canvas.setActiveObject(object)
         },
-
-        // addText: (value, option) => {
-        //     let fillValue: string | fabric.Gradient;
-        //     console.log(value)
-        //     if (typeof value === "string" && value.startsWith("linear-gradient")) {
-        //         // Convert CSS gradient string to a fabric.Gradient manually (basic support)
-        //         const gradient = new fabric.Gradient({
-        //         type: "linear",
-        //         gradientUnits: "percentage",
-        //         coords: { x1: 0, y1: 0, x2: 1, y2: 0 }, // Horizontal gradient
-        //         colorStops: [
-        //             { offset: 0, color: "#ff00cc" }, // You can parse the string to extract these dynamically
-        //             { offset: 1, color: "#3333ff" },
-        //         ],
-        //         });
-
-        //         fillValue = gradient;
-        //     } else {
-        //         fillValue = fillColor; // regular solid color
-        //     }
-
-        //     const shadow = new fabric.Shadow({
-        //         color: fillColor,
-        //         blur: 20,
-        //     });
-
-        //     const object = new fabric.Textbox(value, {
-        //         fill: fillValue,
-        //         stroke: strokeColor,
-        //         strokeWidth: 1,
-        //         fontFamily: font,
-        //         fontStyle: "normal",
-        //         textAlign: "left",
-        //         fontSize: fontSize,
-        //         height: 100,
-        //         fontWeight: fontWeight,
-        //         linethrough: false,
-        //         underline: false,
-        //         width: 260,
-        //         shadow: textShadow,
-        //         ...option,
-        //     });
-
-        //     center(object);
-        //     canvas.add(object);
-        //     canvas.setActiveObject(object);
-        // },
-
 
         addCircle:()=>{
             const object=new fabric.Circle({
@@ -977,7 +942,6 @@ const buildEditor =({
                 strokeWidth: strokeWidth,
                 strokeDashArray: strokeType,
                 opacity:1,
-                
             })
             center(object)
             canvas.add(object)
@@ -1943,7 +1907,6 @@ export const useEditor=({
 
     const loadFont = (fontFamily: string) => {
         if (fontsLoaded[fontFamily]) return; 
-        console.log("loadFontCalled");
   
         const fontUrl = `/fonts/${fontFamily}/${fontFamily}.ttf`;
   
@@ -1953,15 +1916,14 @@ export const useEditor=({
         });
   
         font
-            .load()
-            .then(() => {
-                console.log(`Font ${fontFamily} loaded!`);
-                document.fonts.add(font);
-                setFontsLoaded((prev) => ({ ...prev, [fontFamily]: true }));
-            })
-            .catch((error) => {
-                console.error(`Error loading font ${fontFamily}:`, error);
-            });
+        .load()
+        .then(() => {
+            document.fonts.add(font);
+            setFontsLoaded((prev) => ({ ...prev, [fontFamily]: true }));
+        })
+        .catch((error) => {
+            console.error(`Error loading font ${fontFamily}:`, error);
+        });
     };
 
     const editor=useMemo(()=>{

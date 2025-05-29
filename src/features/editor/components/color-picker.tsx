@@ -5,6 +5,7 @@ import { colors } from "../types"
 import { ColorObjectToString } from "../utils"
 import { motion } from "framer-motion"
 import { Gradient, Pattern } from "fabric/fabric-impl"
+import Hint from "./hint"
 
 interface ColorPickerProps{
     value: string | undefined | Gradient | Pattern,
@@ -30,40 +31,32 @@ const ColorPicker = ({
                 className="border rounded-lg chrome-picker"
             />
             <p className="text-sm text-gray-700">Solid colors</p>
-            {/* <CirclePicker 
-                color={value}
-                colors={colors}
-                onChangeComplete={(color)=>{ 
-                    const stringColor = ColorObjectToString(color.rgb)
-                    onChange(stringColor)
-                }}
-            /> */}
-            <div  className="grid grid-cols-6 gap-4 justify-center">
+            <div  className="grid grid-cols-6 gap-4 justify-center mr-2 ">
                 {colors.map((color, index) => (
-
-                    <div
-                    key={index}
-                    className="flex items-center justify-center h-10 w-10 cursor-pointer"
-                    >
-                    <motion.div
-                        key={index}
-                        className={`
-                            w-full h-full rounded-full border-2 hover:border-gray-500
-                            ${value === color && "border-gray-500"}
-                        `}
-                    >
+                    <Hint key={index} label={color} side="right">
+                        <div
+                        className="flex items-center justify-center h-10 w-10 cursor-pointer"
+                        >
                         <motion.div
-                            className="w-full h-full rounded-full"
-                            animate={{ scale: value === color ? 0.85 : 1 }}
-                            whileHover={{ scale: 0.85 }}
-                            transition={{ duration: 0.2 }}
-                            style={{
-                            backgroundColor: color,
-                            }}
-                            onClick={() => onChange(color)}
-                        />
-                    </motion.div>
-                    </div>
+                            key={index}
+                            className={`
+                                w-full h-full rounded-full border-2 hover:border-gray-500
+                                ${value === color && "border-gray-500"}
+                            `}
+                        >
+                            <motion.div
+                                className="w-full h-full rounded-full"
+                                animate={{ scale: value === color ? 0.85 : 1 }}
+                                whileHover={{ scale: 0.85 }}
+                                transition={{ duration: 0.2 }}
+                                style={{
+                                backgroundColor: color,
+                                }}
+                                onClick={() => onChange(color)}
+                            />
+                            </motion.div>
+                        </div>
+                    </Hint>
                             
                 ))}
             </div>

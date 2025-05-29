@@ -27,7 +27,6 @@ const TemplateSection = ({page="10", show, templateNumber}:TemplateSectionProps)
     } = useGetTemplates("1",page);
   
     const onClick = (template: templateType["data"][0]) => {
-      console.log(paywall.shouldBlock)
       if(template.isPro && paywall.shouldBlock){
         paywall.triggerPaywall()
         return;

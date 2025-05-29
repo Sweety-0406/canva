@@ -13,12 +13,10 @@
 //     try {
 //         const session = await auth()
 //         if(!session?.user || !session?.user?.id) {
-//             console.log("Unathorized")
 //             return NextResponse.json({error:"Unathorized"},{status: 401})
 //         }
 //         const {projectId} = params
 //         if (!projectId) {
-//             console.log("Missing projectId in URL")
 //             return NextResponse.json({ error: "Missing projectId in URL" }, { status: 400 });
 //         }
 //         const userId = session.user.id
@@ -33,7 +31,6 @@
 //         .returning();
 
 //         if (result.length === 0) {
-//             console.log("not found project")
 //         return NextResponse.json({ error: "Project not found or not authorized" }, { status: 404 });
 //         }
 
@@ -61,7 +58,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<IParams>
     try {
         const session = await auth();
         if (!session?.user || !session?.user?.id) {
-            console.log("Unauthorized");
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -70,7 +66,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<IParams>
         const { projectId } = resolvedParams;
         
         if (!projectId) {
-            console.log("Missing projectId in URL");
             return NextResponse.json({ error: "Missing projectId in URL" }, { status: 400 });
         }
 
@@ -87,7 +82,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<IParams>
             .returning();
 
         if (result.length === 0) {
-            console.log("not found project");
             return NextResponse.json({ error: "Project not found or not authorized" }, { status: 404 });
         }
 

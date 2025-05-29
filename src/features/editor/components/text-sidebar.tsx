@@ -27,10 +27,10 @@ const TextSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-64 bg-white border-r absolute z-40 h-full left-16"
+            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Text" description="Add text to your element" />
-            <ScrollArea className="p-1">
+            <ScrollArea className="p-3">
                 <div className="mt-2 flex flex-col gap-3 w-full">
                     <Button className="w-full rounded-xl text-white bg-[#8b3dff] hover:bg-[#7731d8]" onClick={()=>editor?.addText("hii there")}>
                         <TfiText className="text-white  "/> Click To Add Text 

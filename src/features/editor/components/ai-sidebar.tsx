@@ -35,7 +35,6 @@ const AiSidebar = ({
       });
 
       editor?.addImage(response.data.image);
-      console.log(response.data.image)
     } catch {
       toast.error("Somethign went wrong");
     } finally {
@@ -57,7 +56,7 @@ const AiSidebar = ({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -240 }}
       transition={{ duration: 0.5 }}
-      className="w-64 bg-white border-r absolute z-40 h-full left-16"
+      className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
     >
       <ToolSidebarHeader
         onClose={onClose}

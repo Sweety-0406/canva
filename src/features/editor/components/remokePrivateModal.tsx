@@ -35,8 +35,7 @@ const RemovePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
       } else {
         toast.error("Something went wrong. Please try again!");
       }
-    } catch (err) {
-      console.log(err)
+    } catch{
       toast.error("An error occurred.");
     } finally {
       setIsLoading(false);

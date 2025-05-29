@@ -48,7 +48,6 @@ const ImageSidebar = ({
     const [searchData, setSearchData] = useState<UnsplashImage[]>([])
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    console.log(data)
     const onClose = ()=>{
         onChangeActiveTool("select")
     }
@@ -59,7 +58,6 @@ const ImageSidebar = ({
     const fetchImages = async (search:string, pageNum = 1) => {
         try {
             const response = await axios.post("/api/images", { search, page: pageNum, per_page: 24 });
-            console.log(response.data.data.results);
     
             if (pageNum === 1) {
                 setSearchData(response.data.data.results); 
@@ -77,7 +75,6 @@ const ImageSidebar = ({
     
     const onClick = () => {
         if(searchKey.length===0){
-            console.log("empty")
             toast.error("Please write something")
             setSearchData([])
             return
@@ -97,10 +94,10 @@ const ImageSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-64 bg-white border-r absolute z-40 h-full left-16"
+            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Images" description="Add images in  your PixelForge" />
-            <ScrollArea className="p-1 h-[84vh]">
+            <ScrollArea className="p-3 pr-4 h-[84vh]">
                 <div>
                     <UploadButton 
                         className=""
@@ -131,7 +128,6 @@ const ImageSidebar = ({
                             }}
                             endpoint="videoUploader" 
                             onClientUploadComplete={(res) => {
-                                console.log("video property:", res)
                                 editor?.addVideo(res[0].ufsUrl )
                             }}
                             onUploadError={(error: Error) => {
@@ -153,10 +149,12 @@ const ImageSidebar = ({
                     </div>
                 </div>
                 {isLoading && (
-                    <div className="flex flex-1 h-[70vh] justify-center  items-center">
-                        <div className=''>
-                            <Loader r="100" />
-                        </div>
+                    <div className="grid grid-cols-2  gap-1">
+                        {Array.from({ length: 10 }).map((_, idx) => (
+                            <div key={idx} className="bg-gray-200 rounded-lg animate-pulse overflow-hidden">
+                            <div className="w-full aspect-video bg-gray-300" /> 
+                            </div>
+                        ))}
                     </div>
                 )}
                 {searchData.length==0? (

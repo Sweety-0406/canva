@@ -9,8 +9,7 @@ export const useCheckout = () => {
       try {
         const response = await axios.post("/api/subscription/checkout");
         return response.data;
-      } catch (error) {
-        console.log(error)
+      } catch{
         throw new Error( "Failed to create session");
       }
     },

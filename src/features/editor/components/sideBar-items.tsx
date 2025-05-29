@@ -7,25 +7,29 @@ interface SideBarItemsProps{
     label:string,
     icon:LucideIcon,
     isActive: boolean,
-    onClick:()=>void
+    onClick:()=>void,
+    customCss?:string
 }
 
 const SideBarItems = ({
     label,
     icon: Icon,
     isActive,
-    onClick
+    onClick,
+    customCss
 }:SideBarItemsProps)=>{
     return(
         <Button 
-            variant="ghost"
+            variant="none"
             onClick={onClick}
             className={cn(
-                " w-full h-full rounded-none p-3 py-2 flex flex-col",
-                isActive?"bg-muted  text-primary":"bg-transparent"                    
+                " w-full group h-full rounded-none flex flex-col",
+                isActive?" text-primary":"bg-transparent text-[#0e1318b2]"                    
             )}
         >
-            <Icon />
+            <div className={`group-hover:bg-muted group-hover:shadow-md  group-hover:rounded-md p-2 ${isActive && "bg-white shadow-md  rounded-md "}`}>
+                <Icon className={` ${isActive && `text-[#a570ff] ${customCss} `}`} />
+            </div> 
             <span className="text-xs -mt-2  ">{label}</span>
         </Button>
     )

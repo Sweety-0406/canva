@@ -30,7 +30,6 @@ export async function POST(req: Request) {
 
         
         const base64Image = `data:image/png;base64,${Buffer.from(response.data).toString("base64")}`;
-        console.log(base64Image)
         return NextResponse.json({ image: base64Image });
     } catch (error) {
         console.error("Remove.bg Error:", error);

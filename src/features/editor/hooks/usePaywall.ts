@@ -6,7 +6,6 @@ const usePaywall = ()=>{
     const{data: subscription, isLoading: isLoadingSubscription} = useGetSubscription()
     const subscriptionModal = useSubscriptionModal()
     const shouldBlock = isLoadingSubscription || !subscription?.active;
-    console.log(shouldBlock)
     return{
         isLoading: isLoadingSubscription,
         shouldBlock,

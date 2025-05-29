@@ -28,7 +28,6 @@ export async function POST(req: Request) {
 
     const{name, json, height, width} = parsedBody.data
 
-    console.log(name, json, height, width, userId)
     if (!name || json===undefined || !height || !width || !userId) {
         return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
@@ -45,7 +44,6 @@ export async function POST(req: Request) {
     if(!data[0]){
     return NextResponse.json({error: "Something went wrong."})
     }
-    console.log(data[0])
     return NextResponse.json({data: data[0]},{status: 200})
 
   } catch (error) {

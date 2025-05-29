@@ -19,6 +19,8 @@ import { PiSelectionBackgroundDuotone } from "react-icons/pi";
 import { AnimatePresence, motion } from "framer-motion";
 import BlurSidebar from "./blur-sidebar";
 import { PiFlipHorizontalFill,PiFlipVerticalFill  } from "react-icons/pi";
+import StrokeWidthSidebar from "./stroke-width-sidebar";
+import TextAlignSidebar from "./text-align-sidebar";
 
 interface  ToolBarProps{
     editor: Editor | undefined,
@@ -58,9 +60,10 @@ const Toolbar=({
     const fontSize = editor?.selectedObjects[0].get("fontSize")
     // const textShadow = editor?.selectedObjects[0].get("shadow")
 
-    
+    const selectedObject = editor?.selectedObjects[0]
     const selectedObjectType = editor?.selectedObjects[0].type;
     // const isTextTypeObject = isTextType(selectedObjectType) 
+    console.log( editor?.selectedObjects[0])
 
     const flipImageHorizontally = () => {
         onChangeActiveTool("flip-horizontally")
@@ -90,7 +93,7 @@ const Toolbar=({
                     transition={{ duration: 0.6, ease: "easeOut" }}
                     className="bg-white z-50 absolute rounded-2xl  shadow-lg flex gap-2 border-b p-1 h-10"
                 >
-                    {!(selectedObjectType==="line" || selectedObjectType==="image" || selectedObjectType==="group") && (
+                    {!(selectedObjectType==="line"  || selectedObjectType==="image") && (
                         <div className="flex items-center  h-full my-auto">
                             <Hint 
                                 label="Fill Color"
@@ -115,6 +118,7 @@ const Toolbar=({
                             </Hint>
                         </div>
                     )}
+                    {/* {selectedObject.objectType } */}
                     <div className="flex items-center  h-full my-auto">
                         <Hint 
                             label="Stroke color"
@@ -296,7 +300,7 @@ const Toolbar=({
                     )}
                     {selectedObjectType === "textbox" && (
                         <div className="flex items-center   h-full my-auto">
-                            <Hint 
+                            {/* <Hint 
                                 label="Align"
                                 side="bottom"
                                 >
@@ -323,31 +327,36 @@ const Toolbar=({
                                         <CiTextAlignRight/>
                                     )}
                                 </Button>
-                            </Hint>
+                            </Hint> */}
+                            <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
                         </div>
                     )}
                     {!(selectedObjectType==="textbox"  )  && (
-                        <div className={`
-                            flex items-center  h-full my-auto
-                        `}>
-                            <Hint 
-                                label="Stroke Width"
-                                side="bottom"
-                            >
-                                <Button 
-                                    onClick={()=>onChangeActiveTool("stroke-width")}
-                                    size="sm" 
-                                    variant="ghost"
-                                    className={`
-                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
-                                        ${activeTool==="stroke-width"? "bg-[#a570ff33]":"bg-none"}
-                                    `}
-                                >
-                                    <BsBorderWidth 
-                                        className="size-4 rounded-sm "
-                                    />    
-                                </Button>
-                            </Hint>
+                        // <div className={`
+                        //     flex items-center  h-full my-auto
+                        // `}>
+                        //     <Hint 
+                        //         label="Stroke Width"
+                        //         side="bottom"
+                        //     >
+                        //         <Button 
+                        //             onClick={()=>onChangeActiveTool("stroke-width")}
+                        //             size="sm" 
+                        //             variant="ghost"
+                        //             className={`
+                        //                 items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
+                        //                 ${activeTool==="stroke-width"? "bg-[#a570ff33]":"bg-none"}
+                        //             `}
+                        //         >
+                        //             <BsBorderWidth 
+                        //                 className="size-4 rounded-sm "
+                        //             />    
+                        //         </Button>
+                        //     </Hint>
+                        // </div>
+                        <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="stroke-width"?"bg-[#a570ff33]":"bg-transparent"}`}>
+                        {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/> */}
+                            <StrokeWidthSidebar editor={editor} activeTool={activeTool} />
                         </div>
                     )}
                     {selectedObjectType==="image"  && (
@@ -490,7 +499,8 @@ const Toolbar=({
                         </Hint>
                     </div>
                     <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="opacity"?"bg-[#a570ff33]":"bg-transparent"}`}>
-                        <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
+                        {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/> */}
+                        <OpacitySidebar editor={editor} activeTool={activeTool} />
                     </div>
                     <div className="flex items-center  h-full my-auto">
                         <Hint 

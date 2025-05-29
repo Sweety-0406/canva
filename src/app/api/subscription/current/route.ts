@@ -18,7 +18,6 @@ export async function GET() {
         eq(subscriptions.userId, userId)
     )
     const active = checkIsActive(subscription)
-    console.log(subscription, active)
     return NextResponse.json({data: {...subscription, active}});
 
   } catch (error) {

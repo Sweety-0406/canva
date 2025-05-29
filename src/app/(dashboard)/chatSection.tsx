@@ -45,7 +45,7 @@ const ChatSection = () => {
       
       <motion.button
         onClick={() => setOpen(true)}
-        className={`fixed bottom-6 right-6 bg-[#7d2ae7] text-white w-12 h-12 rounded-full shadow-xl z-50 flex items-center justify-center ${open && "cursor-not-allowed scale-100"}`}
+        className={`fixed bottom-12 right-6 bg-[#7d2ae7] text-white w-12 h-12 rounded-full shadow-xl z-50 flex items-center justify-center ${open && "cursor-not-allowed scale-100"}`}
         whileHover={{ scale: 1.1 }}
       >
         <FaQuestion />
