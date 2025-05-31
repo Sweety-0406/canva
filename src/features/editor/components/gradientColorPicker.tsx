@@ -1,3 +1,4 @@
+"use client"
 import React, { useRef, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import GradientPreview from './gradientPreview';
@@ -70,9 +71,8 @@ const GradientColorPicker: React.FC<GradientColorPickerProps> = ({ gradientColor
         <p className='text-xs text-gray-500 py-2'>Default Gradient</p>
         <div  className="grid grid-cols-6 mr-2  gap-4 justify-center">
           {gradientDefaultColros.map((color:string[], index) => ( 
-            <Hint side="right" label={`Linear gradient 90deg: ${color}`}>
+            <Hint key={index} side="right" label={`Linear gradient 90deg: ${color}`}>
               <div
-              key={index}
               className="flex items-center justify-center h-10 w-10 cursor-pointer"
               >
               <motion.div
@@ -196,29 +196,3 @@ const GradientColorPicker: React.FC<GradientColorPickerProps> = ({ gradientColor
 export default GradientColorPicker;
 
 
-
-{/* Gradient type selector */}
-{/* <div className="flex gap-2 items-center">
-  <label>Gradient Type:</label>
-  <select
-    value={gradientType}
-    onChange={(e) => setGradientType(e.target.value as GradientType)}
-    className="border px-2 py-1 rounded"
-  >
-    <option value="linear">Linear</option>
-    <option value="radial">Radial</option>
-  </select>
-</div> */}
-
-{/* Angle input */}
-{/* {gradientType === 'linear' && (
-  <div className="flex gap-2 items-center">
-    <label>Angle:</label>
-    <input
-      type="number"
-      value={angle}
-      onChange={(e) => setAngle(parseInt(e.target.value))}
-      className="border px-2 py-1 rounded w-20"
-    />
-  </div>
-)} */}

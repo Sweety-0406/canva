@@ -11,6 +11,7 @@ export type projectType={
     height: number,
     width: number,
     thumbnailUrl :string | null,
+    tag :string | null,
     isTemplate: boolean | null,
     isPro: boolean | null,
     isPrivate: boolean ;

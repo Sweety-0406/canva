@@ -4,6 +4,7 @@ import ProjectSection from "./projectSection";
 import TemplateSection from "./templateSection";
 import DashboardCategorySection from "./dashboardCategorySection";
 import Heading from "./heading";
+// import { NamedTemplateModal } from "@/features/editor/components/namedTemplateModal";
 
 export default async function Home() {
   await protectServer()
@@ -14,6 +15,7 @@ export default async function Home() {
       <DashboardCategorySection />
       <TemplateSection page="4" show={false} templateNumber={4}/>
       <ProjectSection projectNumber={5}  />
+      
     </div>
   );
 }

@@ -113,6 +113,7 @@ export const projects = pgTable(
     height: integer("height").notNull(),  
     width: integer("width").notNull(),  
     thumbnailUrl: text("thumbnailUrl"),
+    tag: text("tag"),
     isTemplate: boolean("isTemplate"),
     isPrivate: boolean("isPrivate"),
     isRemove: boolean("isRemove"),

@@ -42,6 +42,7 @@ const Toolbar=({
     const strokeColor = editor?.selectedObjects[0].stroke
     const fillColor = editor?.selectedObjects[0].fill
     const font = editor?.font
+    const f = editor?.selectedObjects
     // const shadowColor = typeof fillColor === "string" ? fillColor : "black"
    
 

@@ -16,6 +16,7 @@ import { IoLogoPinterest } from "react-icons/io";
 import { BiSolidSpreadsheet } from "react-icons/bi";
 import { GiTargetPoster } from "react-icons/gi";
 import { Sparkles } from 'lucide-react';
+import useGetTemplateModal from "@/features/editor/hooks/useGetTemplateModal";
 
 const baseCategories = [
   { label: "For You", icon: <Sparkles className="text-white  " />, color:"bg-emerald-700" },
@@ -36,7 +37,7 @@ const loopedCategories = [...baseCategories, ...baseCategories, ...baseCategorie
 
 export default function DashboardCategorySection() {
   const containerRef = useRef<HTMLDivElement>(null);
-
+  const {onOpen} = useGetTemplateModal()
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -67,7 +68,7 @@ export default function DashboardCategorySection() {
         className="flex overflow-x-auto space-x-2 scrollbar-hide px-4"
       >
         {loopedCategories.map((cat, index) => (
-          <div className="" key={index}>
+          <div className="hover:cursor-pointer" key={index} onClick={()=>onOpen(cat.label)}>
             <div
               className="group flex-shrink-0 w-20 h-20 justify-center  flex flex-col items-center   rounded-lg py-1 text-sm "
             >
