@@ -4,7 +4,7 @@ import { Gradient, ITextOptions } from "fabric/fabric-impl"
 // import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
 export type projectType={
-    json: string,
+    json: string ,
     name: string,
     id: string,
     userId: string,
