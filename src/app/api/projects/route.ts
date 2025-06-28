@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { projects, projectsInsetSchema } from "@/db/schema";
+import { projectJsons, projects, projectsInsetSchema } from "@/db/schema";
 import { db } from "@/db/drizzle";
 import { eq , desc, and} from "drizzle-orm";
 import { z } from "zod";
@@ -11,49 +11,56 @@ export async function POST(req: Request) {
   try {
     const session = await auth()
     if(!session?.user) {
-        return NextResponse.json({error:"Unathorized"},{status: 401})
+      return NextResponse.json({error:"Unathorized"},{status: 401})
     }
     const userId = session.user.id
-    const schema = projectsInsetSchema.pick({
-        name: true,
-        json: true,
-        width: true,
-        height: true
-    })
+    const schema = z.object({
+      name: z.string(),
+      json: z.string(), 
+      width: z.number(),
+      height: z.number(),
+    });
     const body = await req.json()
     const parsedBody = schema.safeParse(body)
     if(!parsedBody.success){
-        return NextResponse.json({error: "Invalid request data", details: parsedBody.error}, {status: 400})
+      return NextResponse.json({error: "Invalid request data", details: parsedBody.error}, {status: 400})
     }
 
     const{name, json, height, width} = parsedBody.data
+    console.log(parsedBody.data)
 
     if (!name || json===undefined || !height || !width || !userId) {
-        return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
-    const data = await db.insert(projects).values({
-        name,
-        json,
-        width,
-        height,
-        userId: userId, 
-        createdAt: new Date(),
-        updatedAt: new Date(),
+    const [project] = await db.insert(projects).values({
+      name,
+      width,
+      height,
+      userId: userId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }).returning();
 
-    if(!data[0]){
-    return NextResponse.json({error: "Something went wrong."})
+    if (!project) {
+      return NextResponse.json({ error: "Project creation failed" }, { status: 500 });
     }
-    return NextResponse.json({data: data[0]},{status: 200})
+
+    // Step 2: Insert JSON into `projectJsons`
+    await db.insert(projectJsons).values({
+      projectId: project.id,
+      json,
+      index:1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return NextResponse.json({ data: project }, { status: 200 });
 
   } catch (error) {
     console.error("Register API Error:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
-
-
-
 
 
 const querySchema = z.object({

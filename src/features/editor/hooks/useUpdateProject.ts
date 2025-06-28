@@ -7,7 +7,7 @@ export const useUpdateProject = (projectId: string) => {
 
   const mutation = useMutation({
     mutationKey: ["project", { projectId }],
-    mutationFn: async (json: { json: string; height: number; width: number }) => {
+    mutationFn: async (json: { json: string; height: number; width: number, index:number }) => {
       const response = await axios.patch(`/api/projects/${projectId}`, json);
 
       if (response.status !== 200) {

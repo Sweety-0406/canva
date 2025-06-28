@@ -6,6 +6,8 @@ import {
     text,
     primaryKey,
     integer,
+    PgColumn,
+    PgTableWithColumns,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"   
 import {createInsertSchema} from "drizzle-zod"
@@ -109,15 +111,15 @@ export const projects = pgTable(
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    json: text("json").notNull(),
+    // json: text("json").notNull(),
     height: integer("height").notNull(),  
     width: integer("width").notNull(),  
     thumbnailUrl: text("thumbnailUrl"),
     tag: text("tag"),
     isTemplate: boolean("isTemplate"),
-    isPrivate: boolean("isPrivate"),
-    isRemove: boolean("isRemove"),
-    isArchive: boolean("isArchive"),
+    isPrivate: boolean("isPrivate").default(false),
+    isArchive: boolean("isArchive").default(false),
+    isRemove: boolean("isRemove").default(false),
     hashedPassword: text("hashedPassword"),
     isPro: boolean("isPro"),
     createdAt: timestamp("createdAt", {mode: "date"}).notNull(),
@@ -125,12 +127,38 @@ export const projects = pgTable(
   }
 )
 
-export const projectsRelations = relations(projects, ({one})=>({
+export const projectJsons = pgTable("projectJson", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+
+  projectId: text("projectId")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+
+  json: text("json").notNull(), 
+  index: integer("index"),
+
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});
+
+
+export const projectsRelations = relations(projects, ({one, many})=>({
   user: one(users,{
     fields: [projects.userId],
     references: [users.id]
-  })
+  }),
+  jsons: many(projectJsons),
 }))
+
+export const projectJsonsRelations = relations(projectJsons, ({ one }) => ({
+  project: one(projects, {
+    fields: [projectJsons.projectId],
+    references: [projects.id],
+  }),
+}));
+
 
 export const projectsInsetSchema = createInsertSchema(projects)
 
@@ -149,3 +177,5 @@ export const subscriptions = pgTable("subscription",{
   createdAt: timestamp("createdAt", {mode: "date"}).notNull(),
   updatedAt: timestamp("updatedAt", {mode: "date"}).notNull(),
 })
+
+

@@ -37,7 +37,8 @@ const FillColorSidebar = ({
     const selectedObjects = editor?.selectedObjects
     useEffect(() => {
         if (!selectedObjects) return;
-
+        console.log("fill",selectedObjects[0]
+)
         const objectsColors: string[] = []
 
         for (let i = 0; i < selectedObjects.length; i++) {

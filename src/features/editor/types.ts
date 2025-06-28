@@ -3,8 +3,15 @@ import * as material from "material-colors"
 import { Gradient, ITextOptions } from "fabric/fabric-impl"
 // import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
+export type projectJson={
+    id:string,
+    index:number,
+    projectId: string,
+    json:string
+}
+
 export type projectType={
-    json: string ,
+    jsons: projectJson[] ,
     name: string,
     id: string,
     userId: string,
@@ -14,7 +21,7 @@ export type projectType={
     tag :string | null,
     isTemplate: boolean | null,
     isPro: boolean | null,
-    isPrivate: boolean ;
+    isPrivate: boolean ,
     createdAt: string,
     updatedAt: string
 
@@ -212,6 +219,7 @@ export type buildEditorProps = {
 
 export interface Editor{
     saveJson:()=>void,
+    savePdf:()=>void,
     savePng:()=>void,
     saveJpg:()=>void,
     saveSvg:()=>void,

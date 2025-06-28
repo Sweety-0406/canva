@@ -59,7 +59,7 @@ const SidebarRoutes = ()=>{
                         <Button
                             disabled={mutation.isPending}
                             onClick={onClickCreatHandler}
-                            className="flex text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
+                            className="flex hover:text-white text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
                             variant="outline"
                         >
                             <div className="flex gap-2 hover:text-white"> <span><HiPlus /></span></div>

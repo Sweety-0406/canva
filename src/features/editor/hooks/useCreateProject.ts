@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface ProjectData {
     name: string;
-    json: string;
+    json: string ;
     width: number;
     height: number;
   }
@@ -15,9 +15,11 @@ export const useCreateProject = () => {
   const mutation = useMutation({
     mutationFn: async (json:ProjectData) => {
       try {
+        const jsonString = JSON.stringify(json)
         const response = await axios.post("/api/projects",json);
         return response.data;
-      } catch{
+      } catch(e){
+        console.log(e)
         throw new Error( "Something went wrong");
       }
     },
@@ -25,7 +27,8 @@ export const useCreateProject = () => {
       toast.success("Project created");
       queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
-    onError: () => {
+    onError: (e:any) => {
+      console.log(e)
       toast.error("Failed to create project");
     }
   });

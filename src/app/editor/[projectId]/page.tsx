@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useGetProject } from "@/features/editor/hooks/useGetProject";
 import EditorSkeleton from "./editorSkeleton";
+import ErrorPage from "@/features/editor/components/error";
 
 
 
@@ -35,16 +36,8 @@ const projectIdString = Array.isArray(projectId) ? projectId[0] : projectId || "
 
   if (isError) {
     return (
-      <div className="h-full flex flex-col gap-y-5 items-center justify-center">
-        <TriangleAlert className="size-6 text-muted-foreground" />
-        <p className="text-muted-foreground text-sm">
-          Failed to fetch project
-        </p>
-        <Button asChild variant="secondary">
-          <Link href="/">
-            Back to Home
-          </Link>
-        </Button>
+      <div className="flex h-screen justify-center items-center content-center overflow-hidden mx-[10%] lg:mx-[20%]">
+        <ErrorPage />
       </div>
     );
   }

@@ -36,6 +36,27 @@
       "when": 1743342208185,
       "tag": "0004_dear_big_bertha",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1748960871103,
+      "tag": "0005_complex_absorbing_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1748962257564,
+      "tag": "0006_broad_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1748973964901,
+      "tag": "0007_high_scarlet_witch",
+      "breakpoints": true
     }
   ]
 }

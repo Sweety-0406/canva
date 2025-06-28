@@ -8,9 +8,9 @@ interface SkeletonCardProps{
 
 const SkeletonCard = () => (
   <div className="animate-pulse rounded overflow-hidden shadow px-2 pt-2">
-    <div className="bg-gray-300 h-40 w-full rounded"></div>
+    <div className="bg-gray-300 h-40 w-full rounded"/>
     <div className="my-2 px-1">
-      <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
+      <div className="h-3 bg-gray-300 rounded w-3/4 mb-1"/>
     </div>
   </div>
 );

@@ -31,6 +31,8 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import useChangeFileNameModal from "../hooks/useChangeFileName";
 import { motion } from "framer-motion";
 import { TbLoader3 } from "react-icons/tb";
+import { useEffect } from "react";
+import { useHistory } from "../hooks/useHistory";
 
 interface NavbarProps{
     name: string,
@@ -38,7 +40,11 @@ interface NavbarProps{
     editor: Editor | undefined,
     id: string,
     activeTool: ActiveTool,
-    onChangeActiveTool:(tool:ActiveTool)=>void
+    onChangeActiveTool:(tool:ActiveTool)=>void,
+    canUndo: () => boolean,
+    canRedo: () => boolean,
+    onUndo: () => void,
+    onRedo: () => void,
 }  
 
 const Navbar = ({
@@ -47,13 +53,21 @@ const Navbar = ({
     editor,
     id,
     activeTool,
-    onChangeActiveTool
+    onChangeActiveTool,
+    canUndo,
+    canRedo,
+    onUndo,
+    onRedo
 }:NavbarProps)=>{ 
     // const query = useGetProject(id)
     const makePrivateModal = useMakePrivateModal()
     const removePrivateModal =  useRemovePrivateModal()
     const changeFileName = useChangeFileNameModal()
-    
+    // const {activePage} = useHistory()
+    useEffect(()=>{
+        editor?.canRedo()
+        editor?.canUndo()
+    },[])
     const data = useMutationState({
         filters:{
             mutationKey: ["project", { projectId:id }],
@@ -149,8 +163,10 @@ const Navbar = ({
                 <Button 
                     variant="ghost" 
                     size={"sm"}
-                    disabled={!editor?.canUndo()}
-                    onClick={(()=>editor?.onUndo())}
+                    disabled={!canUndo()}
+                    onClick={onUndo}
+                    // disabled={!editor?.canUndo()}
+                    // onClick={(()=>editor?.onUndo())}
                 >
                     <Undo/>
                 </Button>
@@ -159,8 +175,10 @@ const Navbar = ({
                 <Button
                     variant="ghost" 
                     size={"sm"}
-                    disabled={!editor?.canRedo()}
-                    onClick={(()=>editor?.onRedo())}
+                    disabled={!canRedo()}
+                    onClick={onRedo}
+                    // disabled={!editor?.canRedo()}
+                    // onClick={(()=>editor?.onRedo())}
                 >
                     <Redo />
                 </Button>
@@ -215,13 +233,20 @@ const Navbar = ({
                             <Download  />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent asChild align="start" className=" flex flex-col w-60 mr-2">
+                    <DropdownMenuContent asChild align="start" className=" flex flex-col w-60 mr-2 mt-1">
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 20 }}
                             transition={{ duration: 0.5 }}
                         >
+                            <DropdownMenuItem  onClick={()=> editor?.savePdf()} className="flex items-center hover:cursor-pointer  w-full">
+                                <File />
+                                <div >
+                                    <h1>PDF</h1>
+                                    <p className="text-xs  text-gray-500">Save your design as a PDF </p>
+                                </div>
+                            </DropdownMenuItem>
                             <DropdownMenuItem  onClick={()=> editor?.saveJson()} className="flex items-center hover:cursor-pointer  w-full">
                                 <File />
                                 <div >
@@ -260,3 +285,146 @@ const Navbar = ({
 }
 
 export default Navbar
+
+
+
+
+// "use client"
+
+// import Logo from "./logo"
+// import Hint from "./hint";
+// import {useFilePicker} from "use-file-picker"
+// import {
+//     DropdownMenu,
+//     DropdownMenuContent,
+//     DropdownMenuItem,
+//     DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu"
+// import { FaRegFileAlt } from "react-icons/fa";
+// import { Button } from "@/components/ui/button"
+// import { ChevronDown, Download, File } from "lucide-react";
+// import { MousePointerClick } from 'lucide-react';
+// import { Separator } from "@/components/ui/separator";
+// import { Redo } from 'lucide-react';
+// import { Undo } from 'lucide-react';
+// import { MdOutlineCloudDone } from "react-icons/md";
+// import { ActiveTool, Editor } from "../types";
+// import { cn } from "@/lib/utils";
+// import UserButton from "./user-button";
+// import {useMutationState } from "@tanstack/react-query";
+// import { BsCloudSlash } from "react-icons/bs";
+// import { CiUnlock } from "react-icons/ci";
+// import { CiLock } from "react-icons/ci";
+// // import { useGetProject } from "../hooks/useGetProject";
+// import useMakePrivateModal from "../hooks/useMakePrivateModal";
+// import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
+// import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+// import useChangeFileNameModal from "../hooks/useChangeFileName";
+// import { motion } from "framer-motion";
+// import { TbLoader3 } from "react-icons/tb";
+
+// interface NavbarProps{
+//     name: string,
+//     isPrivate:boolean,
+//     editor: Editor | undefined,
+//     id: string,
+//     activeTool: ActiveTool,
+//     onChangeActiveTool:(tool:ActiveTool)=>void
+// }  
+
+// const Navbar = ({
+//     name,
+//     isPrivate,
+//     editor,
+//     id,
+//     activeTool,
+//     onChangeActiveTool
+// }:NavbarProps)=>{ 
+//     // const query = useGetProject(id)
+//     const makePrivateModal = useMakePrivateModal()
+//     const removePrivateModal =  useRemovePrivateModal()
+//     const changeFileName = useChangeFileNameModal()
+    
+//     const data = useMutationState({
+//         filters:{
+//             mutationKey: ["project", { projectId:id }],
+//             exact: true
+//         },
+//         select: (mutation)=> mutation.state.status
+//     })
+//     const currentState = data[data.length - 1]
+//     const isError = currentState === "error"
+//     const isPending = currentState === "pending"
+//     const {openFilePicker} = useFilePicker({
+//         accept: ".json",
+//         onFilesSuccessfullySelected:({plainFiles}: { plainFiles: File[] })=>{
+//             if(plainFiles && plainFiles.length >0){
+//                 const file = plainFiles[0]
+//                 const reader = new FileReader();
+//                 reader.readAsText(file, "UTF-8")
+//                 reader.onload=()=>{
+//                     editor?.loadFromJSON(reader.result as string)
+//                 }
+//             }
+//         }
+//     })
+    
+//     return(
+//         <div className="bg-white z-[60] flex items-center gap-3 h-12 border-b p-2 ">
+//             <Logo />
+//             <Separator orientation="vertical" />
+//             <Hint label="select" sideOffset={8}>
+//                 <Button  
+//                     variant="ghost" 
+//                     size={"sm"}
+//                     onClick={()=>onChangeActiveTool("select")}
+//                     className={cn(
+//                         activeTool==='select' && "bg-gray-100"
+//                     )}
+//                 >
+//                     <MousePointerClick />
+//                 </Button>
+//             </Hint>
+//             <Hint label="Undo" sideOffset={8}>
+//                 <Button 
+//                     variant="ghost" 
+//                     size={"sm"}
+//                     disabled={!editor?.canUndo()}
+//                     onClick={(()=>editor?.onUndo())}
+//                 >
+//                     <Undo/>
+//                 </Button>
+//             </Hint>
+//             <Hint label="Redo" sideOffset={8}>
+//                 <Button
+//                     variant="ghost" 
+//                     size={"sm"}
+//                     disabled={!editor?.canRedo()}
+//                     onClick={(()=>editor?.onRedo())}
+//                 >
+//                     <Redo />
+//                 </Button>
+//             </Hint>
+//             <Separator orientation="vertical" />
+//             {isPending && (
+//                 <div className="flex gap-2 text-gray-500 ">
+//                     <TbLoader3 className="animate-spin" size={20} />
+//                 </div>
+//             )}
+//             {!isPending && isError && (
+//                 <div className="flex gap-2 text-gray-500 ">
+//                     <BsCloudSlash size={20} />
+//                 </div>
+//             )}
+//             {!isPending && !isError && (
+//                 <Hint label="All changes saved" sideOffset={8}>
+//                     <div className="flex gap-2 text-gray-500 ">
+//                         <MdOutlineCloudDone size={20} />
+//                     </div>
+//                 </Hint>
+//             )}
+//         </div>
+//     )
+// }
+
+// export default Navbar

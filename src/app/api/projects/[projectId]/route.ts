@@ -151,14 +151,22 @@ export async function GET(
             eq(projects.userId, userId)
         ].filter(Boolean);
 
-        const data = await db.select().from(projects).where(
-            conditions.length > 0 ? and(...conditions) : sql`1 = 1`
-        );
+        // const data = await db.select().from(projects).where(
+        //     conditions.length > 0 ? and(...conditions) : sql`1 = 1`
+        // );
+        const data = await db.query.projects.findFirst({
+            where: and(eq(projects.id, projectId), eq(projects.userId, userId)),
+            with: {
+                jsons: {
+                    orderBy: (projectJsons, { asc }) => asc(projectJsons.index),
+                }, 
+            },
+        });
         
-        if (data.length === 0) {
+        if (!data) {
             return NextResponse.json({ error: "Not found" }, { status: 404 });
         }
-        return NextResponse.json({ data: data[0] }, { status: 200 });
+        return NextResponse.json({ data }, { status: 200 });
     } catch {
         return NextResponse.json({ error: "Server error" }, { status: 500 });
     }
@@ -187,6 +195,7 @@ export async function PATCH(
         const body = await request.json();
         const parsedBody = schema.safeParse(body);
         if (!parsedBody.success) {
+            console.log(parsedBody)
             return NextResponse.json({ error: "Invalid request data", details: parsedBody.error }, { status: 400 });
         }
 

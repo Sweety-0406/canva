@@ -49,7 +49,7 @@ const SettingSidebar = ({
         setGradientColor(value)
         setGradientType(gradientType)
         setAngle(angle)
-        editor?.changeGradientBackground(gradientColor, gradientType, angle)
+        editor?.changeGradientBackground(value, gradientType, angle)
     }
     
     const onSubmit=(e:React.FormEvent<HTMLFormElement>)=>{
@@ -59,7 +59,7 @@ const SettingSidebar = ({
             width: parseInt(width,10),
             height: parseInt(height)
         })
-        editor?.changeGradientBackground(gradientColor,gradientType,angle)
+        // editor?.changeGradientBackground(gradientColor,gradientType,angle)
     }
 
     const onClose = ()=>{

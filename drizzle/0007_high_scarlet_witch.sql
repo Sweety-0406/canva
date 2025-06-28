@@ -1,0 +1,1 @@
+ALTER TABLE "projectJson" ADD COLUMN "index" integer;

@@ -9,7 +9,8 @@ import { useHistory } from "./useHistory"
 import { useShortcutKeys } from "./useShortcutKeys"
 import { useWindowEvents } from "./useWindowEvents"
 import useLoadState from "./useLoadState"
-
+import { jsPDF } from "jspdf";
+import { v4 as uuidv4 } from "uuid";
   
 type FontsLoaded = {
     [fontFamily: string]: boolean;
@@ -102,6 +103,37 @@ const buildEditor =({
         )}`
         downloadCanvasImage(fileString,"json")
     }
+    const savePdf = () => {
+        const workspace = getWorkspace();
+        if (!canvas || !workspace) return;
+
+        // Get the image data from the Fabric canvas
+        const dataUrl = canvas.toDataURL({
+            format: "png",
+            multiplier: 2, // Higher quality
+        });
+
+        const width = workspace.width
+        const height = workspace.height;
+        if(!width || !height) return
+        console.log("w-", width)
+        console.log("h-", height)
+        const orientation = width > height ? "landscape" : "portrait";
+
+        // Create a new jsPDF document
+        const pdf = new jsPDF({
+            orientation, 
+            unit: "px",
+            format: [width, height],
+        });
+
+        // Add image to the PDF
+        pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+
+        // Save the PDF
+        pdf.save(`${uuidv4()}.pdf`);
+    };
+
     const loadFromJSON = (json: string)=>{
         const data = JSON.parse(json);
         canvas.loadFromJSON(data, ()=>{
@@ -124,6 +156,7 @@ const buildEditor =({
         saveJpg,
         savePng,
         saveJson,
+        savePdf,
         saveSvg,
         loadFromJSON,
         getWorkspace,
@@ -294,8 +327,8 @@ const buildEditor =({
             fabric.loadSVGFromString(svgString, (objects, options) => {
             const obj = fabric.util.groupSVGElements(objects, options);
             obj.scaleToWidth(400); 
-            // obj.set({ objectType: 'svg' });
-            (obj as fabric.Object & { objectType?: string }).set({ objectType: 'custom-svg' });
+            obj.set({ type: 'svg' });
+            // (obj as fabric.Object & { objectType?: string }).set({ type: 'custom-svg' });
 
             canvas.add(obj);
             canvas.centerObject(obj);
@@ -647,56 +680,36 @@ const buildEditor =({
             
         },
         addSingleHeadArrow: (strokeWidth) => {
-            // Define dimensions
-            const arrowLength = 150;
-            const headWidth = 12 + strokeWidth;
-            const headHeight = 18 + strokeWidth;
-            
-            // Create a custom path for the entire arrow
-            // This ensures the arrow scales as one unit
-            const arrowPath = [
-                'M', 0, strokeWidth/2,                           // Start at left center
-                'L', arrowLength - headHeight, strokeWidth/2,    // Line to before arrow head
-                'L', arrowLength - headHeight, -headWidth/2,     // Line to bottom of arrow head
-                'L', arrowLength, 0,                             // Line to arrow tip
-                'L', arrowLength - headHeight, headWidth/2,      // Line to top of arrow head
-                'L', arrowLength - headHeight, strokeWidth/2,    // Line back to shaft
-                'L', 0, strokeWidth/2                            // Line back to start
-            ].join(' ');
-            
-            // Create the arrow as a fabric.Path object
-            const arrow = new fabric.Path(arrowPath, {
+            const line = new fabric.Line([50, 100, 200, 100], {
+                stroke: strokeColor,  
+                // strokeDashArray: [] , 
+                strokeWidth: strokeWidth,
+                opacity: 1
+            });
+
+        
+            const rightTriangle = new fabric.Triangle({
+                width: 10,
+                height: 15,
                 fill: strokeColor,
                 stroke: strokeColor,
-                strokeWidth: 1,
-                strokeLineJoin: 'round',
-                strokeLineCap: 'round',
-                objectCaching: false,
-                left: 100,
-                top: 100
+                strokeWidth: strokeWidth,
+                opacity: 1,
+                left: 200, 
+                top: 95,
+                angle: 90 
             });
+        
+            const objs = [line, rightTriangle];
             
-            // Set the center point properly
-            arrow.set({
-                originX: 'center',
-                originY: 'center'
-            });
-            
-            // Make sure all controls are enabled
-            arrow.setControlsVisibility({
-                mt: true,  // middle top
-                mb: true,  // middle bottom
-                ml: true,  // middle left
-                mr: true,  // middle right
-            });
-            
-            // Add the object to canvas
-            canvas.add(arrow);
-            canvas.setActiveObject(arrow);
-            canvas.renderAll();
-            
-            // Return the arrow object in case you need to reference it elsewhere
-            return arrow;
+            const alltogetherObj = new fabric.Group(objs);
+        
+            // Ensure bounding box and positioning is correct
+            alltogetherObj.setCoords();
+        
+            center(alltogetherObj);
+            canvas.add(alltogetherObj);
+            canvas.setActiveObject(alltogetherObj);
         },
         addDashedSingleHeadArrow:(strokeWidth: number)=>{
             const triangle = new fabric.Triangle({
@@ -1865,192 +1878,404 @@ const buildEditor =({
     }
 }
 
-export const useEditor=({
-    defaultState,
-    defaultHeight,
-    defaultWidth,
-    clearSelectionCallback, 
-    saveCallback
-}: EditorHookProps)=>{
-    const initialState = useRef(defaultState)
-    const initialHeight = useRef(defaultHeight)
-    const initialWidth = useRef(defaultWidth)
-    const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
-    const [container, setContainer] = useState<HTMLDivElement | null>(null)
-    const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
-    const [fillColor, setFillColor] = useState("#000000")
-    const [strokeColor, setStrokeColor] = useState("#000000")
-    const [strokeWidth, setStrokeWidth] = useState(5)
-    const [strokeType, setStrokeType] = useState<number[]>([])
-    const [opacity, setOpacity] = useState<number>(1)
-    const [font, setFont] = useState("Arial")
-    const [fontWeight, setFontWeight] = useState(700)
-    const [fontStyle, setFontStyle] = useState("normal")
-    const [underline, setUnderline] = useState(false)
-    const [lineThrough, setLineThrough] = useState(false)
-    const [textAlign, setTextAlign] = useState("left")
-    const [fontSize, setFontSize] = useState(32)
-    const [blur, setBlur] = useState(0)
-    const [textShadow, setTextShadow] = useState("white")
-    const [fontsLoaded, setFontsLoaded] = useState<FontsLoaded>({});
-    const [gradientType, setGradientType] = useState('linear')
-    const [gradientColor, setGradientColor] = useState(['#E77777', '#77E77F', '#778DE7'])
+// export const useEditor=({
+//     defaultState,
+//     defaultHeight,
+//     defaultWidth,
+//     clearSelectionCallback, 
+//     saveCallback
+// }: EditorHookProps)=>{
+//     const initialState = useRef(defaultState)
+//     const initialHeight = useRef(defaultHeight)
+//     const initialWidth = useRef(defaultWidth)
+//     const [canvas, setCanvas] = useState<fabric.Canvas | null>(null)
+//     const [container, setContainer] = useState<HTMLDivElement | null>(null)
+//     const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([])
+//     const [fillColor, setFillColor] = useState("#000000")
+//     const [strokeColor, setStrokeColor] = useState("#000000")
+//     const [strokeWidth, setStrokeWidth] = useState(5)
+//     const [strokeType, setStrokeType] = useState<number[]>([])
+//     const [opacity, setOpacity] = useState<number>(1)
+//     const [font, setFont] = useState("Arial")
+//     const [fontWeight, setFontWeight] = useState(700)
+//     const [fontStyle, setFontStyle] = useState("normal")
+//     const [underline, setUnderline] = useState(false)
+//     const [lineThrough, setLineThrough] = useState(false)
+//     const [textAlign, setTextAlign] = useState("left")
+//     const [fontSize, setFontSize] = useState(32)
+//     const [blur, setBlur] = useState(0)
+//     const [textShadow, setTextShadow] = useState("white")
+//     const [fontsLoaded, setFontsLoaded] = useState<FontsLoaded>({});
+//     const [gradientType, setGradientType] = useState('linear')
+//     const [gradientColor, setGradientColor] = useState(['#E77777', '#77E77F', '#778DE7'])
 
-    const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas, saveCallback})
-    const {copy, paste} = useClipboard({canvas})
-    const {autoZoom} = useAutoResizer({canvas,container})
+//     const {save, undo, redo, canRedo, canUndo, canvasHistory, setHistoryIndex} = useHistory({canvas, saveCallback})
+//     const {copy, paste} = useClipboard({canvas})
+//     const {autoZoom} = useAutoResizer({canvas,container})
 
-    useWindowEvents()
-    useCanvasEvents({canvas, setSelectedObjects, save, clearSelectionCallback})
-    useShortcutKeys({canvas, undo, redo, save, copy, paste})
-    useLoadState({canvas, autoZoom, initialState, canvasHistory, setHistoryIndex})
+//     useWindowEvents()
+//     useCanvasEvents({canvas, setSelectedObjects, save, clearSelectionCallback})
+//     useShortcutKeys({canvas, undo, redo, save, copy, paste})
+//     useLoadState({canvas, autoZoom, initialState, canvasHistory, setHistoryIndex})
 
-    const loadFont = (fontFamily: string) => {
-        if (fontsLoaded[fontFamily]) return; 
+//     const loadFont = (fontFamily: string) => {
+//         if (fontsLoaded[fontFamily]) return; 
   
-        const fontUrl = `/fonts/${fontFamily}/${fontFamily}.ttf`;
+//         const fontUrl = `/fonts/${fontFamily}/${fontFamily}.ttf`;
   
-        const font = new FontFace(fontFamily, `url(${fontUrl})`, {
-            style: 'normal',
-            weight: 'normal',
-        });
+//         const font = new FontFace(fontFamily, `url(${fontUrl})`, {
+//             style: 'normal',
+//             weight: 'normal',
+//         });
   
-        font
-        .load()
-        .then(() => {
-            document.fonts.add(font);
-            setFontsLoaded((prev) => ({ ...prev, [fontFamily]: true }));
-        })
-        .catch((error) => {
-            console.error(`Error loading font ${fontFamily}:`, error);
-        });
-    };
+//         font
+//         .load()
+//         .then(() => {
+//             document.fonts.add(font);
+//             setFontsLoaded((prev) => ({ ...prev, [fontFamily]: true }));
+//         })
+//         .catch((error) => {
+//             console.error(`Error loading font ${fontFamily}:`, error);
+//         });
+//     };
 
-    const editor=useMemo(()=>{
-        if(canvas){
-            return buildEditor({
-                canvas,
-                save,
-                loadFont,
-                undo,
-                redo,
-                canRedo,
-                canUndo,
-                autoZoom,
-                copy,
-                paste,
-                fillColor,
-                setFillColor,
-                strokeColor,
-                setStrokeColor,
-                strokeWidth,
-                setStrokeWidth,
-                strokeType,
-                setStrokeType,
-                opacity,
-                setOpacity,
-                selectedObjects,
-                font,
-                setFont,
-                blur,
-                setBlur,
-                fontWeight,
-                setFontWeight,
-                fontStyle,
-                setFontStyle,
-                underline,
-                setUnderline,
-                lineThrough,
-                setLineThrough,
-                textAlign,
-                setTextAlign,
-                fontSize,
-                setFontSize,
-                textShadow,
-                setTextShadow,
-                gradientType,
-                setGradientType,
-                gradientColor,
-                setGradientColor
-            })
-        }
-        return undefined
-    },[
+//     const editor=useMemo(()=>{
+//         if(canvas){
+//             return buildEditor({
+//                 canvas,
+//                 save,
+//                 loadFont,
+//                 undo,
+//                 redo,
+//                 canRedo,
+//                 canUndo,
+//                 autoZoom,
+//                 copy,
+//                 paste,
+//                 fillColor,
+//                 setFillColor,
+//                 strokeColor,
+//                 setStrokeColor,
+//                 strokeWidth,
+//                 setStrokeWidth,
+//                 strokeType,
+//                 setStrokeType,
+//                 opacity,
+//                 setOpacity,
+//                 selectedObjects,
+//                 font,
+//                 setFont,
+//                 blur,
+//                 setBlur,
+//                 fontWeight,
+//                 setFontWeight,
+//                 fontStyle,
+//                 setFontStyle,
+//                 underline,
+//                 setUnderline,
+//                 lineThrough,
+//                 setLineThrough,
+//                 textAlign,
+//                 setTextAlign,
+//                 fontSize,
+//                 setFontSize,
+//                 textShadow,
+//                 setTextShadow,
+//                 gradientType,
+//                 setGradientType,
+//                 gradientColor,
+//                 setGradientColor
+//             })
+//         }
+//         return undefined
+//     },[
+//         canvas,
+//         loadFont,
+//         save,
+//         undo,
+//         redo,
+//         canUndo,
+//         canRedo,
+//         autoZoom,
+//         copy,
+//         paste,
+//         fillColor,
+//         strokeColor,
+//         strokeWidth,
+//         strokeType,
+//         selectedObjects,
+//         opacity,
+//         font, 
+//         fontWeight,
+//         fontStyle,
+//         underline,
+//         lineThrough,
+//         textAlign,
+//         textShadow,
+//         gradientColor,
+//         gradientType
+//     ])
+
+    
+
+//     const init = useCallback(({
+//         initialCanvas,
+//         initialContainer
+//     }:{
+//         initialCanvas:fabric.Canvas,
+//         initialContainer:HTMLDivElement
+//     })=>{
+//         fabric.Object.prototype.set({
+//             cornerColor: "#FFF",
+//             cornerStyle:"circle",
+//             cornerSize:5.5,
+//             borderColor:"#3b82f6",
+//             borderScaleFactor:1.5,
+//             transparentCorners: false,
+//             borderOpacityWhenMoving:1,
+//             cornerStrokeColor:"#3b82f6", 
+//         })
+
+//         const initialWorkspace = new fabric.Rect({
+//             width: initialWidth.current,
+//             height: initialHeight.current,
+//             name: "clip",
+//             fill: "white",
+//             selectable: false,
+//             hasControls: false,
+//             shadow: new fabric.Shadow({
+//                 color: "rgba(0,0,0,0.8)",
+//                 blur: 5,
+//             })
+//         })
+//         initialCanvas.setWidth(initialContainer.offsetWidth)
+//         initialCanvas.setHeight(initialContainer.offsetHeight)
+//         initialCanvas.add(initialWorkspace)
+//         initialCanvas.centerObject(initialWorkspace)
+//         initialCanvas.clipPath = initialWorkspace 
+
+//         setCanvas(initialCanvas)
+//         setContainer(initialContainer)
+
+//         const currentState = JSON.stringify(initialCanvas.toJSON(KEYS))
+//         canvasHistory.current = [currentState]
+//         setHistoryIndex(0)
+
+//     },[
+//         setHistoryIndex,
+//         canvasHistory
+//     ])
+//     return{init, editor, loadFont}
+// }  
+
+
+export const useEditor = ({
+  defaultState,
+  defaultHeight,
+  defaultWidth,
+  clearSelectionCallback,
+  saveCallback
+}: EditorHookProps) => {
+  const initialState = useRef(defaultState);
+  const initialHeight = useRef(defaultHeight);
+  const initialWidth = useRef(defaultWidth);
+
+  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
+  const [fillColor, setFillColor] = useState("#000000");
+  const [strokeColor, setStrokeColor] = useState("#000000");
+  const [strokeWidth, setStrokeWidth] = useState(5);
+  const [strokeType, setStrokeType] = useState<number[]>([]);
+  const [opacity, setOpacity] = useState<number>(1);
+  const [font, setFont] = useState("Arial");
+  const [fontWeight, setFontWeight] = useState(700);
+  const [fontStyle, setFontStyle] = useState("normal");
+  const [underline, setUnderline] = useState(false);
+  const [lineThrough, setLineThrough] = useState(false);
+  const [textAlign, setTextAlign] = useState("left");
+  const [fontSize, setFontSize] = useState(32);
+  const [blur, setBlur] = useState(0);
+  const [textShadow, setTextShadow] = useState("white");
+  const [fontsLoaded, setFontsLoaded] = useState<FontsLoaded>({});
+  const [gradientType, setGradientType] = useState("linear");
+  const [gradientColor, setGradientColor] = useState(["#E77777", "#77E77F", "#778DE7"]);
+
+  const {
+    save,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    setActivePage,
+    canvasHistoryMap,
+    historyIndexMap,
+    setHistoryIndexMap,
+    activePageIndex
+  } = useHistory({ canvas, saveCallback });
+
+  const { copy, paste } = useClipboard({ canvas });
+  const { autoZoom } = useAutoResizer({ canvas, container });
+
+  useWindowEvents();
+  useCanvasEvents({ canvas, setSelectedObjects, save, clearSelectionCallback });
+  useShortcutKeys({ canvas, undo, redo, save, copy, paste });
+
+  useLoadState({
+    canvas,
+    autoZoom,
+    initialState,
+    canvasHistoryMap,
+    setHistoryIndexMap,
+    activePageIndex,
+  });
+
+  const loadFont = (fontFamily: string) => {
+    if (fontsLoaded[fontFamily]) return;
+
+    const fontUrl = `/fonts/${fontFamily}/${fontFamily}.ttf`;
+    const font = new FontFace(fontFamily, `url(${fontUrl})`, {
+      style: "normal",
+      weight: "normal",
+    });
+
+    font
+      .load()
+      .then(() => {
+        document.fonts.add(font);
+        setFontsLoaded((prev) => ({ ...prev, [fontFamily]: true }));
+      })
+      .catch((error) => {
+        console.error(`Error loading font ${fontFamily}:`, error);
+      });
+  };
+
+  const editor = useMemo(() => {
+    if (canvas) {
+      return buildEditor({
         canvas,
-        loadFont,
         save,
+        loadFont,
         undo,
         redo,
-        canUndo,
         canRedo,
+        canUndo,
         autoZoom,
         copy,
         paste,
         fillColor,
+        setFillColor,
         strokeColor,
+        setStrokeColor,
         strokeWidth,
+        setStrokeWidth,
         strokeType,
-        selectedObjects,
+        setStrokeType,
         opacity,
-        font, 
+        setOpacity,
+        selectedObjects,
+        font,
+        setFont,
+        blur,
+        setBlur,
         fontWeight,
+        setFontWeight,
         fontStyle,
+        setFontStyle,
         underline,
+        setUnderline,
         lineThrough,
+        setLineThrough,
         textAlign,
+        setTextAlign,
+        fontSize,
+        setFontSize,
         textShadow,
+        setTextShadow,
+        gradientType,
+        setGradientType,
         gradientColor,
-        gradientType
-    ])
+        setGradientColor,
+      });
+    }
+    return undefined;
+  }, [
+    canvas,
+    loadFont,
+    save,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+    autoZoom,
+    copy,
+    paste,
+    fillColor,
+    strokeColor,
+    strokeWidth,
+    strokeType,
+    selectedObjects,
+    opacity,
+    font,
+    fontWeight,
+    fontStyle,
+    underline,
+    lineThrough,
+    textAlign,
+    fontSize,
+    textShadow,
+    gradientColor,
+    gradientType,
+  ]);
 
-    
+  const init = useCallback(
+    ({
+      initialCanvas,
+      initialContainer
+    }: {
+      initialCanvas: fabric.Canvas;
+      initialContainer: HTMLDivElement;
+    }) => {
+      fabric.Object.prototype.set({
+        cornerColor: "#FFF",
+        cornerStyle: "circle",
+        cornerSize: 5.5,
+        borderColor: "#3b82f6",
+        borderScaleFactor: 1.5,
+        transparentCorners: false,
+        borderOpacityWhenMoving: 1,
+        cornerStrokeColor: "#3b82f6",
+      });
 
-    const init = useCallback(({
-        initialCanvas,
-        initialContainer
-    }:{
-        initialCanvas:fabric.Canvas,
-        initialContainer:HTMLDivElement
-    })=>{
-        fabric.Object.prototype.set({
-            cornerColor: "#FFF",
-            cornerStyle:"circle",
-            cornerSize:5.5,
-            borderColor:"#3b82f6",
-            borderScaleFactor:1.5,
-            transparentCorners: false,
-            borderOpacityWhenMoving:1,
-            cornerStrokeColor:"#3b82f6", 
-        })
+      const initialWorkspace = new fabric.Rect({
+        width: initialWidth.current,
+        height: initialHeight.current,
+        name: "clip",
+        fill: "white",
+        selectable: false,
+        hasControls: false,
+        shadow: new fabric.Shadow({
+          color: "rgba(0,0,0,0.8)",
+          blur: 5,
+        }),
+      });
 
-        const initialWorkspace = new fabric.Rect({
-            width: initialWidth.current,
-            height: initialHeight.current,
-            name: "clip",
-            fill: "white",
-            selectable: false,
-            hasControls: false,
-            shadow: new fabric.Shadow({
-                color: "rgba(0,0,0,0.8)",
-                blur: 5,
-            })
-        })
-        initialCanvas.setWidth(initialContainer.offsetWidth)
-        initialCanvas.setHeight(initialContainer.offsetHeight)
-        initialCanvas.add(initialWorkspace)
-        initialCanvas.centerObject(initialWorkspace)
-        initialCanvas.clipPath = initialWorkspace 
+      initialCanvas.setWidth(initialContainer.offsetWidth);
+      initialCanvas.setHeight(initialContainer.offsetHeight);
+      initialCanvas.add(initialWorkspace);
+      initialCanvas.centerObject(initialWorkspace);
+      initialCanvas.clipPath = initialWorkspace;
 
-        setCanvas(initialCanvas)
-        setContainer(initialContainer)
+      setCanvas(initialCanvas);
+      setContainer(initialContainer);
 
-        const currentState = JSON.stringify(initialCanvas.toJSON(KEYS))
-        canvasHistory.current = [currentState]
-        setHistoryIndex(0)
+      const json = JSON.stringify(initialCanvas.toJSON(KEYS));
+      canvasHistoryMap.current[activePageIndex] = [json];
+      setHistoryIndexMap((prev) => ({ ...prev, [activePageIndex]: 0 }));
+    },
+    [setHistoryIndexMap, canvasHistoryMap, activePageIndex]
+  );
 
-    },[
-        setHistoryIndex,
-        canvasHistory
-    ])
-    return{init, editor, loadFont}
-}   
+  return { init, editor, loadFont, setActivePage };
+};
