@@ -14,14 +14,14 @@ import { useRouter } from "next/navigation"
 const Navbar = ()=>{
     const session = useSession();
     const router = useRouter();
-
+    console.log(session)
     if (session.status === "loading") {
     return <Loader className="size-4 animate-spin text-muted-foreground" />
     }
 
     return(
         <div>
-            <nav className="h-[58px]  flex items-center justify-between pr-5 ">
+            <div className="h-[58px]  flex items-center justify-between pr-5 ">
                 <Logo />
                 {session.data ? (
                     <div className="mt-2 flex gap-3">
@@ -31,7 +31,7 @@ const Navbar = ()=>{
                                 side="bottom"
                             >
                                 <Button 
-                                    onClick={()=>"/"}
+                                    onClick={()=>router.push("/")}
                                     size="lg" 
                                     variant="ghost"
                                     className={`
@@ -80,14 +80,14 @@ const Navbar = ()=>{
                             <Button
                                 onClick={()=>router.push("/sign-up")}
                                 variant="purple"
-                                className="hover:cursor-pointer"
+                                className="cursor-pointer "
                             >
                                 Register
                             </Button>
                         </div>
                     </div>
                 )}
-            </nav>
+            </div>
         </div>
     )
 }

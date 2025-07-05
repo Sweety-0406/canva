@@ -91,6 +91,7 @@ export async function PATCH(
     }
 
     const { json, index } = parsedBody.data;
+    console.log(index)
 
     // Find existing projectJson row by projectId and index
     const existingEntry = await db.query.projectJsons.findFirst({

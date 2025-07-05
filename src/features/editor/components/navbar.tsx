@@ -163,22 +163,22 @@ const Navbar = ({
                 <Button 
                     variant="ghost" 
                     size={"sm"}
-                    disabled={!canUndo()}
-                    onClick={onUndo}
-                    // disabled={!editor?.canUndo()}
-                    // onClick={(()=>editor?.onUndo())}
+                    // disabled={!canUndo()}
+                    // onClick={onUndo}
+                    disabled={!editor?.canUndo()}
+                    onClick={(()=>editor?.onUndo())}
                 >
                     <Undo/>
                 </Button>
             </Hint>
             <Hint label="Redo" sideOffset={8}>
                 <Button
-                    variant="ghost" 
+                    variant="ghost"  
                     size={"sm"}
-                    disabled={!canRedo()}
-                    onClick={onRedo}
-                    // disabled={!editor?.canRedo()}
-                    // onClick={(()=>editor?.onRedo())}
+                    // disabled={!canRedo()}
+                    // onClick={onRedo}
+                    disabled={!editor?.canRedo()}
+                    onClick={(()=>editor?.onRedo())}
                 >
                     <Redo />
                 </Button>

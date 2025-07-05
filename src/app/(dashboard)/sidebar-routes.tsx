@@ -51,7 +51,7 @@ const SidebarRoutes = ()=>{
     return( 
         <div>
             <div className="block lg:hidden px-1 border-t">
-                <div className="my-2 ">
+                <div className="my-2 hover:text-white ">
                     <Hint
                         label="Start New Design"
                         side="right"
@@ -124,14 +124,14 @@ const SidebarRoutes = ()=>{
                 <ChatSection />
             </div>
             <div className="hidden lg:block">
-                <div className="px-2 ">
+                <div className="px-2 group ">
                     <Button
                         disabled={mutation.isPending}
                         onClick={onClickCreatHandler}
-                        className="flex text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
+                        className="flex text-white hover:text-white  w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
                         variant="outline"
                     >
-                        <div className="flex gap-2 hover:text-white"> <span><HiPlus /></span> Start new design</div>
+                        <div className="flex gap-2 group-hover:text-white"> <span><HiPlus /></span> Start new design</div>
                     </Button>
                 </div>
                 <div className="py-3">

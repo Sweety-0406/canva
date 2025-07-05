@@ -506,7 +506,6 @@ export const Editor = ({ initialData }: EditorProps) => {
       setActiveTool("select");
     }
   }, [activeTool]);
-  
   const { init, editor } = useEditor({
     defaultState: normalizedPageData.current[0].json,
     defaultWidth: initialData.width,
@@ -534,8 +533,10 @@ export const Editor = ({ initialData }: EditorProps) => {
         json: jsonArray,
         // height: editor?.getWorkspace()?.height || initialData.height,
         // width: editor?.getWorkspace()?.width || initialData.width,
-        height: editor?.canvas.getHeight() || initialData.height,
-        width: editor?.canvas.getWidth() || initialData.width,
+        // height: editor?.canvas.getHeight() || initialData.height,
+        // width: editor?.canvas.getWidth() || initialData.width,
+        height: initialData.height,
+        width: initialData.width,
         index:activeInd
       });
     }, 500),
@@ -552,11 +553,11 @@ export const Editor = ({ initialData }: EditorProps) => {
     save()
     const json = JSON.stringify(editor.canvas.toJSON(KEYS));
     pageDataRef.current[activeInd].json = JSON.stringify(json);
-    const updatedJsonData = await axios.patch(`/api/projects/${projectId}/addJson`,{json, index:activeInd+1})
-    if(!updatedJsonData){
-      toast.error("Something went wrong.")
-      return
-    }
+    // const updatedJsonData = await axios.patch(`/api/projects/${projectId}/addJson`,{json, index:activeInd+1})
+    // if(!updatedJsonData){
+    //   toast.error("Something went wrong.")
+    //   return
+    // }
     // Clear canvas
     editor.canvas.getObjects().forEach((obj) => {
       if (obj.name !== "clip") editor.canvas.remove(obj);
@@ -573,24 +574,24 @@ export const Editor = ({ initialData }: EditorProps) => {
     }
     pageDataRef.current.push(addedJsonData);
     setActiveInd(newInd-1);
-    // console.log(newInd-1)
+    console.log(newInd-1)
     setActivePage(newInd-1)
-    save()
+    // save()
     console.log("activePage", activePage)
 
   };
 
   const onClickPage = async(i: number) => {
     if (!editor || i === activeInd) return;
-    save()
+    await save()
     const currentJson = JSON.stringify(editor.canvas.toJSON(KEYS));
     pageDataRef.current[activeInd].json = JSON.stringify(currentJson);
-
-    const updatedJsonData = await axios.patch(`/api/projects/${projectId}/addJson`,{json:currentJson, index:activeInd+1})
-    if(!updatedJsonData){
-      toast.error("Something went wrong.")
-      return
-    }
+    // console.log("hiii", activeInd+1)
+    // const updatedJsonData = await axios.patch(`/api/projects/${projectId}/addJson`,{json:currentJson, index:activeInd+1})
+    // if(!updatedJsonData){
+    //   toast.error("Something went wrong.")
+    //   return
+    // }
 
     const targetJsonString = pageDataRef.current[i].json;
     if (targetJsonString) {
@@ -602,7 +603,7 @@ export const Editor = ({ initialData }: EditorProps) => {
       editor.loadFromJSON(targetJsonString);
       setActiveInd(i);
       setActivePage(i);
-      save()
+      // await save()
       console.log("activePage on change", activePage)
     }
   };

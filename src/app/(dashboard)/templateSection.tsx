@@ -82,7 +82,7 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
         ) : (
           <div className="text-xl font-semibold mt-4 mb-4">What&apos;s new</div>
         )}
-        <ErrorPage />;
+        <ErrorPage isShow={false}/>
       </div>
     );
   }
