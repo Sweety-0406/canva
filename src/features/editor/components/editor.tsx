@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor } from "../hooks/useEditor";
 import { fabric } from "fabric";
 import { debounce } from "lodash";
+import { FloatingDock } from "@/components/ui/floating-dock";
 
 import SideBar from "./sideBar";
 import Navbar from "./navbar";
@@ -41,7 +42,7 @@ import { projectJson } from "../types";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-
+import {PageBar} from "./pageBar";
 
 interface EditorProps {
   initialData: projectType;
@@ -260,8 +261,8 @@ const addPage = async () => {
           <div className="flex-1 overflow-y-hidden h-full bg-muted" ref={containerRef}>
             <canvas ref={canvasRef} />
           </div>
-          <div className="flex justify-center -mt-4 mb-4">
-            <div className="max-w-72 rounded-full overflow-x-auto scrollbar-hide">
+          <div className="flex justify-center -mt-4 ">
+            {/* <div className="max-w-72 rounded-full overflow-x-auto scrollbar-hide">
               <div className="flex  rounded-full gap-2 px-2 py-1 w-fit whitespace-nowrap">
                 {pageDataRef.current.map((_, i) => (
                   <div
@@ -270,17 +271,26 @@ const addPage = async () => {
                     className={`h-8 w-8 bg-white hover:border cursor-pointer flex justify-center items-center rounded-sm ${activeInd === i ? "border border-[#8B3DFF] shadow" : ""
                       }`}
                   >
-                    {i + 1}
+                    {i + 1} 
                   </div>
                 ))}
               </div>
+            </div> */}
+            <div className="">
+              <PageBar 
+                pageData={pageDataRef.current} 
+                activeInd={activeInd} 
+                onClickPage={onClickPage} 
+              />
             </div>
+          </div>
+          <div className="flex justify-center mb-2">
             <Button
               disabled={isLoading}
-              className="rounded-full mt-1 h-8 w-8 flex justify-center items-center bg-[#8B3DFF] hover:bg-[#7731d8]"
+              className="rounded-md mt-1 h-10 w-72 flex font-bold text-lg justify-center items-center bg-[#8B3DFF] hover:bg-[#7731d8]"
               onClick={addPage}
             >
-              <FaPlus className="text-white" />
+              Add Page <FaPlus className="text-white" />
             </Button>
           </div>
           <Footer editor={editor} />
