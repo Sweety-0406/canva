@@ -94,7 +94,7 @@ const Toolbar=({
                     transition={{ duration: 0.6, ease: "easeOut" }}
                     className="bg-white z-50 absolute rounded-2xl  shadow-lg flex gap-2 border-b p-1 h-10"
                 >
-                    {!(selectedObjectType==="line"  || selectedObjectType==="image"|| selectedObjectType==="svg") && (
+                    {!(selectedObjectType==="line"  || selectedObjectType==="image") && (
                         <div className="flex items-center  h-full my-auto">
                             <Hint 
                                 label="Fill Color"
