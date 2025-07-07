@@ -59,9 +59,9 @@ export function PageBar({ pageData, activeInd, onClickPage }: PageBarProps) {
             {i + 1}
         </div>
     ),
-    onClick: () => onClickPage(i),  // Correctly pass index
+    onClick: () => onClickPage(i), 
   }));
-
+ 
   return (
     <FloatingPage
       mobileClassName="translate-y-20"
