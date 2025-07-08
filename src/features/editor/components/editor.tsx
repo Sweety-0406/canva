@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useEditor } from "../hooks/useEditor";
 import { fabric } from "fabric";
 import { debounce } from "lodash";
-import { FloatingDock } from "@/components/ui/floating-dock";
 
 import SideBar from "./sideBar";
 import Navbar from "./navbar";
@@ -53,6 +52,8 @@ export const Editor = ({ initialData }: EditorProps) => {
   const [isPrivate, setIsPrivate] = useState(initialData.isPrivate);
   const [fileName, setFileName] = useState(initialData.name);
   const [isLoading, setIsLoading] = useState(false)
+  const[isDelete, setIsDelete] = useState(false)
+  const [isPending, startTransition] = useTransition();
 
   // Normalize json data into array of strings
   const normalizedPageData = useRef<projectJson[]>(
@@ -63,7 +64,7 @@ export const Editor = ({ initialData }: EditorProps) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const [activeInd, setActiveInd] = useState<number>(0);
 
-
+  console.log("normalizedPageData",normalizedPageData)
 
   const { mutate } = useUpdateProject(projectId);
 
@@ -72,7 +73,10 @@ export const Editor = ({ initialData }: EditorProps) => {
       setActiveTool("select");
     }
   }, [activeTool]);
-  const { init, editor, save,
+  const { 
+    init, 
+    editor, 
+    save,
     undo,
     redo,
     canRedo,
@@ -83,6 +87,7 @@ export const Editor = ({ initialData }: EditorProps) => {
       defaultHeight: initialData.height,
       clearSelectionCallback: onClearSelection,
       saveCallback: () => debouncedSave(pageDataRef.current[activeInd].json),
+      initialPageId: normalizedPageData.current[0].id,
     });
 
 
@@ -105,74 +110,73 @@ export const Editor = ({ initialData }: EditorProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
 
-const addPage = async () => {
-  if (!editor) return;
+  const addPage = async () => {
+    if (!editor) return;
 
-  setIsLoading(true);
-  await save();
-  const currentJson = JSON.stringify(editor.canvas.toJSON(KEYS));
-  pageDataRef.current[activeInd].json = currentJson;
-
-
-  const clipObject = editor.canvas.getObjects().find((obj) => obj.name === "clip");
-  if (!clipObject) {
-    toast.error("Workspace (clip) not found");
-    return;
-  }
+    setIsLoading(true);
+    await save();
+    const currentJson = JSON.stringify(editor.canvas.toJSON(KEYS));
+    pageDataRef.current[activeInd].json = currentJson;
 
 
-  const blankWithClipJson = JSON.stringify({
-    version: "5.3.0",
-    objects: [clipObject.toObject(['name'])],
-  });
+    const clipObject = editor.canvas.getObjects().find((obj) => obj.name === "clip");
+    if (!clipObject) {
+      toast.error("Workspace (clip) not found");
+      return;
+    }
 
 
-  const newInd = pageDataRef.current.length + 1;
-  const addedJsonData: projectJson = await axios.post(
-    `/api/projects/${projectId}/addJson`,
-    { json: blankWithClipJson, index: newInd }
-  );
-
-  if (!addedJsonData) {
-    toast.error("Something went wrong.");
-    return;
-  }
+    const blankWithClipJson = JSON.stringify({
+      version: "5.3.0",
+      objects: [clipObject.toObject(['name'])],
+    });
 
 
-  pageDataRef.current.push(addedJsonData);
-  setActiveInd(newInd - 1);
-  setActivePage(newInd - 1);
+    const newInd = pageDataRef.current.length + 1;
+    const addedJsonData= await axios.post(
+      `/api/projects/${projectId}/addJson`,
+      { json: blankWithClipJson, index: newInd }
+    );
 
-  editor.canvas.off("object:removed");
-  editor.canvas.off("object:added");
-  editor.canvas.off("object:modified");
+    if (!addedJsonData) {
+      toast.error("Something went wrong.");
+      return;
+    }
 
-  editor.canvas.getObjects().forEach((obj) => {
-    if (obj.name !== "clip") editor.canvas.remove(obj);
-  });
-  editor.canvas.renderAll();
+    console.log("added new page:", addedJsonData.data.data.id)
+    pageDataRef.current.push(addedJsonData.data.data);
+    setActiveInd(newInd - 1);
+    setActivePage(newInd - 1, addedJsonData.data.data.id);
 
-  await save();
+    editor.canvas.off("object:removed");
+    editor.canvas.off("object:added");
+    editor.canvas.off("object:modified");
 
-  editor.canvas.on("object:removed", () => save());
-  editor.canvas.on("object:added", () => save());
-  editor.canvas.on("object:modified", () => save());
-  setIsLoading(false);
-};
+    editor.canvas.getObjects().forEach((obj) => {
+      if (obj.name !== "clip") editor.canvas.remove(obj);
+    });
+    editor.canvas.renderAll();
 
+    await save();
 
+    editor.canvas.on("object:removed", () => save());
+    editor.canvas.on("object:added", () => save());
+    editor.canvas.on("object:modified", () => save());
+    setIsLoading(false);
+  };
 
-  const onClickPage = async (i: number) => {
+  const onClickPage = async (i: number, id:string) => {
+    console.log(i)
     if (!editor || i === activeInd) return;
     await save()
     const currentJson = JSON.stringify(editor.canvas.toJSON(KEYS));
     pageDataRef.current[activeInd].json = JSON.stringify(currentJson);
-
+    console.log(i)
     const targetJsonString = pageDataRef.current[i].json;
 
     if (targetJsonString) {
       setActiveInd(i);
-      setActivePage(i);
+      setActivePage(i,id);
       editor.canvas.off("object:removed");
       editor.canvas.off("object:added");
       editor.canvas.off("object:modified");      
@@ -185,6 +189,52 @@ const addPage = async () => {
       editor.canvas.on("object:modified", () => save());
     }
   };
+
+
+  const deletePage = async (index: number) => {
+    if (pageDataRef.current.length <= 1) {
+      toast.error("At least one page must be present.");
+      return;
+    }
+    const confirmDelete = confirm(`Are you sure you want to delete page ${index+1 }?`);
+    if (!confirmDelete) return;
+    setIsDelete(true)
+    try {
+      
+      await axios.delete(`/api/projects/${projectId}/deleteJson`, {
+        data: { pageId: pageDataRef.current[index].id },
+      });
+
+      pageDataRef.current.splice(index, 1);
+
+      const newActiveInd = index === 0 ? 0 : index - 1;
+      const newJson = pageDataRef.current[newActiveInd]?.json;
+      startTransition(()=>{
+        setActiveInd(newActiveInd);
+        setActivePage(newActiveInd, pageDataRef.current[newActiveInd].id);
+  
+        if (newJson && editor) {
+          editor.canvas.off("object:removed");
+          editor.canvas.off("object:added");
+          editor.canvas.off("object:modified");
+  
+          editor.canvas.clear().renderAll();
+          editor.loadFromJSON(newJson);
+  
+          editor.canvas.on("object:removed", () => save());
+          editor.canvas.on("object:added", () => save());
+          editor.canvas.on("object:modified", () => save());
+        }
+      })
+
+      toast.success("Page deleted successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete page.");
+    }
+    setIsDelete(false)
+  };
+
 
   const onChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
@@ -262,25 +312,13 @@ const addPage = async () => {
             <canvas ref={canvasRef} />
           </div>
           <div className="flex justify-center -mt-4 ">
-            {/* <div className="max-w-72 rounded-full overflow-x-auto scrollbar-hide">
-              <div className="flex  rounded-full gap-2 px-2 py-1 w-fit whitespace-nowrap">
-                {pageDataRef.current.map((_, i) => (
-                  <div
-                    key={i}
-                    onClick={() => onClickPage(i)}
-                    className={`h-8 w-8 bg-white hover:border cursor-pointer flex justify-center items-center rounded-sm ${activeInd === i ? "border border-[#8B3DFF] shadow" : ""
-                      }`}
-                  >
-                    {i + 1} 
-                  </div>
-                ))}
-              </div>
-            </div> */}
-            <div className="">
+            <div>
               <PageBar 
                 pageData={pageDataRef.current} 
                 activeInd={activeInd} 
                 onClickPage={onClickPage} 
+                pageDeleteHandler={deletePage}
+                isDelete = {isDelete}
               />
             </div>
           </div>
@@ -290,7 +328,7 @@ const addPage = async () => {
               className="rounded-md mt-1 h-10 w-72 flex font-bold text-lg justify-center items-center bg-[#8B3DFF] hover:bg-[#7731d8]"
               onClick={addPage}
             >
-              Add Page <FaPlus className="text-white" />
+              <FaPlus className="text-white" /> Add Page 
             </Button>
           </div>
           <Footer editor={editor} />

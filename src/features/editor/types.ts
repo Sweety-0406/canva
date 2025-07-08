@@ -159,7 +159,8 @@ export interface EditorHookProps{
         json: string,
         height: number,
         width: number
-    })=>void
+    })=>void,
+    initialPageId:string
 }
 export const selectionDependentTools = [
     "fill",
