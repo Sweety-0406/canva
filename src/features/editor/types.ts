@@ -122,6 +122,7 @@ export type ActiveTool =
     |"blur"
     |"flip-horizontally"
     |"flip-vertically"
+    |"offset"
 
 
 export const filters = [
@@ -182,6 +183,7 @@ export type buildEditorProps = {
     canRedo:()=>boolean,
     autoZoom:()=>void,
     copy:()=>void,
+    copyPage:()=>void,
     paste:()=>void,
     fillColor:string,
     setFillColor: (value: string)=>void
@@ -215,12 +217,16 @@ export type buildEditorProps = {
     gradientType: string,
     setGradientType: (value:string) => void
     gradientColor: string[],
-    setGradientColor: (value:string[]) => void
+    setGradientColor: (value:string[]) => void,
+    offsetX: number,
+    setOffsetX:(value: number)=>void,
+    offsetY: number,
+    setOffsetY:(value: number)=>void,
 }  
 
 export interface Editor{
     saveJson:()=>void,
-    savePdf:()=>void,
+    savePdf:(pages: projectJson[], canvasSize: { width: number; height: number })=>void,
     savePng:()=>void,
     saveJpg:()=>void,
     saveSvg:()=>void,
@@ -239,6 +245,7 @@ export interface Editor{
     enableDrawing:()=>void,
     disableDrawing:()=>void,
     onCopy:()=>void,
+    onCopyPage:()=>void,
     onPaste:()=>void,
     addImage:(value: string)=>void,
     addSVGImage:(url: string)=>void,
@@ -259,6 +266,8 @@ export interface Editor{
     changeLineThrough:(value: boolean)=>void,
     changeUnderline:(value: boolean)=>void,
     changeTextAlign:(value: string)=>void,
+    changeOffsetX:(value:number)=>void,
+    changeOffsetY:(value:number)=>void,
     changeFontSize:(value: number)=>void,
     changeBlur:(value: number)=>void,
     changeTextShadow:( color: string )=>void,
@@ -333,7 +342,9 @@ export interface Editor{
     blur: number,
     textShadow: string,
     gradientColor: string[],
-    gradientType: string
+    gradientType: string,
+    offsetX: number,
+    offsetY: number
     
 }
 

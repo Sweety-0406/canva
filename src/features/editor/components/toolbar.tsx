@@ -21,6 +21,7 @@ import BlurSidebar from "./blur-sidebar";
 import { PiFlipHorizontalFill,PiFlipVerticalFill  } from "react-icons/pi";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
 import TextAlignSidebar from "./text-align-sidebar";
+import OffsetSidebar from "./offset";
 
 interface  ToolBarProps{
     editor: Editor | undefined,
@@ -144,7 +145,7 @@ const Toolbar=({
                             </Button>
                         </Hint>
                     </div>
-                    {selectedObjectType === "textbox"  && (
+                    {/* {selectedObjectType === "textbox"  && ( */}
                         <div className="flex items-center  h-full my-auto">
                             <Hint 
                                 label="Shadow color"
@@ -167,7 +168,8 @@ const Toolbar=({
                                 </Button>
                             </Hint>
                         </div>
-                    )}
+                    {/* )} */}
+                    <OffsetSidebar onChangeActiveTool={onChangeActiveTool} editor={editor} activeTool={activeTool} />
                     {selectedObjectType === "textbox" && (
                         <div className="flex items-center  w-20 h-full my-auto">
                             <Hint 
@@ -300,37 +302,7 @@ const Toolbar=({
                         </div>
                     )}
                     {selectedObjectType === "textbox" && (
-                        <div className="flex items-center   h-full my-auto">
-                            {/* <Hint 
-                                label="Align"
-                                side="bottom"
-                                >
-                                <Button 
-                                    onClick={()=>onChangeActiveTool("textAlign")}
-                                    size="sm" 
-                                    variant="ghost"
-                                    className={`
-                                        items-center h-full rounded-sm hover:bg-muted flex justify-center p-1 px-2
-                                        ${activeTool==="textAlign"? "bg-[#a570ff33]":"bg-none"}
-                                    `}
-                                    
-                                >
-                                    {textAlign=="center" && (
-                                        <CiTextAlignCenter />
-                                    )}
-                                    {textAlign=="justify" && (
-                                        <CiTextAlignJustify />
-                                    )}
-                                    {textAlign=="left" && (
-                                        <CiTextAlignLeft />
-                                    )}
-                                    {textAlign=="right" && (
-                                        <CiTextAlignRight/>
-                                    )}
-                                </Button>
-                            </Hint> */}
-                            <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
-                        </div>
+                        <TextAlignSidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/>
                     )}
                     {!(selectedObjectType==="textbox"  )  && (
                         // <div className={`
@@ -355,10 +327,7 @@ const Toolbar=({
                         //         </Button>
                         //     </Hint>
                         // </div>
-                        <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="stroke-width"?"bg-[#a570ff33]":"bg-transparent"}`}>
-                        {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/> */}
-                            <StrokeWidthSidebar editor={editor} activeTool={activeTool} />
-                        </div>
+                        <StrokeWidthSidebar onChangeActiveTool={onChangeActiveTool} editor={editor} activeTool={activeTool} />
                     )}
                     {selectedObjectType==="image"  && (
                         <div className={`
@@ -499,10 +468,7 @@ const Toolbar=({
                             </Button>
                         </Hint>
                     </div>
-                    <div className={`flex items-center hover:bg-muted px-2 rounded-sm  h-full my-auto ${activeTool==="opacity"?"bg-[#a570ff33]":"bg-transparent"}`}>
-                        {/* <OpacitySidebar editor={editor} activeTool={activeTool} onChangeActiveTool={onChangeActiveTool}/> */}
-                        <OpacitySidebar editor={editor} activeTool={activeTool} />
-                    </div>
+                    <OpacitySidebar onChangeActiveTool={onChangeActiveTool} editor={editor} activeTool={activeTool} />
                     <div className="flex items-center  h-full my-auto">
                         <Hint 
                             label="copy style"

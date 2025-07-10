@@ -72,7 +72,7 @@ const FillColorSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
+            className="w-72  bg-gradient-to-r from-white/80 to-white border-r absolute z-40 h-full left-[74px]"
         >
         <ToolSidebarHeader onClose={onClose} title="Fill color" description="Add fill color to your element" />
         <ScrollArea className="flex-1 overflow-auto p-3 h-[84vh]">

@@ -28,8 +28,7 @@ const SettingSidebar = ({
     const[height,setHeight] = useState(initialHeight)
     const[background,setBackground] = useState(initialBackground)
     const [gradientColor, setGradientColor] = useState(editor?.gradientColor || ['#E77777', '#77E77F', '#778DE7'])
-    const [gradientType, setGradientType] = useState(editor?.gradientType || 'linear');
-    const [angle, setAngle] = useState<number>(90);
+
     
     useEffect(()=>{
         setWidth(initialWidth)
@@ -47,8 +46,6 @@ const SettingSidebar = ({
     }
     const onChangnGradientBackground = (value: string[], gradientType:string, angle: number)=>{
         setGradientColor(value)
-        setGradientType(gradientType)
-        setAngle(angle)
         editor?.changeGradientBackground(value, gradientType, angle)
     }
     
@@ -72,7 +69,7 @@ const SettingSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
+            className="w-72  bg-gradient-to-r from-white/80 to-white border-r absolute z-40 h-full left-[74px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Setting" description="Personalize your workspace " />
             <ScrollArea className="p-3 h-[84vh] ">

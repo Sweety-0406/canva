@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Project creation failed" }, { status: 500 });
     }
 
-    // Step 2: Insert JSON into `projectJsons`
+    
     await db.insert(projectJsons).values({
       projectId: project.id,
       json,

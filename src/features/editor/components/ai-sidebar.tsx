@@ -48,15 +48,11 @@ const AiSidebar = ({
 
   return (
     <motion.div
-      // className={cn(
-      //   "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-      //   activeTool === "ai" ? "visible" : "hidden",
-      // )}
       initial={{ opacity: 0, x: -240 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -240 }}
       transition={{ duration: 0.5 }}
-      className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
+      className="w-72  bg-gradient-to-r from-white/80 to-white border-r absolute z-40 h-full left-[74px]"
     >
       <ToolSidebarHeader
         onClose={onClose}

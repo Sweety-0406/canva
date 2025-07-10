@@ -12,7 +12,7 @@ interface FooterProps{
 
 const Footer=({editor}: FooterProps)=>{
     return(
-        <div className="bg-white gap-2 flex flex-row-reverse border-t h-10 px-2">
+        <div className="bg-muted gap-2 flex flex-row-reverse h-10 px-2">
             <Hint label="Reset" side="top" >
                 <Button
                     variant="ghost"

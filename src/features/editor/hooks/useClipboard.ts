@@ -18,6 +18,51 @@ export const useClipboard = ({ canvas }: useClipboardProps) => {
     }
   }, [canvas]);
 
+  const copyPage= useCallback(()=>{
+    if (!canvas) return;
+
+    // const canvas = canvas;
+    const clipObject = canvas.getObjects().find(obj => obj.name === "clip");
+
+    if (!clipObject) {
+    console.warn("Clip object not found");
+    return;
+    }
+
+    const clipBounds = clipObject.getBoundingRect();
+    const objectsInClip = canvas.getObjects().filter(obj => {
+    if (obj.name === "clip") return false;
+    const objBounds = obj.getBoundingRect();
+    return (
+        objBounds.left >= clipBounds.left &&
+        objBounds.top >= clipBounds.top &&
+        objBounds.left + objBounds.width <= clipBounds.left + clipBounds.width &&
+        objBounds.top + objBounds.height <= clipBounds.top + clipBounds.height
+    );
+    });
+
+    
+    canvas.discardActiveObject();
+    if (objectsInClip.length === 1) {
+    canvas.setActiveObject(objectsInClip[0]);
+    } else if (objectsInClip.length > 1) {
+    const group = new fabric.ActiveSelection(objectsInClip, { canvas });
+    canvas.setActiveObject(group);
+    }
+    canvas.requestRenderAll();
+
+    // Now trigger the copy
+    copy(); 
+  },[canvas])   
+  
+  const canPaste = ()=>{
+    if(clipboard.current){
+      return true;
+    }else{
+      return false
+    }
+  }
+
   const paste = useCallback(() => {
     if (!clipboard.current) return;
 
@@ -50,5 +95,5 @@ export const useClipboard = ({ canvas }: useClipboardProps) => {
     });
   }, [canvas]);
 
-  return { copy, paste };
+  return { copy, copyPage, paste, canPaste };
 };

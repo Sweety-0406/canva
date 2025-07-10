@@ -270,7 +270,7 @@ export const useHistory = ({ canvas, saveCallback,initialPageId }: useHistoryPro
       setHistoryIndexMap((prev) => ({ ...prev, [index]: -1 }));
     }
   };
-
+ 
   const canUndo = () => {
     const index = activePage.current;
     const currentHistoryIndex = historyIndexMap[index] ?? -1;

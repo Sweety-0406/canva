@@ -13,19 +13,17 @@ import { BsBorderWidth } from "react-icons/bs"
 interface StrokeWidthSidebarProps{
     editor: Editor | undefined,
     activeTool: ActiveTool,
-    // onChangeActiveTool: (tool:ActiveTool)=>void    
+    onChangeActiveTool: (tool:ActiveTool)=>void 
 }
 
 const StrokeWidthSidebar = ({
     editor,
     activeTool,
-    // onChangeActiveTool
+    onChangeActiveTool
 }:StrokeWidthSidebarProps)=>{
     const strokeWidthValue = editor?.strokeWidth || 5
     const strokeTypeValue = editor?.strokeType || []
-    // const onClose = ()=>{
-    //     onChangeActiveTool("select")
-    // }
+
 
     const onChangeStrokeWidth=(value:number)=>{
         editor?.changeStrokeWidth(value)
@@ -36,81 +34,83 @@ const StrokeWidthSidebar = ({
     }
 
     return(
-        // <div className="">
-            <DropdownMenu >
-                <DropdownMenuTrigger >
-                    <div className={`mt-2 ${activeTool==="stroke-width"?"bg-muted":"bg-transparent"}`}>
-                        <Hint 
-                            label="Stroke Width"
-                            side="bottom"
+        <DropdownMenu onOpenChange={(open) => {
+            if (open) {
+                onChangeActiveTool("stroke-width");
+            } else {
+                onChangeActiveTool("select");
+            }
+        }}>
+            <DropdownMenuTrigger asChild>
+                <div  className={`p-2 hover:bg-muted hover:cursor-pointer rounded-sm ${activeTool === "stroke-width" ? "bg-[#a570ff33]" : "bg-transparent border-none"}`}>
+                    <Hint 
+                        label="Stroke Width"
+                        side="bottom"
+                        sideOffset={10}
+                        >
+                        <BsBorderWidth   
+                            className="size-4 rounded-sm"
+                        /> 
+                    </Hint>
+                </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent asChild>
+                <motion.div 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.5 }}
+                    className="w-56 rounded-md bg-white shadow-md p-4 mt-4"
+                >
+                    <div className="flex  gap-2">
+                        <Button 
+                            onClick={()=>onChangeStrokeType([])}
+                            variant="secondary"
+                            className={`
+                                w-full
+                                ${JSON.stringify(strokeTypeValue) === '[]'? "border-2 border-[#8B3DFF]": "border-none"}
+                            `}
                             >
-                            <BsBorderWidth   
-                                className="size-4 -mt-1 rounded-sm"
-                            /> 
-                        </Hint>
+                            <div className="border-2 w-6 rounded-full border-black  " />
+                        </Button>
+                        <Button 
+                            onClick={()=>onChangeStrokeType([5,5])}
+                            variant="secondary"
+                            className={`
+                                w-full
+                                ${JSON.stringify(strokeTypeValue) === '[5,5]' ? "border-2 border-[#8B3DFF]": "border-none"}
+                            `}
+                        > 
+                            <div className="border-2 w-6 border-dashed rounded-full border-black  " />
+                        </Button>
+                        <Button 
+                            onClick={()=>onChangeStrokeType([10,10])}
+                            variant="secondary"
+                            className={`
+                                w-full
+                                ${JSON.stringify(strokeTypeValue) === '[10,10]' ? "border-2 border-[#8B3DFF]": "border-none"}
+                            `}
+                        >
+                            <div className="border-2 w-6 border-dashed rounded-full border-black " />
+                        </Button>
                     </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent asChild>
-                    <motion.div 
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        transition={{ duration: 0.5 }}
-                        className="w-56 rounded-md bg-white shadow-md p-4 mt-4"
-                    >
-                        {/* <ToolSidebarHeader onClose={onClose} title="Stroke Options" description="Modify the stroke of your element" /> */}
-                        {/* <ScrollArea > */}
-                            <div className="flex  gap-2">
-                                <Button 
-                                    onClick={()=>onChangeStrokeType([])}
-                                    variant="secondary"
-                                    className={`
-                                        w-full
-                                        ${JSON.stringify(strokeTypeValue) === '[]'? "border-2 border-[#8B3DFF]": "border-none"}
-                                    `}
-                                    >
-                                    <div className="border-2 w-6 rounded-full border-black  " />
-                                </Button>
-                                <Button 
-                                    onClick={()=>onChangeStrokeType([5,5])}
-                                    variant="secondary"
-                                    className={`
-                                        w-full
-                                        ${JSON.stringify(strokeTypeValue) === '[5,5]' ? "border-2 border-[#8B3DFF]": "border-none"}
-                                    `}
-                                > 
-                                    <div className="border-2 w-6 border-dashed rounded-full border-black  " />
-                                </Button>
-                                <Button 
-                                    onClick={()=>onChangeStrokeType([10,10])}
-                                    variant="secondary"
-                                    className={`
-                                        w-full
-                                        ${JSON.stringify(strokeTypeValue) === '[10,10]' ? "border-2 border-[#8B3DFF]": "border-none"}
-                                    `}
-                                >
-                                    <div className="border-2 w-6 border-dashed rounded-full border-black " />
-                                </Button>
-                            </div>
-                            <div className=" p-1">
-                                <div className="m-1 pb-2">
-                                    <Label>
-                                        Stroke weight
-                                    </Label>
-                                </div>
-                                <div className="m-1 pb-2  ">
-                                    <Slider 
-                                        onValueChange={(values)=>onChangeStrokeWidth(values[0])}
-                                        value={[strokeWidthValue]}
-                                    />
-                                </div>
-                            </div>
-                        {/* </ScrollArea> */}
-                    </motion.div>
-                </DropdownMenuContent>
+                    <div className=" p-1">
+                        <div className="m-1 pb-2">
+                            <Label>
+                                Stroke weight
+                            </Label>
+                        </div>
+                        <div className="m-1 pb-2  ">
+                            <Slider 
+                                onValueChange={(values)=>onChangeStrokeWidth(values[0])}
+                                value={[strokeWidthValue]}
+                            />
+                        </div>
+                    </div>
+                </motion.div>
+            </DropdownMenuContent>
 
-            </DropdownMenu>
-        // </div>
+        </DropdownMenu>
         
     )
 }

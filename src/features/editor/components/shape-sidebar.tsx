@@ -35,7 +35,7 @@ const ShapeSidebar = ({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -240 }}
             transition={{ duration: 0.5 }}
-            className="w-72 bg-white border-r absolute z-40 h-full left-[68px]"
+            className="w-72 bg-gradient-to-r from-white/80 to-white border-r absolute z-40 h-full left-[74px]"
         >
             <ToolSidebarHeader onClose={onClose} title="Shapes" description="Add shapes to your canvas" />
             <ScrollArea className="p-3 h-[84vh]">
@@ -74,18 +74,18 @@ const ShapeSidebar = ({
                         <ShapeTool imgUrl="/images/arrowBlockConcave.svg" onClick={()=>editor?.addArrowBlockConcave()}/>
                         <ShapeTool imgUrl="/images/arrowBlockConvex.svg" onClick={()=>editor?.addArrowBlockConvex()}/>
                         <ShapeTool imgUrl="/images/whiteOblongShape.svg" onClick={()=>editor?.addWhiteOblongShape()}/>
-                        <ShapeTool imgUrl="/images/squareSpeechBubble.svg" onClick={()=>editor?.addSquareSpeechBubble()}/>
-                        <ShapeTool imgUrl="/images/ovalSpeechBubble.svg" onClick={()=>editor?.addOvalSpeechBubble()}/>
+                        <ShapeTool imgUrl="/images/squareSpeechBubble.svg" onClick={()=>editor?.addSquareSpeechBubble()} iconClassName="rotate-180" />
+                        <ShapeTool imgUrl="/images/ovalSpeechBubble.svg" onClick={()=>editor?.addOvalSpeechBubble()} iconClassName="rotate-180" />
                         <ShapeTool imgUrl="/images/plusShape.svg" onClick={()=>editor?.addPlusShape()}/>
                         <ShapeTool imgUrl="/images/cloudShape.svg" onClick={()=>editor?.addCloudShape()}/>
-                        <ShapeTool imgUrl="/images/banner2.svg" onClick={()=>editor?.addBanner2()}/>
-                        <ShapeTool imgUrl="/images/banner3.svg" onClick={()=>editor?.addBanner3()}/>
+                        <ShapeTool imgUrl="/images/banner2.svg" onClick={()=>editor?.addBanner2()} iconClassName="rotate-180" />
+                        <ShapeTool imgUrl="/images/banner3.svg" onClick={()=>editor?.addBanner3()} iconClassName="rotate-180" />
                         <ShapeTool imgUrl="/images/banner4.svg" onClick={()=>editor?.addBanner4()}/>
                         <ShapeTool imgUrl="/images/banner5.svg" onClick={()=>editor?.addBanner5()}/>
                         <ShapeTool imgUrl="/images/banner6.svg" onClick={()=>editor?.addBanner6()}/>
                         <ShapeTool imgUrl="/images/parallelogramRight.svg" onClick={()=>editor?.addParallelogramRight()}/>
                         <ShapeTool imgUrl="/images/parallelogramLeft.svg" onClick={()=>editor?.addParallelogramLeft()}/>
-                        <ShapeTool imgUrl="/images/trapezoidalUp.svg" onClick={()=>editor?.addTrapezoidUp()}/>
+                        <ShapeTool imgUrl="/images/trapezoidalUp.svg" onClick={()=>editor?.addTrapezoidUp()} iconClassName="rotate-180" />
                         <ShapeTool imgUrl="/images/trapezoidalDown.svg" onClick={()=>editor?.addTrapezoidDown()}/>
                         <ShapeTool imgUrl="/images/archDown.svg" onClick={()=>editor?.addArchDown()}  iconClassName=" bg-white" />
                         <ShapeTool imgUrl="/images/archUp.svg" onClick={()=>editor?.addArchUp()}/>

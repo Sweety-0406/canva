@@ -93,25 +93,25 @@ function IconContainer({
 //   });
 
 const width = useSpring(useTransform(distance, [-150, 0, 150], [40, 55, 40]), {
-  mass: 0.8,
+  mass: 0.4,
   stiffness: 150,
   damping: 6,
 });
 
 const height = useSpring(useTransform(distance, [-150, 0, 150], [40, 55, 40]), {
-  mass: 0.8,
+  mass: 0.4,
   stiffness: 150,
   damping: 6,
 });
 
 const widthIcon = useSpring(useTransform(distance, [-150, 0, 150], [20, 28, 20]), {
-  mass: 0.8,
+  mass: 0.4,
   stiffness: 150,
   damping: 6,
 });
 
 const heightIcon = useSpring(useTransform(distance, [-150, 0, 150], [20, 28, 20]), {
-  mass: 0.8,
+  mass: 0.4,
   stiffness: 150,
   damping: 6,
 });

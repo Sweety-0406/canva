@@ -35,10 +35,10 @@ const Hint = ({
           side={side}
           align={align}
           sideOffset={sideOffset}
-          className={cn("bg-slate-800 text-white text-xs z-[200] capitalize px-2 py-1 rounded shadow", customClassName)}
+          className={cn("text-muted bg-[#171f25] text-xs z-[200] capitalize px-2 py-1 rounded shadow", customClassName)}
         >
           {label}
-          <TooltipArrow className="fill-slate-800" />
+          <TooltipArrow className="fill-[#171f25]" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -7,6 +7,7 @@ interface useShortcutKeys{
     redo: ()=> void,
     save: (skip?: boolean)=> void,
     copy: ()=> void,
+    copyPage:()=>void,
     paste: ()=> void,
 }
 
@@ -16,7 +17,8 @@ export const useShortcutKeys = ({
     redo,
     save,
     copy,
-    paste
+    copyPage,
+    paste,
 }:useShortcutKeys)=>{
     useEvent("keydown", (e)=>{
         const isCtrlKey = e.ctrlKey || e.metaKey
@@ -43,6 +45,10 @@ export const useShortcutKeys = ({
         if(isCtrlKey && e.key === "c"){
             e.preventDefault()
             copy()
+        }
+        if(isCtrlKey && e.key === "C"){
+            e.preventDefault()
+            copyPage()
         }
         if(isCtrlKey && e.key === "v"){
             e.preventDefault()
