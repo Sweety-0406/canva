@@ -13,15 +13,17 @@ export async function GET() {
     }
     
     const userId = session.user.id;
+    console.log(userId)
 
     const [subscription] = await db.select().from(subscriptions).where(
-        eq(subscriptions.userId, userId)
+      eq(subscriptions.userId, userId)
     )
     const active = checkIsActive(subscription)
+    console.log("subscription", subscription)
     return NextResponse.json({data: {...subscription, active}});
 
   } catch (error) {
-    console.error("Error fetching projects:", error);
+    console.error("Error: ", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

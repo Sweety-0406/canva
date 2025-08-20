@@ -20,10 +20,10 @@ export async function GET(
             return NextResponse.json({ error: "Project ID required." }, { status: 400 });
         }
 
-        const conditions = [
-            eq(projects.id, projectId),
-            eq(projects.userId, userId)
-        ].filter(Boolean);
+        // const conditions = [
+        //     eq(projects.id, projectId),
+        //     eq(projects.userId, userId)
+        // ].filter(Boolean);
 
         // const data = await db.select().from(projects).where(
         //     conditions.length > 0 ? and(...conditions) : sql`1 = 1`

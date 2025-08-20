@@ -4,12 +4,9 @@ import { ActiveTool, Editor } from "../types";
 import { Button } from "@/components/ui/button";
 import Hint from "./hint";
 import { AiOutlineAlibaba } from "react-icons/ai";
-import { BsBorderWidth } from "react-icons/bs";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown  } from "react-icons/io";
 import { RiBrushAiFill } from "react-icons/ri";
-// import { isTextType } from "../utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa6";
-import { CiTextAlignCenter, CiTextAlignJustify, CiTextAlignLeft, CiTextAlignRight  } from "react-icons/ci";
 import OpacitySidebar from "./opacity-sidebar";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { RiColorFilterAiLine } from "react-icons/ri";
@@ -43,10 +40,6 @@ const Toolbar=({
     const strokeColor = editor?.selectedObjects[0].stroke
     const fillColor = editor?.selectedObjects[0].fill
     const font = editor?.font
-    const f = editor?.selectedObjects
-    // const shadowColor = typeof fillColor === "string" ? fillColor : "black"
-   
-
 
     //@ts-expect-error typescript error
     const fontWeight = editor?.selectedObjects[0].get("fontWeight")
@@ -57,14 +50,9 @@ const Toolbar=({
     //@ts-expect-error typescript error
     const lineThrough = editor?.selectedObjects[0].get("linethrough")
     //@ts-expect-error typescript error
-    const textAlign = editor?.selectedObjects[0].get("textAlign")
-    //@ts-expect-error typescript error
     const fontSize = editor?.selectedObjects[0].get("fontSize")
-    // const textShadow = editor?.selectedObjects[0].get("shadow")
 
-    const selectedObject = editor?.selectedObjects[0]
     const selectedObjectType = editor?.selectedObjects[0].type;
-    // const isTextTypeObject = isTextType(selectedObjectType) 
     console.log( editor?.selectedObjects[0])
 
     const flipImageHorizontally = () => {

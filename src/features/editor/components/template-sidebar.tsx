@@ -4,7 +4,6 @@ import { ActiveTool, Editor, projectType } from "../types"
 import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-import Loader from "@/features/editor/components/loader"
 import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
 import { useGetTemplates } from "../hooks/useGetTemplates";
@@ -32,7 +31,7 @@ const TemplateSidebar = ({
             paywall.triggerPaywall()
             return;
         }
-        editor?.loadFromJSON(template.json)
+        editor?.loadFromJSON(template.jsons[0].json)
     }
     return(
         <motion.div 

@@ -30,15 +30,15 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
   const [filteredData, setFilteredData] = useState<projectType[]>([]);
 
   const onClick = (template: templateType["data"][0]) => {
+    console.log(data)
     if (template.isPro && paywall.shouldBlock) {
       paywall.triggerPaywall();
       return;
     }
-
     mutation.mutate(
       {
-        name: `${template.name} project`,
-        json: template.json,
+        name: `${template.name} copy`,
+        json: template.jsons[0].json,
         width: template.width,
         height: template.height,
       },
@@ -107,7 +107,7 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
         </>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 pb-4 mt-4 gap-4">
         {templatesToRender.map((template: projectType) => (
           <TemplateCard
             key={template.id}

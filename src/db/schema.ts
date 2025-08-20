@@ -6,8 +6,6 @@ import {
     text,
     primaryKey,
     integer,
-    PgColumn,
-    PgTableWithColumns,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccountType } from "next-auth/adapters"   
 import {createInsertSchema} from "drizzle-zod"

@@ -5,7 +5,6 @@ import ToolSidebarHeader from "./tool-sidebar-header"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { useImages } from "@/app/api/getImages";
-import Loader from "@/features/editor/components/loader"
 import { LuTriangleAlert } from "react-icons/lu";
 import Image from "next/image";
 import Link from "next/link";

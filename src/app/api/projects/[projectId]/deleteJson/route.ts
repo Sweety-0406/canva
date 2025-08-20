@@ -6,7 +6,8 @@ import { eq, and } from "drizzle-orm";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
+  // { params }: { params: { projectId: string } }
 ) {
   try {
     const session = await auth();
@@ -14,7 +15,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const userId = session.user.id;
+    // const userId = session.user.id;
     const { projectId } = await params;
 
     if (!projectId) {
@@ -28,7 +29,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Page ID required" }, { status: 400 });
     }
 
-    const deleted = await db
+    await db
       .delete(projectJsons)
       .where(and(eq(projectJsons.id, pageId), eq(projectJsons.projectId, projectId)));
 

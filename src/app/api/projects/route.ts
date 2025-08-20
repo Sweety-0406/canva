@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { projectJsons, projects, projectsInsetSchema } from "@/db/schema";
+import { projectJsons, projects } from "@/db/schema";
 import { db } from "@/db/drizzle";
 import { eq , desc, and} from "drizzle-orm";
 import { z } from "zod";

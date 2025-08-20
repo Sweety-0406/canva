@@ -156,6 +156,7 @@ const buildEditor =({
             parsedJson = JSON.parse(page.json);
         } catch (err) {
             console.error("Invalid JSON at index:", i);
+            console.error("Error:", err);
             continue;
         }
 
@@ -2009,7 +2010,6 @@ export const useEditor = ({
     canRedo,
     setActivePage,
     canvasHistoryMap,
-    historyIndexMap,
     setHistoryIndexMap,
     activePageIndex,
   } = useHistory({ canvas, saveCallback,initialPageId });

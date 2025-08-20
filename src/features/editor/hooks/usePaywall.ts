@@ -1,6 +1,7 @@
 import { useGetSubscription } from "./useGetSubscription";
 import useSubscriptionModal from "./useSubscriptions"
 
+type PayType = "monthly" | "yearly";
 
 const usePaywall = ()=>{
     const{data: subscription, isLoading: isLoadingSubscription} = useGetSubscription()
@@ -9,8 +10,8 @@ const usePaywall = ()=>{
     return{
         isLoading: isLoadingSubscription,
         shouldBlock,
-        triggerPaywall:()=>{
-            subscriptionModal.onOpen()
+        triggerPaywall:(pay: PayType = "monthly")=>{
+            subscriptionModal.onOpen(pay)
         }
     }
 }

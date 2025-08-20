@@ -1,17 +1,19 @@
 import { auth } from "@/auth";
 import { stripe } from "@/lib/stripe";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 
 
-export async function POST() {
+export async function POST(req: NextRequest) {
     try {
         const authSession = await auth()
+        const { pay } = await req.json();
         if(!authSession?.user || !authSession?.user?.id || !authSession?.user?.email) {
             return NextResponse.json({error:"Unathorized"},{status: 401})
         }
         const userId = authSession.user.id
         const email = authSession.user.email
+        const priceId = pay === "yearly" ? process.env.STRIPE_PRICE_ID_YEARLY : process.env.STRIPE_PRICE_ID_MONTHLY;
         const session = await stripe.checkout.sessions.create({
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}?success=1`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}?canceled=1`,
@@ -21,7 +23,7 @@ export async function POST() {
             customer_email: email,
             line_items: [
                 {
-                    price: process.env.STRIPE_PRICE_ID,
+                    price: priceId,
                     quantity: 1,
                 }
             ],

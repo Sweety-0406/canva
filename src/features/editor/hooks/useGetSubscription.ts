@@ -7,6 +7,7 @@ export const useGetSubscription = () => {
     queryFn: async () => {
       try {
         const response = await axios.get("/api/subscription/current");
+        console.log(response)
         return response.data.data;
       } catch{
         throw new Error("Something went wrong");

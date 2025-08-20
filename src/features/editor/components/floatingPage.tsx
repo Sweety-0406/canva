@@ -1,4 +1,6 @@
+
 import { cn } from "@/lib/utils";
+import { MotionValue } from "motion/react";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "motion/react";
 import { useRef, useState } from "react";
 
@@ -29,7 +31,7 @@ const FloatingDockDesktop = ({
     <motion.div
       onMouseEnter={() => setHovered(true)}
       onMouseMove={(e) => mouseX.set(e.pageX)}
-      onMouseLeave={() => {mouseX.set(Infinity), setHovered(false)}}
+      onMouseLeave={() => {mouseX.set(Infinity); setHovered(false);}}
       className={cn(
         "flex gap-2", 
         hovered ? "w-full":"max-w-72 overflow-hidden  p-1",
@@ -56,41 +58,17 @@ function IconContainer({
   icon,
   onClick,
 }: {
-  mouseX: any;
+  mouseX: MotionValue<number>;
   title: string;
   icon: React.ReactNode;
   onClick: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const distance = useTransform(mouseX, (val:any) => {
+  const distance = useTransform(mouseX, (val:number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return val - bounds.x - bounds.width / 2; 
   });
-
-//   const width = useSpring(useTransform(distance, [-150, 0, 150], [40, 80, 40]), {
-//     mass: 0.1,
-//     stiffness: 150,
-//     damping: 12,
-//   });
-
-//   const height = useSpring(useTransform(distance, [-150, 0, 150], [40, 80, 40]), {
-//     mass: 0.1,
-//     stiffness: 150,
-//     damping: 12,
-//   });
-
-//   const widthIcon = useSpring(useTransform(distance, [-150, 0, 150], [20, 40, 20]), {
-//     mass: 0.1,
-//     stiffness: 150,
-//     damping: 12,
-//   });
-
-//   const heightIcon = useSpring(useTransform(distance, [-150, 0, 150], [20, 40, 20]), {
-//     mass: 0.1,
-//     stiffness: 150,
-//     damping: 12,
-//   });
 
 const width = useSpring(useTransform(distance, [-150, 0, 150], [40, 55, 40]), {
   mass: 0.4,

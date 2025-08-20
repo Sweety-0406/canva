@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import Hint from "./hint"
-import { RxTransparencyGrid } from "react-icons/rx"
 import { BsBorderWidth } from "react-icons/bs"
 
 interface StrokeWidthSidebarProps{

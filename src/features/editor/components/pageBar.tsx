@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { FloatingPage } from "./floatingPage";
 import { projectJson } from "../types";
 import { RxCross2 } from "react-icons/rx";
+
 
 interface PageBarProps {
   pageData: projectJson[];

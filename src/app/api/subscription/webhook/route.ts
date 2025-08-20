@@ -19,9 +19,10 @@ export async function POST(req : Request) {
             process.env.STRIPE_WEBHOOK_SECRET!
         )
     } catch (error) {
+        console.log(error)
         return NextResponse.json({error: "Invalid signature"}, {status:400})
     }
-        
+
     const session = event.data.object as Stripe.Checkout.Session;
     if (event.type === "checkout.session.completed") {
         const subscription = await stripe.subscriptions.retrieve(
@@ -57,7 +58,7 @@ export async function POST(req : Request) {
             return NextResponse.json({ error: "Invalid session" }, {status: 400});
         }
 
-        await db
+        const res = await db
             .update(subscriptions)
             .set({
                 status: subscription.status,
@@ -67,6 +68,8 @@ export async function POST(req : Request) {
                 updatedAt: new Date(),
             })
             .where(eq(subscriptions.id, subscription.id))
+
+        console.log("res", res)    
     } 
 
     return NextResponse.json({status: 200})

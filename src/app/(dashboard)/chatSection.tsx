@@ -1,11 +1,10 @@
-// components/ChatWidget.tsx
+
 
 "use client"
 
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Send } from "lucide-react"
-import axios from "axios"
 import { FaQuestion } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
@@ -15,6 +14,26 @@ const ChatSection = () => {
   const [input, setInput] = useState("")
   const bottomRef = useRef<HTMLDivElement | null>(null)
 
+  // const sendMessage = async () => {
+  //   if (!input.trim()) return
+  //   const newMessages = [...messages, { role: "user", content: input }]
+  //   setMessages(newMessages)
+  //   setInput("")
+
+  //   try {
+  //     const res = await axios.post("/api/chat", {
+  //       messages: newMessages,
+  //     })
+
+  //     const assistantMessage = res.data?.choices?.[0]?.message
+  //     if (assistantMessage?.content) {
+  //       setMessages([...newMessages, assistantMessage])
+  //     }
+  //   } catch (err) {
+  //     console.error("Chat error:", err)
+  //   }
+  // }
+
   const sendMessage = async () => {
     if (!input.trim()) return
     const newMessages = [...messages, { role: "user", content: input }]
@@ -22,27 +41,43 @@ const ChatSection = () => {
     setInput("")
 
     try {
-      const res = await axios.post("/api/chat", {
-        messages: newMessages,
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
       })
 
-      const assistantMessage = res.data?.choices?.[0]?.message
-      if (assistantMessage?.content) {
-        setMessages([...newMessages, assistantMessage])
+      if (!res.body) throw new Error("No response body")
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      const assistantMessage = { role: "assistant", content: "" }
+      setMessages((prev) => [...prev, assistantMessage])
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value, { stream: true })
+
+        assistantMessage.content += chunk
+        setMessages((prev) => {
+          const updated = [...prev]
+          updated[updated.length - 1] = { ...assistantMessage }
+          return updated
+        })
       }
     } catch (err) {
       console.error("Chat error:", err)
     }
   }
 
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
   return (
-    <>
-      {/* Floating Button */}
-      
+    <>      
       <motion.button
         onClick={() => setOpen(true)}
         className={`fixed bottom-12 right-6 bg-[#7d2ae7] text-white w-12 h-12 rounded-full shadow-xl z-50 flex items-center justify-center ${open && "cursor-not-allowed scale-100"}`}

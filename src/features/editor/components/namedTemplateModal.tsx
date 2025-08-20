@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { X } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
@@ -22,7 +21,6 @@ export const NamedTemplateModal = () => {
           "relative w-full max-w-lg md:max-w-3xl bg-background rounded-lg shadow-lg p-6"
         )}
       >
-        {/* Close Button */}
         <button
           className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
           onClick={onClose}
@@ -30,7 +28,6 @@ export const NamedTemplateModal = () => {
           <X className="h-5 w-5" />
         </button>
 
-        {/* Header */}
         <div className="flex items-center flex-col justify-center">
           <Logo />
           <h2 className="text-xl -mt-4 font-semibold">
@@ -40,7 +37,6 @@ export const NamedTemplateModal = () => {
 
         <Separator className="my-4" />
 
-        {/* Content */}
         <ScrollArea className="h-[65vh]">
           <TemplateSection
             page="1000"

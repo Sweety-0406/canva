@@ -8,6 +8,10 @@ import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useRemovePrivateModal from "../hooks/useRemovePrivateModal";
+import { easeInOut, Easing   } from "framer-motion";
+
+const customEase: Easing = [0.22, 1, 0.36, 1];
+
 
 interface ModalProps {
   projectId: string;
@@ -45,8 +49,8 @@ const RemovePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
 
   const backdrop = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.25, ease: "easeInOut" } },
-    exit: { opacity: 0, transition: { duration: 0.25, ease: "easeInOut" } },
+    visible: { opacity: 1, transition: { duration: 0.25, ease: easeInOut } },
+    exit: { opacity: 0, transition: { duration: 0.25, ease: easeInOut } },
   };
 
   const modal = {
@@ -55,13 +59,13 @@ const RemovePrivateModal = ({ projectId, setIsPrivate }: ModalProps) => {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.35, ease: customEase },
     },
     exit: {
       opacity: 0,
       scale: 0.95,
       y: 20,
-      transition: { duration: 0.25, ease: "easeInOut" },
+      transition: { duration: 0.25, ease: easeInOut },
     },
   };
 

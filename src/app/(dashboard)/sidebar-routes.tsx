@@ -17,7 +17,6 @@ import ChatSection from "./chatSection";
 
 const SidebarRoutes = ()=>{
     const pathname = usePathname()
-    // const mutation = useCheckout()
     const mutation = useCreateProject();
     const { shouldBlock, triggerPaywall } = usePaywall();
     const billingMutation = useBilling();

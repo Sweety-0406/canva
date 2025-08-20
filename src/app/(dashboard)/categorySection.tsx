@@ -33,9 +33,7 @@ const baseCategories = [
 
 const loopedCategories = [...baseCategories, ...baseCategories, ...baseCategories];
 
-// interface CategorySectionProps {
-//   onClick: (templateName: string) => void; // function accepting a string
-// }
+
 
 export default function CategorySection() {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -19,7 +19,7 @@ import { useCheckout } from "../hooks/useCheckout";
 
 export const SubscriptionModal = () => {
   const mutation = useCheckout();
-  const { isOpen, onClose } = useSubscriptionModal();
+  const { isOpen, onClose, pay } = useSubscriptionModal();
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -69,7 +69,7 @@ export const SubscriptionModal = () => {
           <Button
             variant="purple"
             className="w-full"
-            onClick={() => mutation.mutate()}
+            onClick={() => mutation.mutate(pay)}
             disabled={mutation.isPending}
           >
             Upgrade

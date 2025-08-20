@@ -2,7 +2,6 @@
 "use client"
 
 import { ActiveTool, Editor } from "../types"
-import ShapeTool from "./shape-tool";
 import { CiTextAlignCenter, CiTextAlignJustify, CiTextAlignLeft, CiTextAlignRight  } from "react-icons/ci";
 import { motion } from "framer-motion";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";

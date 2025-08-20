@@ -15,7 +15,6 @@ export const useCreateProject = () => {
   const mutation = useMutation({
     mutationFn: async (json:ProjectData) => {
       try {
-        const jsonString = JSON.stringify(json)
         const response = await axios.post("/api/projects",json);
         return response.data;
       } catch(e){
@@ -27,8 +26,7 @@ export const useCreateProject = () => {
       toast.success("Project created");
       queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
-    onError: (e:any) => {
-      console.log(e)
+    onError: () => {
       toast.error("Failed to create project");
     }
   });
