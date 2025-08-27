@@ -160,7 +160,7 @@ const SidebarRoutes = ()=>{
                         className="flex  text-white hover:text-white  w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
                         variant="outline"
                     >
-                        <div className="flex gap-2 group-hover:text-white"> <span><HiPlus /></span> Start new design (<span className="text-rose-500">{remaining}</span>)</div>
+                        <div className="flex gap-2 group-hover:text-white"> <span><HiPlus /></span> Start new design {!isLoading && !subscription?.status && (<span className="text-rose-500 mt-[2px]">({remaining})</span>)}</div>
                     </Button>
                 </div>
                 <div className="py-3">
