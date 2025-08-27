@@ -13,6 +13,10 @@ import CategorySection from "./categorySection";
 import { projectType, templateType } from "@/features/editor/types";
 import NotFoundData from "@/features/editor/components/not-found-data";
 import ErrorPage from "@/features/editor/components/error";
+import { useGetSubscription } from "@/features/editor/hooks/useGetSubscription";
+import toast from "react-hot-toast";
+import { useGetUser } from "@/features/editor/hooks/useGetUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TemplateSectionProps {
   page?: string;
@@ -28,13 +32,21 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
 
   const { data, isLoading, isError } = useGetTemplates("1", page);
   const [filteredData, setFilteredData] = useState<projectType[]>([]);
+  const{data: subscription, isLoading:subscriptionIsLoading} = useGetSubscription()
+  const { data: user, isLoading: isUserLoading } = useGetUser();
+  const queryClient = useQueryClient();
 
   const onClick = (template: templateType["data"][0]) => {
-    console.log(data)
     if (template.isPro && paywall.shouldBlock) {
       paywall.triggerPaywall();
       return;
     }
+
+    if(!subscriptionIsLoading && !isUserLoading && !subscription?.status && user?.totalProjects === 5){
+      toast.error("You have reached the limit. Please upgrade to continue")
+      return;
+    }  
+
     mutation.mutate(
       {
         name: `${template.name} copy`,
@@ -44,6 +56,7 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
       },
       {
         onSuccess: ({ data }) => {
+          queryClient.invalidateQueries({ queryKey: ["user"] });
           router.push(`/editor/${data.id}`);
         },
       }
@@ -106,7 +119,9 @@ const TemplateSection = ({ page = "10", show, templateNumber, templateName }: Te
           <h3 className="font-semibold text-2xl mt-4 mb-4">Start Exploring</h3>
         </>
       )}
-
+      {!show && (
+        <div className="text-xl font-semibold mt-4 mb-4">What&apos;s new</div>
+      )}
       <div className="grid grid-cols-2 md:grid-cols-4 pb-4 mt-4 gap-4">
         {templatesToRender.map((template: projectType) => (
           <TemplateCard

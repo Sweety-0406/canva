@@ -1,10 +1,10 @@
 "use client"
 
-// import { useParams } from "next/navigation"
+import { protectServer } from "@/features/auth/utils"
 import TemplateSection from "../../templateSection"
 
-const TemplateNamePage = ()=>{
-    // const {templatename} = useParams()
+const TemplateNamePage = async()=>{
+    await protectServer()
     return(
         <div className="p-2">
             <TemplateSection page="1000"  show={true} templateNumber={12} />

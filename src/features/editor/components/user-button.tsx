@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import usePaywall from "../hooks/usePaywall";
 import { useBilling } from "../hooks/useBilling";
+import { useRouter } from "next/navigation";
 
 const UserButton = () => {
   const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
   const mutation = useBilling();
   const session = useSession();
+  const router = useRouter()
 
   const onClick = () => {
     if (shouldBlock) {
@@ -45,7 +47,11 @@ const UserButton = () => {
 
   const name = session.data?.user?.name ?? "User";
   const imageUrl = session.data?.user?.image ?? "";
-
+  
+  const logoutHandler = ()=>{
+    signOut()
+    router.push("/landingPage")
+  }
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="outline-none relative">
@@ -79,7 +85,7 @@ const UserButton = () => {
             Billing
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="h-10" onClick={() => signOut()}>
+          <DropdownMenuItem className="h-10" onClick={logoutHandler}>
             <FiLogOut  className="size-5 mr-2" />
             Log out
           </DropdownMenuItem>

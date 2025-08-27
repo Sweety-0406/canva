@@ -3,6 +3,17 @@ import * as material from "material-colors"
 import { Gradient, ITextOptions } from "fabric/fabric-impl"
 // import { Gradient, ITextOptions, Pattern } from "fabric/fabric-impl"
 
+
+export type User = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  emailVerified: string | null;
+  image: string | null;
+  hashedPassword: string | null;
+  totalProjects: number;
+};
+
 export type projectJson={
     id:string,
     index:number,

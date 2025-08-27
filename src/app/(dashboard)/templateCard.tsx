@@ -81,9 +81,9 @@ const TemplateCard = ({
       </div> */}
       <div
   style={{
-    aspectRatio: `${width}/${height}`, // keep the original aspect ratio
-    width: "100%", // full width of parent container
-    maxWidth: "250px", // limit size, you can adjust this
+    aspectRatio: `${width}/${height}`,
+    width: "100%", 
+    maxWidth: "250px", 
   }}
   className="relative rounded-xl overflow-hidden border group"
 >
@@ -98,16 +98,16 @@ const TemplateCard = ({
       <FaCrown className="size-5 fill-yellow-500 text-yellow-500" />
     </div>
   )}
-  <div className="opacity-0 group-hover:opacity-100 transition absolute inset-0 rounded-xl backdrop-filter">
+  <div className="opacity-0  group-hover:opacity-100 transition absolute inset-0 rounded-xl backdrop-filter">
     <div className="absolute right-4 top-2">
       <DropdownMenu>
         <DropdownMenuTrigger className="bg-black/50 hover:bg-black/60 text-white p-2 px-3 rounded-sm">
           <HiDotsHorizontal />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="z-[600]">
           <DropdownMenuLabel>{title}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             <HiOutlinePencilSquare className="size-10" />
             Customize this template
           </DropdownMenuItem>

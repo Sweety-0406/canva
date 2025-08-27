@@ -7,9 +7,12 @@ import { useRouter } from "next/navigation";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import { MessageCircle, Phone, Mail, Send, MapPin, Clock, Star } from 'lucide-react';
+import { MessageCircle, Phone, Mail, Send, MapPin, Clock, Star, Play } from 'lucide-react';
 import { LucideIcon } from "lucide-react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { useGetSubscription } from "@/features/editor/hooks/useGetSubscription";
+import { useGetUser } from "@/features/editor/hooks/useGetUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 type ContactMethod = {
@@ -31,6 +34,9 @@ export default function Contact() {
   const [contactVisible, setContactVisible] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState<ContactMethod | null>(null);
   const [loading, setLoading] = useState(false);
+  const{data: subscription, isLoading} = useGetSubscription()
+  const { data: user, isLoading: isUserLoading } = useGetUser();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: '',
     message: '',
@@ -123,6 +129,11 @@ export default function Contact() {
       toast.error("Please login");
       return;
     }
+    
+    if(!isLoading && !isUserLoading && !subscription?.status && user?.totalProjects === 5){
+      toast.error("You have reached the limit. Please upgrade to continue")
+      return;
+    } 
     mutation.mutate(
       {
         name: "Untitled Project",
@@ -132,6 +143,7 @@ export default function Contact() {
       },
       {
         onSuccess: ({ data }) => {
+          queryClient.invalidateQueries({ queryKey: ["user"] });
           router.push(`/editor/${data.id}`);
         },
       }
@@ -357,9 +369,9 @@ export default function Contact() {
               </Button>
               <Button 
                 variant="outline" 
-                className="text-black border-2 hover:bg-gray-50 hover:scale-105 transition-all duration-300"
+                className="text-black border-2 flex gap-2 hover:bg-gray-50 hover:scale-105 transition-all duration-300"
               >
-                Talk to sales
+                <Play size={16} /> Watch Demo
               </Button>
             </div>
           </div>

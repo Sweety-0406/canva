@@ -6,7 +6,7 @@ export const useGetArchiveProjects = () => {
   const query = useInfiniteQuery<projectsType, Error>({
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage?.nextPage || null,
-    queryKey: ["projects"],
+    queryKey: ["archived-projects"],
     queryFn: async ({ pageParam }) => {
       const response = await axios.get(`/api/projects/archive`, {
         params: {

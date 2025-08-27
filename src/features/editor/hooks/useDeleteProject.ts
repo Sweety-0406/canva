@@ -19,6 +19,7 @@ export const useDeleteProject = () => {
     },
     onSuccess: ({data}) => {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["archived-projects"] });
       queryClient.invalidateQueries({ queryKey: ["project", { projectId: data.projectId }] });
       toast.success("Project deleted successfully");
       deleteModal.onClose()

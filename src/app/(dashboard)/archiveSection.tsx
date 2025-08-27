@@ -18,18 +18,20 @@ import useDeleteModal from "@/features/editor/hooks/useDeleteModal"
 import DeleteModal from "./deleteModal"
 import useVerifyPrivateModal from "@/features/editor/hooks/useVerifyPrivateModal"
 import VerifyPrivateModal from "@/features/editor/components/verifyPrivateModal"
-import { RiInboxUnarchiveLine } from "react-icons/ri";import axios from "axios"
+import { RiInboxUnarchiveLine } from "react-icons/ri";
+import axios from "axios"
 import toast from "react-hot-toast"
 import { useGetArchiveProjects } from "@/features/editor/hooks/useGetArchiveProjects"
 import ProjectSkeleton from "./projectSkeleton"
+import { useQueryClient } from "@tanstack/react-query"
 
-const ProjectSection = ()=>{
+const ArchiveSection = ()=>{
     const router = useRouter()
     const duplicateMutation = useDuplicateProject()
     const deleteMutation = useDeleteProject()
     const deleteModal = useDeleteModal()
     const verifyPrivateModal = useVerifyPrivateModal()
-
+    const queryClient = useQueryClient();
 
     const onCopy = (projectId:string)=>{
       duplicateMutation.mutate({projectId})
@@ -51,7 +53,8 @@ const ProjectSection = ()=>{
       const response = await axios.patch(`api/projects/${projectId}/deleteArchive`)
       if(response.status==200){
         toast.success("Project is remove from archive section.")
-        window.location.reload();
+        queryClient.invalidateQueries({ queryKey: ["projects"] });
+        queryClient.invalidateQueries({ queryKey: ["archived-projects"] });
       }else{
         toast.error("Project is not remove from archive section.")
       }
@@ -64,6 +67,7 @@ const ProjectSection = ()=>{
       isFetchingNextPage,
       hasNextPage
     } = useGetArchiveProjects() 
+    console.log(data)
 
     if (status === "pending") {
         return (
@@ -112,7 +116,7 @@ const ProjectSection = ()=>{
         <div className="space-y-3 mb-5">
           <VerifyPrivateModal />
           <DeleteModal isPending={deleteMutation.isPending} isOpen={deleteModal.isOpen} onClose={deleteModal.onClose} onSubmit={()=>onDelete(deleteModal.projectId)} />
-          <h3 className="font-semibold text-3xl">Recent archive projects</h3>
+          <h3 className="font-semibold text-3xl">Recent archived projects</h3>
           <Table>
             <TableBody>
               {data.pages.map((group, i)=>(
@@ -154,7 +158,7 @@ const ProjectSection = ()=>{
                             className="h-10 cursor-pointer"
                             disabled={duplicateMutation.isPending}
                             onClick={() => onCopy(project.id)}
-                            >
+                          >
                             <CopyIcon className="size-4 mr-2" />
                             Make a copy
                           </DropdownMenuItem>
@@ -199,4 +203,4 @@ const ProjectSection = ()=>{
     )
 }
 
-export default ProjectSection
+export default ArchiveSection

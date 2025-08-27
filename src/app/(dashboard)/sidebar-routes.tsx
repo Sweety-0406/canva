@@ -14,6 +14,12 @@ import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import { HiPlus } from "react-icons/hi";
 import Hint from "@/features/editor/components/hint";
 import ChatSection from "./chatSection";
+import { FaProjectDiagram } from "react-icons/fa";
+import { useGetSubscription } from "@/features/editor/hooks/useGetSubscription"
+import toast from "react-hot-toast"
+import { useGetUser } from "@/features/editor/hooks/useGetUser"
+import { useQueryClient } from "@tanstack/react-query"
+
 
 const SidebarRoutes = ()=>{
     const pathname = usePathname()
@@ -21,6 +27,11 @@ const SidebarRoutes = ()=>{
     const { shouldBlock, triggerPaywall } = usePaywall();
     const billingMutation = useBilling();
     const router = useRouter()
+    const{data: subscription, isLoading} = useGetSubscription()
+    const { data: user, isLoading: isUserLoading } = useGetUser();
+    const queryClient = useQueryClient();
+    const maxProjects = user?.totalProjects ?? 5;
+    const remaining = (5 - maxProjects);
 
     const onClick = () => {
         if (shouldBlock) {
@@ -32,6 +43,10 @@ const SidebarRoutes = ()=>{
     };
 
     const onClickCreatHandler = async () => {
+        if(!isLoading && !isUserLoading && !subscription?.status && user?.totalProjects === 5){
+            toast.error("You have reached the limit. Please upgrade to continue")
+            return;
+        }        
         mutation.mutate(
         {
             name: "Untitled Project",
@@ -41,6 +56,7 @@ const SidebarRoutes = ()=>{
         },
         {
             onSuccess: ({ data }) => {
+                queryClient.invalidateQueries({ queryKey: ["user"] });
                 router.push(`/editor/${data.id}`);
             },
         }
@@ -56,12 +72,15 @@ const SidebarRoutes = ()=>{
                         side="right"
                     >
                         <Button
-                            disabled={mutation.isPending}
+                            disabled={mutation.isPending ||isLoading}
                             onClick={onClickCreatHandler}
-                            className="flex hover:text-white text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
+                            className="flex relative hover:text-white text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
                             variant="outline"
                         >
                             <div className="flex gap-2 hover:text-white"> <span><HiPlus /></span></div>
+                            {!isLoading && !subscription?.status && 
+                                <div className="absolute size-5 flex justify-center items-center -top-2 -left-1 bg-rose-500 rounded-full p-1 text-white">{remaining}</div>
+                            }
                         </Button>
                     </Hint>
                 </div>
@@ -85,6 +104,17 @@ const SidebarRoutes = ()=>{
                             href="/templates"
                             icon={LuLayoutTemplate}
                             isActive={pathname === "/templates"}
+                        />
+                    </Hint>
+
+                    <Hint
+                        label="My projects"
+                        side="right"
+                    >
+                        <SidebarItem
+                            href="/projects"
+                            icon={FaProjectDiagram }
+                            isActive={pathname === "/projects"}
                         />
                     </Hint>
 
@@ -125,12 +155,12 @@ const SidebarRoutes = ()=>{
             <div className="hidden lg:block">
                 <div className="px-2 group ">
                     <Button
-                        disabled={mutation.isPending}
+                        disabled={mutation.isPending || isLoading }
                         onClick={onClickCreatHandler}
-                        className="flex text-white hover:text-white  w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
+                        className="flex  text-white hover:text-white  w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
                         variant="outline"
                     >
-                        <div className="flex gap-2 group-hover:text-white"> <span><HiPlus /></span> Start new design</div>
+                        <div className="flex gap-2 group-hover:text-white"> <span><HiPlus /></span> Start new design (<span className="text-rose-500">{remaining}</span>)</div>
                     </Button>
                 </div>
                 <div className="py-3">
@@ -148,6 +178,12 @@ const SidebarRoutes = ()=>{
                         icon={LuLayoutTemplate}
                         label="Templates "
                         isActive={pathname === "/templates"}
+                    />
+                    <SidebarItem
+                        href="/projects"
+                        icon={FaProjectDiagram }
+                        label="My projects "
+                        isActive={pathname === "/projects"}
                     />
                     <SidebarItem
                         href="/archive"

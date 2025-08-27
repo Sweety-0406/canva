@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { projectJsons, projects } from "@/db/schema";
+import { projectJsons, projects, users } from "@/db/schema";
 import { db } from "@/db/drizzle";
-import { eq , desc, and} from "drizzle-orm";
+import { eq , desc, and, sql} from "drizzle-orm";
 import { z } from "zod";
 
 
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
     }
 
     const{name, json, height, width} = parsedBody.data
-    console.log(parsedBody.data)
 
     if (!name || json===undefined || !height || !width || !userId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -53,6 +52,11 @@ export async function POST(req: Request) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    
+    await db.update(users)
+    .set({ totalProjects: sql`${users.totalProjects} + 1` })
+    .where(eq(users.id, userId));
 
     return NextResponse.json({ data: project }, { status: 200 });
 

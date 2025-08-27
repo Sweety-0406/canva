@@ -1,0 +1,1 @@
+ALTER TABLE "user" ADD COLUMN "totalProjects" integer DEFAULT 0 NOT NULL;

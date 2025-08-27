@@ -2,18 +2,12 @@
 
 import UserButton from "@/features/editor/components/user-button"
 import Logo from "./logo"
-import Hint from "@/features/editor/components/hint"
 import { Button } from "@/components/ui/button"
-import { MessageCircleQuestion } from "lucide-react"
-import { RiInboxArchiveLine } from "react-icons/ri"
-import { LuLayoutTemplate } from "react-icons/lu"
-import { useRouter } from "next/navigation"
 import usePaywall from "@/features/editor/hooks/usePaywall"
 import { FaCrown } from "react-icons/fa"
 import { useBilling } from "@/features/editor/hooks/useBilling"
 
 const Navbar = ()=>{
-    const router = useRouter()
     const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
     const mutation = useBilling();
     
@@ -27,7 +21,7 @@ const Navbar = ()=>{
     };
     return(
         <div className="border-b">
-            <nav className=" hidden h-[58px] lg:flex justify-end pr-5 ">
+            <nav className=" hidden h-[10vh] items-center lg:flex justify-end pr-5 ">
                 {shouldBlock && !isLoading && (
                     <div className="mt-2">
                         <div className="px-2 ">
@@ -52,7 +46,7 @@ const Navbar = ()=>{
                     <Logo />
                 </div>
                 <div className="mt-2 flex gap-3">
-                    <div className="block lg:hidden">
+                    {/* <div className="block lg:hidden">
                         <Hint 
                             label="Templates"
                             side="bottom"
@@ -105,7 +99,7 @@ const Navbar = ()=>{
                                 </a>   
                             </Button>
                         </Hint>
-                    </div>
+                    </div> */}
                     <UserButton />
                 </div> 
             </nav>

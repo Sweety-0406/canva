@@ -19,7 +19,8 @@ export const users = pgTable("user", {
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  hashedPassword: text("password")
+  hashedPassword: text("password"),
+  totalProjects: integer("totalProjects").default(0).notNull(),
 })
 
 export const usersRelations = relations(users, ({many})=>({

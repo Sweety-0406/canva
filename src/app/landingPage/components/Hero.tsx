@@ -9,17 +9,28 @@ import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import { useGetSubscription } from "@/features/editor/hooks/useGetSubscription";
+import { useGetUser } from "@/features/editor/hooks/useGetUser";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Hero() {
   const router = useRouter();
   const mutation = useCreateProject();
   const session = useSession();
+  const{data: subscription, isLoading} = useGetSubscription()
+  const { data: user, isLoading: isUserLoading } = useGetUser();
+  const queryClient = useQueryClient();
 
   const onClick = async () => {
     if (!session.data?.user) {
       toast.error("Please login");
       return;
     }
+    
+    if(!isLoading && !isUserLoading && !subscription?.status && user?.totalProjects === 5){
+      toast.error("You have reached the limit. Please upgrade to continue")
+      return;
+    } 
     mutation.mutate(
       {
         name: "Untitled Project",
@@ -29,6 +40,7 @@ export default function Hero() {
       },
       {
         onSuccess: ({ data }) => {
+          queryClient.invalidateQueries({ queryKey: ["user"] });
           router.push(`/editor/${data.id}`);
         },
       }

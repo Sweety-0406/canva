@@ -15,7 +15,7 @@ const DashBoardLayout = ({children}: DashBoardLayoutProps)=>{
             <Sidebar />
             <div className="pl-12 lg:pl-[300px] h-full max-h-screen overflow-hidden">
                 <Navbar />
-                <main className="bg-white overflow-auto h-full  lg:rounded-tl-xl">
+                <main className="bg-white overflow-auto h-[90vh]  lg:rounded-tl-xl">
                     {children} 
                 </main>
             </div>
