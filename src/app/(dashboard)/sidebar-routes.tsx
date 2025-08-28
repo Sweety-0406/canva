@@ -12,7 +12,6 @@ import usePaywall from "@/features/editor/hooks/usePaywall"
 import { LuLayoutTemplate } from "react-icons/lu";
 import { useCreateProject } from "@/features/editor/hooks/useCreateProject";
 import { HiPlus } from "react-icons/hi";
-import Hint from "@/features/editor/components/hint";
 import ChatSection from "./chatSection";
 import { FaProjectDiagram } from "react-icons/fa";
 import { useGetSubscription } from "@/features/editor/hooks/useGetSubscription"
@@ -67,88 +66,78 @@ const SidebarRoutes = ()=>{
         <div>
             <div className="block lg:hidden px-1 border-t">
                 <div className="my-2 hover:text-white ">
-                    <Hint
-                        label="Start New Design"
-                        side="right"
+                    <Button
+                        disabled={mutation.isPending ||isLoading}
+                        onClick={onClickCreatHandler}
+                        className="flex relative hover:text-white text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
+                        variant="outline"
+                        title="Start New Design"
                     >
-                        <Button
-                            disabled={mutation.isPending ||isLoading}
-                            onClick={onClickCreatHandler}
-                            className="flex relative hover:text-white text-white w-full rounded-lg bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7]  hover:opacity-75  transition"
-                            variant="outline"
-                        >
-                            <div className="flex gap-2 hover:text-white"> <span><HiPlus /></span></div>
-                            {!isLoading && !subscription?.status && 
-                                <div className="absolute size-5 flex justify-center items-center -top-2 -left-1 bg-rose-500 rounded-full p-1 text-white">{remaining}</div>
-                            }
-                        </Button>
-                    </Hint>
+                        <div className="flex gap-2 hover:text-white"> <span><HiPlus /></span></div>
+                        {!isLoading && !subscription?.status && 
+                            <div className="absolute size-5 flex justify-center items-center -top-2 -left-1 bg-rose-500 rounded-full p-1 text-white">{remaining}</div>
+                        }
+                    </Button>
                 </div>
                 <ul className="flex flex-col gap-y-2">
-                    <Hint
-                        label="Home"
-                        side="right"
+                    <button
+                        title="Home"
                     >
                         <SidebarItem
                             href="/"
                             icon={Home}
                             isActive={pathname === "/"}
                         />
-                    </Hint>
+                    </button>
 
-                    <Hint
-                        label="Templates"
-                        side="right"
+                    <button
+                        title="Templates"
                     >
                         <SidebarItem
                             href="/templates"
                             icon={LuLayoutTemplate}
                             isActive={pathname === "/templates"}
                         />
-                    </Hint>
+                    </button>
 
-                    <Hint
-                        label="My projects"
-                        side="right"
+                    <button
+                        title="My projects"
                     >
                         <SidebarItem
                             href="/projects"
                             icon={FaProjectDiagram }
                             isActive={pathname === "/projects"}
                         />
-                    </Hint>
+                    </button>
 
-                    <Hint
-                        label="Archive"
-                        side="right"
-                    >
+                    <button
+                        title="Archive"
+                    > 
                         <SidebarItem
                             href="/archive"
                             icon={RiInboxArchiveLine}
                             isActive={pathname === "/archive"}
                         />
-                    </Hint>
+                    </button>
 
-                    <Hint
-                        label="Billing"
-                        side="right"
-                    >
+                    <button
+                        title="Billing"
+                    > 
                         <SidebarItem
                             href={pathname}
                             icon={FaRegCreditCard}
                             onClick={onClick}
                         />
-                    </Hint>
+                    </button>
 
-                    <Hint
-                        label="Get Help"
-                        side="right"
+                    <button
+                        title="Get help"
                     >
                         <SidebarItem
                             href="mailto:kiyaranandi02@gmail.com"
                             icon={MessageCircleQuestion}
                         />
-                    </Hint>
+                    </button>
                 </ul>
                 <ChatSection />
             </div>

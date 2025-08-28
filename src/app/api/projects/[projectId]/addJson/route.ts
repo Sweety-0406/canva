@@ -28,7 +28,6 @@ export async function POST(
     const body = await req.json()
     const parsedBody = schema.safeParse(body)
     if(!parsedBody.success){
-      console.log(parsedBody)
       return NextResponse.json({error: "Invalid request data", details: parsedBody.error}, {status: 400})
     }
 
@@ -93,7 +92,6 @@ export async function PATCH(
     }
 
     const { json, id } = parsedBody.data;
-    console.log(id)
 
     
     const existingEntry = await db.query.projectJsons.findFirst({

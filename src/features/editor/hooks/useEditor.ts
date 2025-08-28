@@ -155,7 +155,6 @@ const buildEditor =({
         try {
             parsedJson = JSON.parse(page.json);
         } catch (err) {
-            console.error("Invalid JSON at index:", i);
             console.error("Error:", err);
             continue;
         }
@@ -426,10 +425,10 @@ const buildEditor =({
             source.src = url;
             videoEl.appendChild(source);
           
-            videoEl.onended = () => videoEl.play(); // Looping fallback
+            videoEl.onended = () => videoEl.play(); 
           
             videoEl.addEventListener("loadeddata", () => {
-              videoEl.play(); // Ensure it starts playing
+              videoEl.play();
           
               const fabricVideo = new fabric.Image(videoEl, {
                 left: 200,
@@ -668,15 +667,9 @@ const buildEditor =({
         },
         changeOffsetX:(value:number)=>{
             setOffsetX(value)
-            // canvas.getActiveObjects().forEach(element => {
-            // });
-            // canvas.renderAll()
         },  
         changeOffsetY:(value:number)=>{
             setOffsetY(value)
-            // canvas.getActiveObjects().forEach(element => {
-            // });
-            // canvas.renderAll()
         },  
         addText:(value, option)=>{
             const object = new fabric.Textbox(value,{
@@ -1973,7 +1966,6 @@ export const useEditor = ({
   saveCallback,
   initialPageId
 }: EditorHookProps) => {
-    console.log("normalizedPageData2", initialPageId)
   const initialState = useRef(defaultState);
   const initialHeight = useRef(defaultHeight);
   const initialWidth = useRef(defaultWidth);

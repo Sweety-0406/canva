@@ -67,7 +67,6 @@ const ArchiveSection = ()=>{
       isFetchingNextPage,
       hasNextPage
     } = useGetArchiveProjects() 
-    console.log(data)
 
     if (status === "pending") {
         return (

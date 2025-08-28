@@ -69,7 +69,9 @@ export async function POST(req : Request) {
             })
             .where(eq(subscriptions.id, subscription.id))
 
-        console.log("res", res)    
+        if (process.env.NODE_ENV === "development") {
+            console.log("res", res);
+        }   
     } 
 
     return NextResponse.json({status: 200})

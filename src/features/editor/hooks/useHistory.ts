@@ -55,7 +55,6 @@ export const useHistory = ({ canvas, saveCallback,initialPageId }: useHistoryPro
     
     // Initialize history for new page if it doesn't exist
     if (!canvasHistoryMap.current[index]) {
-      console.log('history for index doesnot exist what to do');
       canvasHistoryMap.current[index] = [];
       setHistoryIndexMap((prev) => ({ ...prev, [index]: -1 }));
     }
@@ -158,7 +157,6 @@ export const useHistory = ({ canvas, saveCallback,initialPageId }: useHistoryPro
     
     if (nextIndex < canvasHistoryMap.current[index].length && canvasHistoryMap.current[index][nextIndex]) {
       const state = JSON.parse(canvasHistoryMap.current[index][nextIndex]);
-      console.log("state", state)
       canvas.clear();
       canvas.loadFromJSON(state, () => {
         canvas.renderAll();
@@ -172,7 +170,6 @@ export const useHistory = ({ canvas, saveCallback,initialPageId }: useHistoryPro
 
   // Initialize first page history when canvas is first available
   const initializeHistory = useCallback(() => {
-    console.log('canvas initialized');
     if (canvas && !canvasHistoryMap.current[0]) {
       const json = JSON.stringify(canvas.toJSON(KEYS));
       canvasHistoryMap.current[0] = [json];
@@ -191,7 +188,6 @@ export const useHistory = ({ canvas, saveCallback,initialPageId }: useHistoryPro
     historyIndexMap,
     setHistoryIndexMap,
     activePageIndex:activePage.current,
-    // activePageIndex: activePage.current,
     initializeHistory,
   };
 };

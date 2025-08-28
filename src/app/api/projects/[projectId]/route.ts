@@ -69,7 +69,6 @@ export async function PATCH(
         const body = await request.json();
         const parsedBody = schema.safeParse(body);
         if (!parsedBody.success) {
-            console.log(parsedBody)
             return NextResponse.json({ error: "Invalid request data", details: parsedBody.error }, { status: 400 });
         }
 

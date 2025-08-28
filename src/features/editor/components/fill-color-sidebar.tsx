@@ -20,16 +20,11 @@ const FillColorSidebar = ({
     onChangeActiveTool
 }: FillColorSidebarProps) => {
     const value = editor?.selectedObjects[0].fill || "#000000"
-    // const value = editor?.fillColor || "#000000"
     const [colors, setColors] = useState<string[]>([])
     const [gradientColor, setGradientColor] = useState(editor?.gradientColor || ['#E77777', '#77E77F', '#778DE7'])
-    // const [gradientType, setGradientType] = useState(editor?.gradientType || 'linear');
-    // const [angle, setAngle] = useState<number>(90);
 
     const onChangnGradientBackground = (value: string[], gradientType:string, angle: number)=>{
         setGradientColor(value)
-        // setGradientType(gradientType)
-        // setAngle(angle)
         if (!selectedObjects) return;
         editor?.changeGradientBackground(value, gradientType, angle, selectedObjects[0])
     }
@@ -37,8 +32,7 @@ const FillColorSidebar = ({
     const selectedObjects = editor?.selectedObjects
     useEffect(() => {
         if (!selectedObjects) return;
-        console.log("fill",selectedObjects[0]
-)
+        
         const objectsColors: string[] = []
 
         for (let i = 0; i < selectedObjects.length; i++) {
@@ -62,7 +56,6 @@ const FillColorSidebar = ({
 
     const onChange = (value: string) => {
         if (!selectedObjects) return;
-        // editor?.changeGradientBackground(gradientColor, gradientType, angle, selectedObjects[0])
         editor?.changeFillColor(value)
     }
 

@@ -103,7 +103,7 @@ export default function Contact() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: `${process.env.NEXT_PUBLIC_EMAIL} `, 
+            email: `${process.env.NEXT_PUBLIC_EMAIL}`, 
             message: `name:${formData.name}, phone:${formData.phone}, message:${formData.message}`,
           }),
         });
@@ -115,8 +115,7 @@ export default function Contact() {
           toast.error(" Failed to send message.");
         }        
       }
-    } catch (err) {
-      console.error(err);
+    } catch{
       toast.error(" Something went wrong. Try again later.");
     } finally {
       setLoading(false);

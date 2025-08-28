@@ -75,7 +75,6 @@ export const Editor = ({ initialData }: EditorProps) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const [activeInd, setActiveInd] = useState<number>(0);
 
-  console.log("normalizedPageData",normalizedPageData)
 
   const { mutate } = useUpdateProject(projectId);
 
@@ -152,7 +151,6 @@ export const Editor = ({ initialData }: EditorProps) => {
       return;
     }
 
-    console.log("added new page:", addedJsonData.data.data.id)
     pageDataRef.current.push(addedJsonData.data.data);
     setActiveInd(newInd - 1);
     setActivePage(newInd - 1, addedJsonData.data.data.id);
@@ -208,7 +206,6 @@ export const Editor = ({ initialData }: EditorProps) => {
       return;
     }
 
-    console.log("added new page:", addedJsonData.data.data.id)
     pageDataRef.current.push(addedJsonData.data.data);
     setActiveInd(newInd - 1);
     setActivePage(newInd - 1, addedJsonData.data.data.id);
@@ -233,12 +230,10 @@ export const Editor = ({ initialData }: EditorProps) => {
 
 
   const onClickPage = async (i: number, id:string) => {
-    console.log(i)
     if (!editor || i === activeInd) return;
     await save()
     const currentJson = JSON.stringify(editor.canvas.toJSON(KEYS));
     pageDataRef.current[activeInd].json = JSON.stringify(currentJson);
-    console.log(i)
     const targetJsonString = pageDataRef.current[i].json;
 
     if (targetJsonString) {
@@ -296,8 +291,7 @@ export const Editor = ({ initialData }: EditorProps) => {
       })
 
       toast.success("Page deleted successfully");
-    } catch (err) {
-      console.error(err);
+    } catch{
       toast.error("Failed to delete page.");
     }
     setIsDelete(false)

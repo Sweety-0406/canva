@@ -53,7 +53,6 @@ const Toolbar=({
     const fontSize = editor?.selectedObjects[0].get("fontSize")
 
     const selectedObjectType = editor?.selectedObjects[0].type;
-    console.log( editor?.selectedObjects[0])
 
     const flipImageHorizontally = () => {
         onChangeActiveTool("flip-horizontally")
