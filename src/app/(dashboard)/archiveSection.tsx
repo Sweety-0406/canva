@@ -24,6 +24,8 @@ import toast from "react-hot-toast"
 import { useGetArchiveProjects } from "@/features/editor/hooks/useGetArchiveProjects"
 import ProjectSkeleton from "./projectSkeleton"
 import { useQueryClient } from "@tanstack/react-query"
+import NotFoundData from "@/features/editor/components/not-found-data"
+import ErrorPage from "@/features/editor/components/error"
 
 const ArchiveSection = ()=>{
     const router = useRouter()
@@ -85,11 +87,8 @@ const ArchiveSection = ()=>{
             <h3 className="font-semibold text-3xl">
               Recent archive projects
             </h3>
-            <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-              <AlertTriangle className="size-6 text-muted-foreground" />
-              <p className="text-muted-foreground text-sm">
-                Failed to load archive projects
-              </p>
+            <div className="flex flex-col gap-y-4 items-center justify-center h-full">
+              <ErrorPage />
             </div>
           </div>
         )
@@ -101,11 +100,8 @@ const ArchiveSection = ()=>{
             <h3 className="font-semibold text-3xl">
               Recent archive projects
             </h3>
-            <div className="flex flex-col gap-y-4 items-center justify-center h-32">
-              <Search className="size-6 text-muted-foreground" />
-              <p className="text-muted-foreground text-sm">
-                No archive projects found
-              </p>
+            <div className="flex flex-col gap-y-4 items-center justify-center h-full">
+              <NotFoundData title="No archive project " description="You don’t have any archived projects yet." />
             </div>
           </div>
         )

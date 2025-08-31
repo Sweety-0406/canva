@@ -277,7 +277,7 @@ const ChatSection = () => {
     setInput("")
     setIsLoading(true)
 
-    // Add placeholder for assistant response
+    
     const assistantMessage: Message = { 
       role: "assistant", 
       content: "",
@@ -312,7 +312,7 @@ const ChatSection = () => {
           const chunk = decoder.decode(value, { stream: true })
           assistantContent += chunk
 
-          // Update the assistant message with accumulated content
+         
           setMessages(prev => {
             const updated = [...prev]
             updated[updated.length - 1] = {
@@ -330,7 +330,7 @@ const ChatSection = () => {
     } catch (error) {
       console.error("Chat error:", error)
       
-      // Remove the placeholder message and add error message
+      
       setMessages(prev => {
         const updated = [...prev]
         updated[updated.length - 1] = {
