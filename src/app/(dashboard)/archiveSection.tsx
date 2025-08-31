@@ -7,7 +7,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {formatDistanceToNow} from "date-fns"
-import { AlertTriangle, CopyIcon, FileIcon, MoreHorizontal, Search, Trash } from "lucide-react"
+import { CopyIcon, FileIcon, MoreHorizontal, Trash } from "lucide-react"
 import React from "react"
 import { useRouter } from "next/navigation"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"

@@ -9,9 +9,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {formatDistanceToNow} from "date-fns"
-import { AlertTriangle, CopyIcon, FileIcon, MoreHorizontal, Search, Trash } from "lucide-react"
+import { AlertTriangle, CopyIcon, FileIcon, MoreHorizontal, Trash } from "lucide-react"
 import React from "react"
-import { useParams, usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useDuplicateProject } from "@/features/editor/hooks/useDuplicateProject"
