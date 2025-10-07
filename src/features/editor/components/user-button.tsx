@@ -64,7 +64,7 @@ const UserButton = () => {
         )}
         <Avatar className="size-10 hover:opcaity-75 transition">
           <AvatarImage alt={name} src={imageUrl || ""} />
-          <AvatarFallback className="bg-[#aa53f2] font-medium text-white flex items-center justify-center">
+          <AvatarFallback className="bg-[#9d3aed] font-medium text-white flex items-center justify-center">
             {name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>

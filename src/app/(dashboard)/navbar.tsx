@@ -46,60 +46,6 @@ const Navbar = ()=>{
                     <Logo />
                 </div>
                 <div className="mt-2 flex gap-3">
-                    {/* <div className="block lg:hidden">
-                        <Hint 
-                            label="Templates"
-                            side="bottom"
-                        >
-                            <Button 
-                                onClick={()=>router.push("/templates")}
-                                size="lg" 
-                                variant="ghost"
-                                className={`
-                                    items-center  rounded-sm hover:bg-white  flex justify-center  px-3
-                                `}
-                            >
-                                <LuLayoutTemplate className="size-6 " />
-                            </Button>
-                        </Hint>
-                    </div>
-                    <div className="block lg:hidden">
-                        <Hint 
-                            label="Archive"
-                            side="bottom"
-                        >
-                            <Button 
-                                onClick={()=>router.push("/archive")}
-                                size="lg" 
-                                variant="ghost"
-                                className={`
-                                    items-center  rounded-sm hover:bg-white  flex justify-center  px-3
-                                `}
-                            >
-                                <RiInboxArchiveLine className="size-6 " />
-                            </Button>
-                        </Hint>
-                    </div>
-                    <div className="block lg:hidden">
-                        <Hint 
-                            label="Help"
-                            side="bottom"
-                        >
-                            <Button 
-                                size="lg" 
-                                variant="ghost"
-                                className={`
-                                    items-center  rounded-sm hover:bg-white  flex justify-center  px-3
-                                `}
-                            >
-                                <a
-                                    href="mailto:kiyaranandi02@gmail.com"
-                                >
-                                    <MessageCircleQuestion  className="size-6 " />
-                                </a>   
-                            </Button>
-                        </Hint>
-                    </div> */}
                     <UserButton />
                 </div> 
             </nav>

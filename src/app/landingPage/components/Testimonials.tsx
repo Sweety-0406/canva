@@ -8,25 +8,25 @@ const testimonials = [
     name: "Sarah Chen",
     iconText: "👩‍💼",
     profession: "Creative Director",
-    description: "PixelForge has completely transformed our design workflow. What used to take hours now takes minutes, and the quality is consistently amazing."
+    description: `"PixelForge has completely transformed our design workflow. What used to take hours now takes minutes, and the quality is consistently amazing."`
   },
   {
     name: "David Kim",
     iconText: "👨‍🎨",
     profession: "Freelance Designer",
-    description: "I've tried every design tool out there, and PixelForge is hands down the most intuitive. My clients are blown away by the results."
+    description: `"I've tried every design tool out there, and PixelForge is hands down the most intuitive. My clients are blown away by the results."`
   },
   {
     name: "Lina Gomez",
     iconText: "👩‍💻",
     profession: "Marketing Lead",
-    description: "Our team went from zero design skills to creating professional-quality content. PixelForge makes everyone feel like a designer."
+    description: `"Our team went from zero design skills to creating professional-quality content. PixelForge makes everyone feel like a designer."`
   },
   {
     name: "Raj Patel",
     iconText: "👨‍💼",
     profession: "Product Manager",
-    description: "The collaboration features are incredible. Our remote team can work together seamlessly, and the real-time editing is a game-changer."
+    description: `"PixelForge gave our small team the power of a full design department. It’s fast, reliable, and has become an essential part of our growth."`
   }
 ];
 

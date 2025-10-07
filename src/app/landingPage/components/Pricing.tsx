@@ -19,17 +19,10 @@ const plans = [
     cost: "400",
     costText: "per month",
     description: "For professional designers and teams",
-    features: ["Unlimited projects", "Premium templates", "4K export quality", "Priority support", "Team collaboration", "Advanced tools", "100GB storage"],
+    features: ["Unlimited projects", "Premium templates", "4K export quality", "Priority support", "Advanced tools", "100GB storage"],
     popular: true,
     billing: "monthly" as "free"|"monthly"|"yearly"
   },
-  // {
-  //   title: "Enterprise",
-  //   cost: "Custom",
-  //   costText: "pricing",
-  //   description: "For large teams and organizations",
-  //   features: ["Everything in Pro", "Unlimited storage", "Custom branding", "SSO integration", "Dedicated support", "Custom integrations", "Admin controls"]
-  // }
   {
     title: "Pro (Yearly)",
     cost: "4000",

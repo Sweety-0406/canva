@@ -362,7 +362,7 @@ const ChatSection = () => {
       {/* Floating Action Button */}
       <motion.button
         onClick={() => setOpen(true)}
-        className={`fixed bottom-6 right-6 bg-gradient-to-r from-[#7d2ae7] to-[#6420ff] text-white size-14 rounded-full shadow-xl z-50 flex items-center justify-center hover:shadow-2xl transition-all duration-300 ${open && "scale-0 pointer-events-none"}`}
+        className={`fixed bottom-6 right-6 bg-gradient-to-r from-[#00c4cc] via-[#6420ff] to-[#7d2ae7] text-white size-14 rounded-full shadow-xl z-50 flex items-center justify-center hover:shadow-2xl transition-all duration-300 ${open && "scale-0 pointer-events-none"}`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >

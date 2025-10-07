@@ -1,6 +1,5 @@
 
 'use client';
-import Image from "next/image";
 import { IoIosColorPalette } from "react-icons/io";
 import { BsLightningChargeFill } from "react-icons/bs";
 import { FaUserGroup } from "react-icons/fa6";
@@ -8,6 +7,8 @@ import { MdOutlinePhoneAndroid, MdOutlineSecurity } from "react-icons/md";
 import { FaCloud } from "react-icons/fa";
 import FeatureCard from "./FeatureCard";
 import { useEffect, useRef, useState } from "react";
+import IconSection from "./IconSection";
+import { RiChatSmile3Line, RiFileCopy2Line } from "react-icons/ri";
 
 const features = [
   {
@@ -21,14 +22,14 @@ const features = [
     description: "Cloud-powered performance ensures your designs load instantly and save automatically."
   },
   {
-    icon: FaUserGroup,
-    title: "Team Collaboration",
-    description: "Work together in real-time with commenting, sharing, and version control features."
+    icon: RiFileCopy2Line, 
+    title: "Free Templates",
+    description: "Choose from a wide range of ready-to-use templates to kickstart your designs instantly."
   },
   {
-    icon: MdOutlinePhoneAndroid,
-    title: "Multi-Platform",
-    description: "Design on any device - desktop, tablet, or mobile. Your work syncs seamlessly across all platforms."
+    icon: RiChatSmile3Line,
+    title: "Chat with AI",
+    description: "Get instant design assistance, ideas, and feedback through our integrated AI chat."
   },
   {
     icon: FaCloud,
@@ -38,7 +39,7 @@ const features = [
   {
     icon: MdOutlineSecurity,
     title: "Enterprise Security",
-    description: "Bank-level security with SSO, team management, and advanced permission controls."
+    description: "The ability to protect files with passwords and advanced permission controls."
   }
 ];
 
@@ -96,7 +97,7 @@ export default function Features() {
             </h2>
             
             <p className="text-lg text-center mb-16 text-gray-500">
-              From powerful editing tools to seamless collaboration, PixelForge has everything you need to bring your creative vision to life.
+              From powerful editing tools to endless designs, PixelForge has everything you need to bring your creative vision to life.
             </p>
           </div>
         </div>
@@ -124,19 +125,13 @@ export default function Features() {
         </div>
 
         <div 
-          className={`mt-16 transform transition-all duration-1000 ease-out ${
+          className={`mt-16  transform transition-all duration-1000 ease-out ${
             imageVisible 
               ? 'translate-y-0 opacity-100 scale-100' 
               : 'translate-y-8 opacity-0 scale-95'
           }`}
         >
-          <Image
-            src="/images/feature-icons.jpg"
-            alt="Design Tools"
-            width={900}
-            height={500}
-            className="mx-auto rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-500"
-          />
+          <IconSection />
         </div>
       </div>
     </section>

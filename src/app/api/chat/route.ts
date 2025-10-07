@@ -55,7 +55,7 @@ const PIXELFORGE_KNOWLEDGE = {
         "Unlimited projects",
         "4K export quality",
         "Priority support", 
-        "Team collaboration",
+        "Premium templates",
         "Advanced tools",
         "100GB storage"
       ]
@@ -66,7 +66,6 @@ const PIXELFORGE_KNOWLEDGE = {
         "Everything in Pro (Monthly)",
         "Save 15% compared to monthly billing",
         "Exclusive yearly-only templates",
-        "Team collaboration",
         "1TB storage",
         "Dedicated success manager"
       ]
@@ -102,10 +101,10 @@ ABOUT PIXELFORGE:
 KEY FEATURES:
 - Intuitive Design Tools: Professional-grade editing tools for all skill levels
 - Lightning Fast: Cloud-powered performance with instant loading
-- Team Collaboration: Real-time collaboration with commenting, sharing, and version control
-- Multi-Platform: Works on desktop, tablet, and mobile with seamless syncing
+- Free Templates: Choose from a wide range of ready-to-use templates to kickstart your designs instantly
+- Chat with AI: Get instant design assistance, ideas, and feedback through our integrated AI chat
 - Cloud Storage: Unlimited storage with automatic backups
-- Enterprise Security: Bank-level security with SSO and team management
+- Enterprise Security: The ability to protect files with passwords and advanced permission controls
 
 ACTUAL PRICING:
 Free Plan: ${PIXELFORGE_KNOWLEDGE.pricing.free.price}

@@ -40,7 +40,7 @@ const TestimonialCard = ({
                 </div>
                 
                 <div className="text-zinc-600 text-sm font-normal italic text-start mb-4 leading-relaxed group-hover:text-zinc-700 transition-colors duration-300">
-                    &quots;{description}&quots;
+                    {description}
                 </div>
                 
                 <div className="flex gap-1 mb-4">

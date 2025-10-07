@@ -5,6 +5,7 @@
 import Logo from "@/features/editor/components/logo";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { MdCopyright } from "react-icons/md";
 
 export default function Footer() {
   const [isVisible, setIsVisible] = useState(false);
@@ -132,18 +133,9 @@ export default function Footer() {
         ))}
       </div>
 
-      <div 
-        className={`border-t border-gray-200 py-4 text-center text-gray-500 text-sm transform transition-all duration-1000 ease-out ${
-          linksVisible 
-            ? 'translate-y-0 opacity-100' 
-            : 'translate-y-4 opacity-0'
-        }`}
-        style={{ transitionDelay: '600ms' }}
-      >
-        <div className="relative">
-          © 2024 PixelForge. All rights reserved.
-          
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-px bg-gradient-to-r from-transparent via-violet-400 to-transparent animate-pulse opacity-30" />
+      <div className={`border-t border-gray-200 py-4 text-cente flex justify-center text-gray-500 text-sm  `}>
+        <div className="flex gap-1">
+          <MdCopyright className="size-4 mt-[1px]" /> 2024 PixelForge. All rights reserved.
         </div>
       </div>
     </footer>
