@@ -2,8 +2,7 @@
 'use client';
 import { IoIosColorPalette } from "react-icons/io";
 import { BsLightningChargeFill } from "react-icons/bs";
-import { FaUserGroup } from "react-icons/fa6";
-import { MdOutlinePhoneAndroid, MdOutlineSecurity } from "react-icons/md";
+import { MdOutlineSecurity } from "react-icons/md";
 import { FaCloud } from "react-icons/fa";
 import FeatureCard from "./FeatureCard";
 import { useEffect, useRef, useState } from "react";
